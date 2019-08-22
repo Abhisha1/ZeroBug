@@ -1,0 +1,24 @@
+{
+  "name": "zerobug",
+  "version": "1.0.0",
+  "description": "Capstone Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhisha1/ZeroBug.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abhisha1/ZeroBug/issues"
+  },
+  "homepage": "https://github.com/Abhisha1/ZeroBug#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase": "^6.4.0",
+    "firebase-admin": "^8.4.0"
+  }
+}
