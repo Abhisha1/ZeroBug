@@ -44,6 +44,19 @@
        // writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
         //writeUserData("04", "Jen", "chen@gmail.com", "123");
 
+        //get the data from the database
+        var userId = "02";
+        firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+            var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+            var email = (snapshot.val() && snapshot.val().email) || 'Anonymous';
+            var password = (snapshot.val() && snapshot.val().password) || 'Anonymous';
+            console.log(username);
+            console.log(email);
+            console.log(password);
+        });
+
+
+
         </script>
     </body>
 </html>
