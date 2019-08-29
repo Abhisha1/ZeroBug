@@ -30,7 +30,19 @@
         firebase.initializeApp(firebaseConfig);
 
 
+        // Get a reference to the database service
+        var database = firebase.database();
 
+        // write data to the database
+        function writeUserData(userId, name, email, pwd) {
+            firebase.database().ref('users/' + userId).set({
+                username: name,
+                email: email,
+                password : pwd
+            });
+        }
+       // writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
+        //writeUserData("04", "Jen", "chen@gmail.com", "123");
 
         </script>
     </body>
