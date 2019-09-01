@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+.parallax {
+    /* The image used */
+    background-image: url("./trees.PNG");
+  
+    /* Set a specific height */
+    min-height: 500px; 
+  
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.homepage {
+    background-color: #282828;
+}
+h1{
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100px;
+}
+h3{
+    color: #ffe960;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.text_container {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
