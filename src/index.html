@@ -39,10 +39,23 @@
                 username: name,
                 email: email,
                 password : pwd
+
+            // add a completion callback    
+            }, function(error) {
+                if (error) {
+                    // The write failed...
+                    console.log("Written data FAILED");
+
+                } else {
+                    // Data saved successfully!
+                    console.log("Successfully append the data!");
+
+                }
             });
         }
-       // writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
+        //writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
         //writeUserData("04", "Jen", "chen@gmail.com", "123");
+        //writeUserData("05", "Jeniiiiii", "chen@gmail.com", "12345");
 
         //get the data from the database
         var userId = "02";
