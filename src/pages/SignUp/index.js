@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import {FirebaseContext} from "../Firebase";
 import * as ROUTES from '../../constants/routes'
 
 const SignUpPage = () => (
   <div>
     <h1>SignUp</h1>
+    <FirebaseContext.Consumer>
+      {firebase => <SignUpForm firebase={firebase} />}
+    </FirebaseContext.Consumer>
     <SignUpForm />
   </div>
 );
@@ -51,7 +54,9 @@ class SignUpForm extends Component {
       password === '' ||
       email === '' ||
       username === '';
-
+    
+    // real time database call
+      this.props.firebase.writeUserData("629400", "Jeniiiiii", "chen@gmail.com", "12345");
     return (
       <form onSubmit={this.onSubmit}>
         <input
