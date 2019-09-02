@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./home.scss";
-import { Link } from 'react-router-dom';
+import {Card, Button} from 'react-bootstrap';
 
 import * as ROUTES from '../../constants/routes'
 
@@ -12,16 +12,24 @@ class Home extends Component {
                 <h1>A family artefact register.</h1>
 				<h3>Safe.Secure.Shareable</h3>
 
-					<div class="parallax"></div>
+					<div className="parallax">
 
-					<div className="text_container">
-					<p>
+					<Card className="card">
+					<Card.Body>
+						<Card.Text className="card_text">
 						A software solution developed by ZeroBugs to help families share artefacts securely online.
 						
 
-						To get started, <Link to={ROUTES.SIGN_UP}> sign up here</Link>
-					</p>
+						</Card.Text>
+						<Button className="redirect_button" variant="primary" href={ROUTES.SIGN_UP}>Get started</Button>
+					</Card.Body>
+					</Card>
+
 					</div>
+
+					{/* <div className="text_container"> */}
+					
+					<div className="parallax"></div>
 			</div>
 		);
 	}
