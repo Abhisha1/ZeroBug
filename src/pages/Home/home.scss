@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,900&display=swap');
+.parallax {
+    /* The image used */
+    background-image: url("./trees.PNG");
+
+    /* Set a specific height */
+    min-height: 500px;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+h1{
+    color: black;
+    font-style: normal;
+    // font-weight: 1000 !important;
+    // font-size: 500% !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+}
+h3{
+    color: black;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.text_container {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #ffe960 !important;
+    color: black;
+    border-color: #ffe960;
+    font-family: 'Montserrat', sans-serif;
+}
+.card_text{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.card {
+    width: 50%;
+    position: absolute;
+    left: 25%;
+    top: 350px;
+}
