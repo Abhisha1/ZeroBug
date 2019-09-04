@@ -1,0 +1,13 @@
+.scrollButton {
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+    scroll-behavior: smooth;
+}  
+.scrollButton:hover {
+    // background-color: #eee; /* Add a dark-grey background on hover */
+}
