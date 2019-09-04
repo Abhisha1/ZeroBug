@@ -1,0 +1,74 @@
+<div class="signup__container">
+  <div class="container__child signup__thumbnail">
+    <div class="thumbnail__content text-center">
+      <h1 class="heading--primary">Welcome to ZeroBug!</h1>
+    </div>
+    <div class="signup__overlay"></div>
+  </div>
+  <div class="container__child signup__form">
+    <form onSubmit={this.onSubmit}>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+            class="form-control"
+            type="text"
+            name="username"
+            value={username}
+            onChange={this.onChange}
+            placeholder="Full Name"
+          />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+            class="form-control"
+            type="text"
+            name="email"
+            value={email}
+            onChange={this.OnChange}
+            id="email"
+            placeholder="johndoe@gmail.com"
+          />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+            class="form-control"
+            type="password"
+            name="password"
+            value={password}
+            onChange={this.onChange}
+            id="password"
+            placeholder="********"
+          />
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+            class="form-control"
+            type="password"
+            name="confirmPassword"
+            value={confirmpassword}
+            onChange={this.onChange}
+            id="confirmPassword"
+            placeholder="********"
+          />
+      </div>
+      <div class="m-t-lg">
+        <ul class="list-inline">
+          <li>
+            <input
+                class="btn btn--form"
+                type="submit"
+                value="Register"
+                disabled={isInvalid}
+              />
+          </li>
+          <li>
+            <p><Link to={ROUTES.SIGN_IN}>I am already a member</Link></p>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>

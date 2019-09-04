@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import "./signup.css"
 
 import { withFirebase } from '../../pages/Firebase'
 import * as ROUTES from '../../constants/routes'
@@ -82,7 +83,7 @@ class SignUpFormBase extends Component {
             placeholder="Password"
           />
           <input
-            name="confirmpassword"
+            name="confirmPassword"
             value={confirmpassword}
             onChange={this.onChange}
             type="password"
