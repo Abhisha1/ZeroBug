@@ -44,7 +44,7 @@ class SignInFormBase extends Component {
             value={email}
             onChange={this.onChange}
             type="email"
-            placeholder="Enter email address"
+            placeholder="Enter email"
             ></Form.Control>
         </Form.Group>
         <Form.Group controlId="formPassword">
