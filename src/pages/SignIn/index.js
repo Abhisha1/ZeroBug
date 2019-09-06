@@ -4,15 +4,15 @@ import SignInForm from "../../components/SignInForm/SignInForm";
 import "./signin.scss";
 const SignInPage = () => (
   <div>
-  <div class="split right">
-    <div class="centred">
+  <div className="split right">
+    <div className="centred">
       <h1>Log In</h1>
       <SignInForm />
       <SignUpLink />
     </div>
   </div>
-  <div class="split left">
-  <div class="centered">
+  <div className="split left">
+  <div className="centered">
   </div>
 </div>
 </div>
