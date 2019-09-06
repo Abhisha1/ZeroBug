@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
+//import 'firebase/database';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,6 +17,7 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
+   // this.db = app.database();
 
     this.userId = "02";
     firebase.database().ref('/users/' + this.userId).once('value').then(function(snapshot) {
@@ -30,7 +32,8 @@ class Firebase {
 
   // write data to the database
   writeUserData = (userId, name, email, pwd) => {
-      firebase.database().ref('users/' + userId).set({
+      //firebase.database().ref('users/' + userId).set({
+        firebase.database().ref('users/' + userId).set({
           username: name,
           email: email,
           password : pwd
@@ -86,4 +89,6 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 }
 
+//export default {writeUserData};
 export default Firebase;
+//export {writeUserData};

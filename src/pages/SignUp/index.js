@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {FirebaseContext} from "../Firebase";
 import * as ROUTES from '../../constants/routes'
+//import {writeUserData} from "../Firebase/firebase"; 
+//import firebase from "../Firebase";
+import { withFirebase } from '../Firebase';
+import { compose } from 'recompose';
 
 const SignUpPage = () => (
   <div>
     <h1>SignUp</h1>
     <FirebaseContext.Consumer>
       {firebase => <SignUpForm firebase={firebase} />}
-    </FirebaseContext.Consumer>
+    </FirebaseContext.Consumer>  
     <SignUpForm />
   </div>
 );
@@ -21,7 +25,7 @@ const INIT_STATE = {
   error: null,
 }
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
 
   constructor(props) {
     super(props);
@@ -29,6 +33,27 @@ class SignUpForm extends Component {
   }
 
   onSubmit = event => {
+    const {username, email, password } = this.state;
+
+    this.props.firebase
+    .doCreateUserWithEmailAndPassword(email.password)
+    .then(authUser => {
+      // Create a user in your Firebase realtime database
+      return this.props.firebase
+        .user(authUser.user.uid)
+        .set({
+          username,
+          email,
+        });
+    })
+    .then(() => {
+      this.setState({ INIT_STATE });
+      this.props.history.push(ROUTES.HOME);
+    })
+    .catch(error => {
+      this.setState({ error });
+    });
+    event.preventDefault();
 
   };
 
@@ -39,6 +64,8 @@ class SignUpForm extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
+  
 
   render(){
     const {
@@ -56,7 +83,12 @@ class SignUpForm extends Component {
       username === '';
     
     // real time database call
-      this.props.firebase.writeUserData("629400", "Jeniiiiii", "chen@gmail.com", "12345");
+    //this.props.firebase.database.writeUserData("629400", "Jeniiiiii", "chen@gmail.com", "12345");
+    //firebase.writeUserData("629400", "Jeniiiiii", "chen@gmail.com", "12345");
+    //firebase.firebase.writeUserData("629400", "Jeniiiiii", "chen@gmail.com", "12345");
+   // this.props.firebase.database.writeUserData("400", "Jeniiiiii", "chen@gmail.com", "12345");
+
+
     return (
       <form onSubmit={this.onSubmit}>
         <input
@@ -95,12 +127,19 @@ class SignUpForm extends Component {
   }
 }
 
+
+
 const SignUpLink = () => (
   <p>
     Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign up now!</Link>
   </p>
 
 );
+
+const SignUpForm = compose(
+  withRouter,
+  withFirebase,
+)(SignUpFormBase);
 
 export default SignUpPage;
 
