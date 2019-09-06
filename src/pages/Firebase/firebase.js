@@ -55,26 +55,7 @@ class Firebase {
   //writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
   //writeUserData("04", "Jen", "chen@gmail.com", "123");
 
-
-  // update data and add the same data into two paths
-  writeNewPost = (uid, username, pwd) => {
-      // A post entry.
-      var postData = {
-          author: username,
-          uid: uid,
-          password: pwd
-      };
-
-      // Get a key for a new Post.
-      var newPostKey = this.database().ref().child('posts').push().key;
-
-      // Write the new post's data simultaneously in the posts list and the user's post list.
-      var updates = {};
-      updates['/posts/' + newPostKey] = postData;
-      updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
-      return this.database().ref().update(updates);
-  }
+  // Autherisation API
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
 
@@ -84,6 +65,7 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+
   
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
