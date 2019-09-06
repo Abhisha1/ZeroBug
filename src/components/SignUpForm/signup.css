@@ -3,10 +3,6 @@
   @return ($value / 16px) * 1rem;
 }
 
-p {
-  text-align: center;
-}
-
 body {
   font: 100% / 1.414 "Open Sans", "Roboto", arial, sans-serif;
   background: #e9e9e9;
