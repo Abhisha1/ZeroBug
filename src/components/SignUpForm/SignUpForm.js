@@ -4,7 +4,7 @@ import "./signup.css"
 
 import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes'
-
+import "./signupform.scss";
 
 const INIT_STATE = {
   username: '',
@@ -102,7 +102,7 @@ class SignUpFormBase extends Component {
 
 const SignUpLink = () => (
   <p>
-    Don't have an account? Sign up Now! <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
   </p>
 );
 
