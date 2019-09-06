@@ -9,7 +9,7 @@ import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes'
 //import {writeUserData} from "../Firebase/firebase"; 
 //import firebase from "../Firebase";
-import { withFirebase } from '../Firebase';
+// import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
 
 const SignUpPage = () => (
@@ -142,9 +142,9 @@ const SignUpLink = () => (
 
 );
 
-const SignUpForm = compose(
+/*const SignUpForm = compose(
   withRouter,
   withFirebase,
-)(SignUpFormBase);
+)(SignUpFormBase);*/
 
 export default SignUpPage;
