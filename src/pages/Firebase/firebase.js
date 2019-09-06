@@ -17,9 +17,10 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
+    
    // this.db = app.database();
 
-    this.userId = "02";
+    /*this.userId = "02";
     firebase.database().ref('/users/' + this.userId).once('value').then(function(snapshot) {
       var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
       var email = (snapshot.val() && snapshot.val().email) || 'Anonymous';
@@ -27,7 +28,7 @@ class Firebase {
       console.log(username);
       console.log(email);
       console.log(password);
-  })
+  })*/
   }
 
   // write data to the database
@@ -52,6 +53,26 @@ class Firebase {
           }
       });
   }
+
+  testUpload = () => {
+    this.database().ref('testUploadsJen/' + "testOne").set({
+      name: "lolol",
+      pease: "testing about the uploading job yoo"
+    }, (error) => {
+      if (error) {
+        // The write failed...
+          console.log("Written data FAILED");
+  
+      } else {
+          // Data saved successfully!
+          console.log("Successfully append the data!");
+  
+      }
+    });
+  }
+
+
+
   //writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
   //writeUserData("04", "Jen", "chen@gmail.com", "123");
 
