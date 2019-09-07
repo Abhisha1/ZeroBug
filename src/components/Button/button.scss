@@ -16,7 +16,5 @@ button[variant="secondary"]{
 }
 
 button:disabled{
-    background-color: #ffffff !important;
-    border-radius: 7px;
-    border: 2px solid #ffe960;
+    opacity: 0.4 !important;
 }
