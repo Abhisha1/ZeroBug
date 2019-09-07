@@ -1,7 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
-//import 'firebase/database';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -17,8 +16,6 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
-    
-   // this.db = app.database();
 
     /*this.userId = "02";
     firebase.database().ref('/users/' + this.userId).once('value').then(function(snapshot) {
@@ -31,73 +28,43 @@ class Firebase {
   })*/
   }
 
-  /*
-  // write data to the database
-  writeUserData = (userId, name, email, pwd) => {
-      //firebase.database().ref('users/' + userId).set({
-        firebase.database().ref('users/' + userId).set({
-          username: name,
-          email: email,
-          password : pwd
-
-      // add a completion callback    
-      }, function(error) {
-          if (error) {
-              // The write failed...
-              console.log("Written data FAILED");
-
-          } else {
-              // Data saved successfully!
-              console.log(name, email, pwd)
-              console.log("Successfully append the data!");
-
-          }
-      });
-  }*/
 
   // write data to the database
-  testUploadArtifactData = () => {
-    this.database().ref('testUploadArtifactData/' + "testOne").set({
-      artifactName: "Family Photo",
-      origin: "Australia",
-      currentOwner: "Jen",
-      description: "Testing about the uploading job"
+  testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
+    this.database().ref('testUploadArtifactData/' + artifactID).set({
+      artifactName: artifactName,
+      origin: artifactOrigin,
+      currentOwner: artifactCurrentOwner,
+      description: artifactDescription
     }, (error) => {
       if (error) {
         // The write failed...
           console.log("Written data FAILED");
-  
       } else {
           // Data saved successfully!
           console.log("Successfully append the data!");
-  
       }
     });
   }
 
-/*
+
   // update or delete the data
-  // add the same data into two paths
-  testNewUpdate = (uid, username, pwd) => {
+  testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
     
-    // A post entry.
+    // A post entry
     var postData = {
-        author: username,
-        uid: uid,
-        password: pwd
+      artifactName : updateArtifactName,
+      origin : updateArtifactOrigin,
+      currentOwner : updateCurrentOwner,
+      description : updateDescription
     };
 
-    // Get a key for a new Post.
-    var newPostKey = firebase.database().ref().child('posts').push().key;
-
-    // Write the new post's data simultaneously in the posts list and the user's post list.
     var updates = {};
-    updates['/posts/' + newPostKey] = postData;
-    updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+    updates['/testUploadArtifactData/' + updateArtifactID] = postData;
 
     return firebase.database().ref().update(updates);
   }
-*/
+
 
 
   // Autherisation API

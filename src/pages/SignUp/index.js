@@ -38,7 +38,12 @@ const SignUpPage = () => (
       {firebase => [
         <div>
           <SignUpForm firebase={firebase} />
-          <button onClick={() => firebase.testUploadArtifactData()}>click upload the test artifact data</button>
+          <button onClick={() => firebase.testUploadArtifactData("05","Family Photo5",  "Australia5", "Jen5", "Testing about the uploading job5")}>
+            click to upload the test artifact data</button>
+          <button onClick={() => firebase.testUpdateArtifactData("03", "update name", "update origin", "update owner", "update description")}>
+            click to update the test artifact data</button>
+          <button onClick={() => firebase.testUpdateArtifactData("04", null, null, null, null)}>
+            click to delete the test artifact data</button>
         </div>
 
       ]}
