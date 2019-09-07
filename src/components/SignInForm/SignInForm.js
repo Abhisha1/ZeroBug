@@ -4,17 +4,22 @@ import { compose } from 'recompose';
 import { withFirebase } from '../../components/Firebase';
 import * as ROUTES from '../../constants/routes';
 import "../Button/button.scss";
-import {Form} from 'react-bootstrap';
+import {Form, Modal} from 'react-bootstrap';
 import "./signinform.scss";
 const INITIAL_STATE = {
   email: '',
   password: '',
   error: null,
+  showModal: false
 };
 class SignInFormBase extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
+    this.handleClose = this.handleClose.bind(this);
+  }
+  handleClose(){
+    this.setState({showModal: false});
   }
   onSubmit = event => {
     const { email, password } = this.state;
@@ -26,6 +31,8 @@ class SignInFormBase extends Component {
       })
       .catch(error => {
         this.setState({ error });
+        this.setState({showModal: true});
+        console.log(this.state.showModal);
       });
     event.preventDefault();
   };
@@ -59,7 +66,15 @@ class SignInFormBase extends Component {
         </Form.Group>
         <button variant="primary" disabled={isInvalid} type="submit" value="Sign In">Sign In
         </button>
-        {error && <p>{error.message}</p>}
+        <Modal show={this.state.showModal}>
+          <Modal.Header closeButton>
+            <Modal.Title> Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{error && error.message}</Modal.Body>
+          <Modal.Footer>
+            <button variant="primary" onClick={this.handleClose}>Close</button>
+          </Modal.Footer>
+        </Modal>
       </Form>
     );
   }
