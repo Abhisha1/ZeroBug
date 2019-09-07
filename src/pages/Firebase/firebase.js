@@ -31,6 +31,7 @@ class Firebase {
   })*/
   }
 
+  /*
   // write data to the database
   writeUserData = (userId, name, email, pwd) => {
       //firebase.database().ref('users/' + userId).set({
@@ -52,12 +53,15 @@ class Firebase {
 
           }
       });
-  }
+  }*/
 
-  testUpload = () => {
-    this.database().ref('testUploadsJen/' + "testOne").set({
-      name: "lolol",
-      pease: "testing about the uploading job yoo"
+  // write data to the database
+  testUploadArtifactData = () => {
+    this.database().ref('testUploadArtifactData/' + "testOne").set({
+      artifactName: "Family Photo",
+      origin: "Australia",
+      currentOwner: "Jen",
+      description: "Testing about the uploading job"
     }, (error) => {
       if (error) {
         // The write failed...
@@ -71,10 +75,30 @@ class Firebase {
     });
   }
 
+/*
+  // update or delete the data
+  // add the same data into two paths
+  testNewUpdate = (uid, username, pwd) => {
+    
+    // A post entry.
+    var postData = {
+        author: username,
+        uid: uid,
+        password: pwd
+    };
 
+    // Get a key for a new Post.
+    var newPostKey = firebase.database().ref().child('posts').push().key;
 
-  //writeUserData("HYvnIcgGjn1uLDzg51Pm", "Jen", "chen@gmail.com", "123");
-  //writeUserData("04", "Jen", "chen@gmail.com", "123");
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    var updates = {};
+    updates['/posts/' + newPostKey] = postData;
+    updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+    return firebase.database().ref().update(updates);
+  }
+*/
+
 
   // Autherisation API
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -92,6 +116,4 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 }
 
-//export default {writeUserData};
 export default Firebase;
-//export {writeUserData};

@@ -9,9 +9,6 @@ import SignUpForm  from '../../components/SignUpForm/SignUpForm'
 import { withFirebase } from '../Firebase'
 
 import * as ROUTES from '../../constants/routes'
-//import {writeUserData} from "../Firebase/firebase"; 
-//import firebase from "../Firebase";
-// import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
 
 /*
@@ -41,7 +38,7 @@ const SignUpPage = () => (
       {firebase => [
         <div>
           <SignUpForm firebase={firebase} />
-          <button onClick={() => firebase.testUpload()}>click to {"caojibababa"}</button>
+          <button onClick={() => firebase.testUploadArtifactData()}>click upload the test artifact data</button>
         </div>
 
       ]}
