@@ -20,16 +20,13 @@ let testUpload = (ba) => {
     if (error) {
       // The write failed...
         console.log("Written data FAILED");
-
     } else {
         // Data saved successfully!
         console.log("Successfully append the data!");
-
     }
   });
 }
 */
-
 
 
 const SignUpPage = () => (
@@ -39,11 +36,11 @@ const SignUpPage = () => (
       {firebase => [
         <div>
           <SignUpForm firebase={firebase} />
-          <button onClick={() => firebase.testUploadArtifactData("05","Family Photo5",  "Australia5", "Jen5", "Testing about the uploading job5")}>
+          <button onClick={() => firebase.testUploadArtifactData("06","Family Photo6",  "Australia6", "Jen6", "Testing about the uploading job6")}>
             click to upload the test artifact data</button>
-          <button onClick={() => firebase.testUpdateArtifactData("03", "update name", "update origin", "update owner", "update description")}>
+          <button onClick={() => firebase.testUpdateArtifactData("06", "update name", "update origin", "update owner", "update description")}>
             click to update the test artifact data</button>
-          <button onClick={() => firebase.testUpdateArtifactData("04", null, null, null, null)}>
+          <button onClick={() => firebase.testUpdateArtifactData("06", null, null, null, null)}>
             click to delete the test artifact data</button>
         </div>
 
