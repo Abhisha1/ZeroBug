@@ -1,19 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {Navbar, Nav} from 'react-bootstrap';
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
+import { FaUser, FaHome } from "react-icons/fa"; 
+import './navigation.scss';
+
 const Navigation = () => (
   <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-  <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
   <Navbar.Toggle aria-controls="responsive-navbar-nav" />
   <Navbar.Collapse id="responsive-navbar-nav">
-    <Nav>
-      <Nav.Link href={ROUTES.HOME}>Home</Nav.Link>
+    <Nav className="mr-auto">
+      <Nav.Link href={ROUTES.HOME}><FaHome></FaHome></Nav.Link>
       <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
-      <Nav.Link href={ROUTES.ACCOUNT}>Account</Nav.Link>
-      <Nav.Link href={ROUTES.LANDING}>Landing</Nav.Link>
-      <Nav.Link href={ROUTES.SIGN_IN}>Log In</Nav.Link>
-      <Nav.Link href={ROUTES.SIGN_UP}>Sign Out</Nav.Link>
+      <NavDropdown title={<FaUser></FaUser>} id="basic-nav-dropdown">
+        <NavDropdown.Item href={ROUTES.ACCOUNT}>Account</NavDropdown.Item>
+        <NavDropdown.Item href={ROUTES.SIGN_IN}>Log In</NavDropdown.Item>
+        <NavDropdown.Item href={ROUTES.SIGN_UP}>Sign Up</NavDropdown.Item>
+      </NavDropdown>
     </Nav>
   </Navbar.Collapse>
 </Navbar>
