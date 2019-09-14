@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./scrollButton.scss";
+import {FaArrowCircleDown} from "react-icons/fa";
 
 
 class ScrollButton extends Component {
@@ -16,7 +17,7 @@ class ScrollButton extends Component {
 	render() {
 		return(
             <div>
-			    <button className="scrollButton" onClick={this.handleClick}>Scroll Down
+			    <button className="scrollButton" onClick={this.handleClick}><FaArrowCircleDown size={40} color='white'></FaArrowCircleDown>
                 </button>
             </div>
 		);
