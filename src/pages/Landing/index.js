@@ -11,8 +11,8 @@ class LandingPage extends Component {
 			<div className="landingpage">
 
 					<div className="parallax">
-					<h1>A family artefact register.</h1>
-					<h3>Safe. Secure. Shareable</h3>
+					<h1 id="title-landing">A family artefact register.</h1>
+					<h3 id="subtitle-landing">Safe. Secure. Shareable</h3>
 					<ScrollButton></ScrollButton>
 
 					</div>

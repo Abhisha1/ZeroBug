@@ -5,7 +5,7 @@
   
     /* Set a specific height */
     min-height: 500px; 
-    min-width: 500px;
+    min-width: 600px;
   
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
@@ -16,7 +16,7 @@
 }
 
 @media only screen and (max-width: 4000px) {
-    h1{
+    #title-landing{
         color: white;
         font-style: normal;
         // font-weight: 1000 !important;
@@ -28,7 +28,7 @@
         text-align: center;
         
     }
-    h3{
+    #subtitle-landing{
         color: white;
         font-family: 'Montserrat', sans-serif;
         padding-left: 5vw;
@@ -45,7 +45,7 @@
 }
 
 @media only screen and (max-width: 800px) {
-    h1{
+    #title-landing{
         color: white;
         font-style: normal;
         // font-weight: 1000 !important;
@@ -57,7 +57,7 @@
         text-align: center;
         
     }
-    h3{
+    #subtitle-landing{
         color: white;
         font-family: 'Montserrat', sans-serif;
         padding-left: 5vw;
@@ -74,7 +74,7 @@
 }
 
 @media only screen and (max-width: 420px) {
-    h1{
+    #title-landing{
         color: white;
         font-style: normal;
         // font-weight: 1000 !important;
@@ -86,7 +86,7 @@
         text-align: center;
         
     }
-    h3{
+    #subtitle-landing{
         color: white;
         font-family: 'Montserrat', sans-serif;
         padding-left: 5vw;
