@@ -84,11 +84,33 @@ class Firebase {
   // get a list of Artifact name data
   getListArtifactName = (the) => {
     var testArtifactName = [];
-    var commentsRef = this.database().ref('/testUploadArtifactData/');
-    commentsRef.on('child_added', function(data) {      
+    var tempRef = this.database().ref('/testUploadArtifactData/');
+    tempRef.on('child_added', function(data) {      
       testArtifactName.push(data.val().artifactName);
     });
     the.setState({... the.state, artifactList: testArtifactName})
+  }
+
+
+   // get a sorted list of Artifact name data by their name
+   getSortedListArtifactName = (the) => {
+    var testSortedArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
+    tempRef.on('child_added', function(data) {      
+      testSortedArtifactName.push(data.val().artifactName);
+    });
+    the.setState({... the.state, artifactSortedList: testSortedArtifactName})
+  }
+
+  
+  // get top 5 Artifact name data order by ArtifactName
+  getTopFiveArtifactName = (the) => {
+    var topFiveArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
+    tempRef.on('child_added', function(data) {      
+      topFiveArtifactName.push(data.val().artifactName);
+    });
+    the.setState({... the.state, topFive: topFiveArtifactName})
   }
 
 

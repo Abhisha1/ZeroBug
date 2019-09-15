@@ -10,7 +10,8 @@ class Artifact extends Component{
   state = {
     artifactName: "No Artifact Name",
     artifactList: null,
-    one: '',
+    artifactSortedList: null,
+    topFive: null,
   }
 
   render() {
@@ -35,6 +36,21 @@ class Artifact extends Component{
                 <li key={item}>{item}</li>
               ))}
             </ul>
+
+            <button onClick={() => firebase.getSortedListArtifactName(this)}>click me to get a SORTED list of Artifacts' Names from the database</button>
+            <ul>
+              {(this.state.artifactSortedList || []).map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            
+            <button onClick={() => firebase.getTopFiveArtifactName(this)}>click me to get TOP 5 Artifacts' Names order by the artifactName from the database</button>
+            <ul>
+              {(this.state.topFive || []).map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+
 
           </div>
  
