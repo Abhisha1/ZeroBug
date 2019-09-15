@@ -3,7 +3,4 @@ import Firebase from './firebase';
 
 export default Firebase
 
-// ononoi
-
 export { FirebaseContext, withFirebase };
-

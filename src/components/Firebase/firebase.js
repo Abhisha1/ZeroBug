@@ -16,17 +16,10 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
-
-    /*this.userId = "02";
-    firebase.database().ref('/users/' + this.userId).once('value').then(function(snapshot) {
-      var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
-      var email = (snapshot.val() && snapshot.val().email) || 'Anonymous';
-      var password = (snapshot.val() && snapshot.val().password) || 'Anonymous';
-      console.log(username);
-      console.log(email);
-      console.log(password);
-  })*/
   }
+
+
+  
 
 
   // write data to the database
@@ -65,6 +58,15 @@ class Firebase {
     return firebase.database().ref().update(updates);
   }
 
+
+  // get the artifact data
+  getArtifactData = (artifactID, the) => {
+    let artifactName = "?";
+    this.database().ref('/testUploadArtifactData/05' + "").once('value').then(function(snapshot) {
+      artifactName= (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
+      the.setState({... the.state, artifactName: artifactName})
+    })
+  }
 
 
   // Autherisation API

@@ -19,7 +19,7 @@ class Firebase {
   }
 
 
-  
+
 
 
   // write data to the database
@@ -40,6 +40,19 @@ class Firebase {
     });
   }
 
+  // write to the database with generated random key
+  // not use at the moment
+  testUpdateArtifactData2 = () => {
+    // Create a new post reference with an auto-generated id
+    var newPostRef = this.database().ref('/testUploadArtifactData/').push();
+    //console.log(newPostRef);
+    newPostRef.set({
+      artifactName : "test3",
+      origin : "test3",
+      currentOwner : "test3",
+      description : "test3"
+    });
+  }
 
   // update or delete the data
   testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
@@ -67,6 +80,21 @@ class Firebase {
       the.setState({... the.state, artifactName: artifactName})
     })
   }
+
+  // get a list of Artifact name data
+  getListArtifactName = (the) => {
+    var testArtifactName = [];
+    var commentsRef = this.database().ref('/testUploadArtifactData/');
+    commentsRef.on('child_added', function(data) {      
+      testArtifactName.push(data.val().artifactName);
+    });
+    the.setState({... the.state, artifactList: testArtifactName})
+  }
+
+
+   
+   
+
 
 
   // Autherisation API
