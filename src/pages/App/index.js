@@ -12,7 +12,7 @@ import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
-import Artifact from './pages/Artifact';
+import Artifact from './Artifact';
 
 import * as ROUTES from '../../constants/routes';
 
