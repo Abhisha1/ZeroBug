@@ -58,7 +58,8 @@ class SignUpFormBase extends Component {
       password !== confirmpassword ||
       password === '' ||
       email === '' ||
-      username === '';
+      username === '' ||
+      email.search(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) !== -1;
 
     return (
       <form onSubmit={this.onSubmit}>
