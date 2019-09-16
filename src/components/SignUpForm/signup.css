@@ -3,6 +3,13 @@
   @return ($value / 16px) * 1rem;
 }
 
+<<<<<<< HEAD
+=======
+p {
+  text-align: center;
+}
+
+>>>>>>> Added css framework for signup page
 body {
   font: 100% / 1.414 "Open Sans", "Roboto", arial, sans-serif;
   background: #e9e9e9;
