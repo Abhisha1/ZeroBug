@@ -10,7 +10,6 @@ const config = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
-
 class Firebase {
   constructor() {
     app.initializeApp(config);
@@ -18,7 +17,15 @@ class Firebase {
     this.database = firebase.database;
   }
 
-
+  searchUsers = function(user, the){
+    let searchedUsers = []
+    let dbRef = this.database().ref('/users/');
+    console.log(user);
+    dbRef.orderByChild("name").startAt(user).on("child_added", function(data) {
+        searchedUsers.push(data.val().name);
+    });
+    the.setState({... the.state, searchedUsers: searchedUsers});
+}
 
 
 
@@ -39,7 +46,7 @@ class Firebase {
       }
     });
   }
-
+  
   // write to the database with generated random key
   // not use at the moment
   testUpdateArtifactData2 = () => {

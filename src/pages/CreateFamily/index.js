@@ -7,11 +7,10 @@ import CustomModal from "../../components/Modal";
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {familyName: '', displayModal: false, familyMember: ''};
+        this.state = {familyName: ''};
     
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleModal = this.handleModal.bind(this);
       }
     
       handleChange(event) {
@@ -25,10 +24,6 @@ class CreateFamilyPage extends Component {
         alert('A name was submitted: ');
         event.preventDefault();
       }
-
-      handleModal(){
-          this.setState({displayModal: true});
-      }
     
       render() {
         return (
@@ -40,19 +35,8 @@ class CreateFamilyPage extends Component {
                     <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange} />
                     <Form.Group controlId="validationFormikUsername">
                     <Form.Label>Add Members</Form.Label>
-                    <InputGroup className="mb-3">
-                        <FormControl
-                        placeholder="User"
-                        aria-label="Users"
-                        name="familyMember"
-                        value={this.state.familyMember}
-                        onChange={this.handleChange}
-                        />
-                        <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={this.handleModal} id="add-user-button">Button</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
-                    {this.state.displayModal &&<CustomModal></CustomModal>}
+                    
+                    <CustomModal></CustomModal>
                     </Form.Group>
                     <button variant="primary" type="submit" value="Create">Create</button>
                 </Form>
