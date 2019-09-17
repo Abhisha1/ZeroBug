@@ -1,11 +1,10 @@
 button[variant="primary"]{
     background-color: #ffe960 !important;
     color: black;
-    border-color: #ffe960;
-    border: #ffe960;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.75vw;
     border-radius: 7px;
+    border: 2px solid #ffe960;
 }
 
 button[variant="secondary"]{
@@ -14,4 +13,8 @@ button[variant="secondary"]{
     border-color: #f9bdbf;
     border: #f9bdbf;
     font-family: 'Montserrat', sans-serif;
+}
+
+button:disabled{
+    opacity: 0.4 !important;
 }
