@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import {Modal} from "react-bootstrap";
-import {Form, InputGroup, FormControl, Button} from "react-bootstrap";
+import {InputGroup, FormControl, Button} from "react-bootstrap";
 import {FirebaseContext} from "../../components/Firebase";
 
 class CustomModal extends Component {
     constructor(props){
         super(props);
-        this.state = {showModal: false, searchedUsers: null,familyMember: ''};
+        this.state = {showModal: false, searchedUsers: [],familyMember: ''};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
       }
@@ -44,15 +44,15 @@ class CustomModal extends Component {
                         />
                         <InputGroup.Append>
                         <FirebaseContext.Consumer>
-                        {firebase => [
+                        {firebase => 
                         <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember,this)} id="add-user-button">Button</Button>
-                        ]}
+                        }
                         </FirebaseContext.Consumer>
                         </InputGroup.Append>
                     </InputGroup>
                         <div>
-                        {(this.state.searchedUsers || []).map(item => (
-                            <p key={item}>{item}</p>))}
+                        {this.state.searchedUsers.map(item => (
+                            <div key={item}><p>{item}</p><Button onClick={() => this.props.action(this.state.searchedUsers)}>Add</Button></div>))}
                         </div>
                 </Modal.Body>
             </Modal>

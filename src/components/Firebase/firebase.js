@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
+import * as MESSAGES from '../../constants/messages';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -10,6 +11,7 @@ const config = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
+
 class Firebase {
   constructor() {
     app.initializeApp(config);
@@ -20,13 +22,31 @@ class Firebase {
   searchUsers = function(user, the){
     let searchedUsers = []
     let dbRef = this.database().ref('/users/');
-    console.log(user);
-    dbRef.orderByChild("name").startAt(user).on("child_added", function(data) {
-        searchedUsers.push(data.val().name);
+    dbRef.orderByChild("name").on("child_added", function(data) {
+        if(data.val().name === user){
+          searchedUsers.push(data.val().name);
+        }
     });
     the.setState({... the.state, searchedUsers: searchedUsers});
-}
+  }
 
+  createFamily = function(users, name, admin){
+    let newFamilyKey = firebase.database().ref().child('families').push().key;
+    this.database().ref('families/'+ newFamilyKey).set({
+      users: users,
+      name: name,
+      admin: admin
+    }, (error) => {
+      if (error) {
+        console.log(error);
+        return error;
+      }
+      else{
+        console.log(MESSAGES.SUCCESS_MESSAGE);
+        return MESSAGES.SUCCESS_MESSAGE;
+      }
+    });
+  }
 
 
   // write data to the database

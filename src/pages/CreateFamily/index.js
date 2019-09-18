@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import "../../components/Button/button.scss";
-import {Form, InputGroup, FormControl, Button} from "react-bootstrap";
-import {MdGroupAdd} from "react-icons/md"
+import {Form, Modal} from "react-bootstrap";
+import {MdGroupAdd, MdPersonPinCircle} from "react-icons/md"
 import "./createFamily.scss";
+import {FirebaseContext} from "../../components/Firebase";
 import CustomModal from "../../components/Modal";
+import {HOME} from '../../constants/routes';
+import * as MESSAGES from '../../constants/messages';
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {familyName: ''};
-    
+        this.state = {familyName: '', familyMembers: [], showOutcomeModal: false, message: ''};
+        this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
@@ -20,9 +23,31 @@ class CreateFamilyPage extends Component {
         this.setState({[name]: value});
       }
     
-      handleSubmit(event) {
-        alert('A name was submitted: ');
-        event.preventDefault();
+      handleSubmit(firebase){
+        return event => {
+          //admin will be changed after session handling to group creator
+
+          // need to make sure it is synchronous?
+          let createFamilyResult = firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0]);
+          console.log(createFamilyResult);
+          if (createFamilyResult === MESSAGES.SUCCESS_MESSAGE){
+            this.setState({message: "You successfully created a new family"});
+          }
+          else{
+            this.setState({message: "Uh-oh. Something went wrong, try again later"});
+          }
+          this.setState({showOutcomeModal: true});
+          event.preventDefault();
+        }
+      }
+
+      handleModal(dataFromModal){
+        console.log('got dfata');
+        let usersToAdd = this.state.familyMembers;
+        usersToAdd.push(dataFromModal);
+        this.setState({
+          familyMembers: usersToAdd
+        });
       }
     
       render() {
@@ -30,16 +55,37 @@ class CreateFamilyPage extends Component {
             <div>
                 <h1 id="create-family-heading">Create a new family</h1>
                 <MdGroupAdd size={400} id="family-avatar"></MdGroupAdd>
-                <Form onSubmit={this.handleSubmit} id="new-family-form">
+                <FirebaseContext.Consumer>
+                  {firebase => 
+                <Form onSubmit={this.handleSubmit(firebase)} id="new-family-form">
                 <Form.Label> Family Name </Form.Label>
                     <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange} />
                     <Form.Group controlId="validationFormikUsername">
                     <Form.Label>Add Members</Form.Label>
                     
-                    <CustomModal></CustomModal>
+                    <CustomModal action={this.handleModal}></CustomModal>
                     </Form.Group>
                     <button variant="primary" type="submit" value="Create">Create</button>
                 </Form>
+                  }
+                </FirebaseContext.Consumer>
+                <div>
+                  {this.state.familyMembers.map(item => (
+                    <div key={item}>
+                      <MdPersonPinCircle></MdPersonPinCircle>
+                      <p>{item.name}</p>
+                    </div>
+                  ))}
+                </div>
+                <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
+                  <Modal.Header closeButton>
+                    <Modal.Title> Error</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
+                  <Modal.Footer>
+                    <button variant="primary" onClick={() => this.props.history.push(HOME)}>Close</button>
+                  </Modal.Footer>
+                </Modal>
             </div>
         );
       }
