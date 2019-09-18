@@ -16,9 +16,113 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
+    this.storage = firebase.storage;
+  }
+
+  //download the file from the storage
+  testDownloadFile  = (the, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+      the.setState({... the.state, imageURL: url})
+    }).catch(function(error) {
+      // ...
+    });
+
   }
 
 
+  testUploadImg = () => {
+   // this.storage.ref("../../assets/testImageFileStorage/TestImage.png");
+    // // Create a root reference
+    // var storageRef = firebase.storage().ref();
+
+    // // Create a reference to 'mountains.jpg'
+    // var mountainsRef = storageRef.child('mountains.jpg');
+
+    // // Create a reference to 'images/mountains.jpg'
+    // var mountainImagesRef = storageRef.child('images/mountains.jpg');
+    
+    // ref.put(file).then(function(snapshot) {
+    //   console.log('Uploaded a blob or file!');
+    // })
+
+
+    // File or Blob named mountains.jpg
+
+    let resolve = (blobreal) => {
+      console.log(blobreal.size)
+      var uploadTask = this.storage().ref().child('images/'+'aaa.png').put(blobreal, {
+        contentType: 'image/png'
+      }).then(function(snapshot) {
+        console.log('Uploaded a blob or file!');
+      });
+      console.log("aaaaaa");
+      console.log(uploadTask);  
+    }
+
+      const xhr = new XMLHttpRequest();
+      xhr.onloadend = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', require("../../assets/testImageFileStorage/TestImage.png") , true);
+      console.log(require("../../assets/testImageFileStorage/TestImage.png"))
+      xhr.send(null);
+
+    // Create the file metadata
+    var metadata = {
+      contentType: 'image/png'
+    };
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    // var uploadTask = this.storage().ref().child('images/').put(file).then(function(snapshot) {
+    //   console.log('Uploaded a blob or file!');
+    // });
+    // console.log(uploadTask);
+
+    // // Listen for state changes, errors, and completion of the upload.
+    // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+    //   function(snapshot) {
+    //     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    //     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //     console.log('Upload is ' + progress + '% done');
+    //     switch (snapshot.state) {
+    //       case firebase.storage.TaskState.PAUSED: // or 'paused'
+    //         console.log('Upload is paused');
+    //         break;
+    //       case firebase.storage.TaskState.RUNNING: // or 'running'
+    //         console.log('Upload is running');
+    //         break;
+    //     }
+    //   }, function (error) {
+
+    //   // A full list of error codes is available at
+    //   // https://firebase.google.com/docs/storage/web/handle-errors
+    //   switch (error.code) {
+    //     case 'storage/unauthorized':
+    //       // User doesn't have permission to access the object
+    //       break;
+
+    //     case 'storage/canceled':
+    //       // User canceled the upload
+    //       break;
+
+        
+
+    //     case 'storage/unknown':
+    //       // Unknown error occurred, inspect error.serverResponse
+    //       break;
+    //   }
+    // }, function() {
+    //   // Upload completed successfully, now we can get the download URL
+    //   uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+    //     console.log('File available at', downloadURL);
+    //   });
+    // });
+
+    
+  };
 
 
 

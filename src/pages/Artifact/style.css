@@ -1,0 +1,13 @@
+h1{
+    font-size: 500;
+    color: red;
+  
+}
+
+
+.Uploader{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 50%;
+    margin-bottom: 10px;
+}
