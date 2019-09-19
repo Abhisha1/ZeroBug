@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {FirebaseContext} from "../../components/Firebase";
-//let a = require("./style.css");
+
+import ImageUpload from "./imageUpload"
 
 class Artifact extends Component{
   state = {
@@ -18,12 +19,10 @@ class Artifact extends Component{
       <FirebaseContext.Consumer>
         {firebase => [
           <div>
-            {/* <link href={a} rel={"stylesheet"}/>   */}
-            <img src={"../../assets/testImageFileStorage/TestImage.png"}></img>
             <button onClick={() => firebase.testUploadArtifactData("09","Family Photo9",  "Australia9", "Jen9", "Testing about the uploading job9")}>
-              click to upload the test artifact data<h1 style={{fontSize: 300}}>jibajibada</h1></button>
+              click to upload the test artifact data</button>
             <button onClick={() => firebase.testUpdateArtifactData("07", "update name", "update origin", "update owner", "update description")}>
-              click to update the test artifact data<h1>jibajibada</h1></button>
+              click to update the test artifact data</button>
             <button onClick={() => firebase.testUpdateArtifactData("07", null, null, null, null)}>
               click to delete the test artifact data</button>
             
@@ -51,15 +50,10 @@ class Artifact extends Component{
               ))}
             </ul>
 
-            <button onClick={() => firebase.testUploadImg()}>
-              click to upload the image</button>
-
-
+            
             <div>
-              <h1>123</h1>
-              <h1>123</h1>
-
-            </div>    
+            <ImageUpload />
+            </div>
             
             <button onClick={() => firebase.testDownloadFile(this,'images/aaa.png')}>
               click to download the image</button>
