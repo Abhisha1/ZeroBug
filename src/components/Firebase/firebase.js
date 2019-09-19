@@ -24,15 +24,14 @@ class Firebase {
     let dbRef = this.database().ref('/users/');
     dbRef.orderByChild("name").on("child_added", function(data) {
         if(data.val().name === user){
-          searchedUsers.push(data.val().name);
+          searchedUsers.push(data.val());
         }
     });
     the.setState({... the.state, searchedUsers: searchedUsers});
   }
 
   createFamily = function(users, name, admin){
-    let newFamilyKey = firebase.database().ref().child('families').push().key;
-    this.database().ref('families/'+ newFamilyKey).set({
+    this.database().ref('families/'+ name).set({
       users: users,
       name: name,
       admin: admin
