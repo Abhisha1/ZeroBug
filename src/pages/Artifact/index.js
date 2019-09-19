@@ -60,6 +60,10 @@ class Artifact extends Component{
             <img src={this.state.imageURL} style={{width: 680, height: 360}}/>
 
 
+            <button onClick={() => firebase.testDeleteFile(this,'images/'+'Web 1920 – 3.png')}>
+              click to delete the image</button>
+
+
           </div>
  
         ]}

@@ -35,7 +35,18 @@ class Firebase {
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image) => {
     var aaa = this.storage().ref().child('images/'+image.name).put(image);
-    //console.log(aaa);
+    console.log(aaa);
+  }
+
+
+  testDeleteFile = (the, filepath) => {
+    var desertRef = this.storage().ref().child(filepath);
+
+    desertRef.delete().then(function() {
+      console.log("delete the file");
+    }).catch(function(error) {
+      // ...
+    });
   }
 
 
