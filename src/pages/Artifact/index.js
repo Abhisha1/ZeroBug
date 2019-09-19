@@ -10,6 +10,7 @@ class Artifact extends Component{
     artifactSortedList: null,
     topFive: null,
     imageURL: null,
+    listFileNames: null,
   }
 
 
@@ -63,6 +64,16 @@ class Artifact extends Component{
             <button onClick={() => firebase.testDeleteFile(this,'images/'+'Web 1920 – 3.png')}>
               click to delete the image</button>
 
+
+              <button onClick={() => firebase.testGetListOfFileNames(this)}>
+              click to get the list of files</button>
+
+
+            <ul>
+            {(this.state.listFileNames || []).map(item => (
+              <li key={item}>{item}</li>
+            ))}
+            </ul>
 
           </div>
  
