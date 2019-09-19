@@ -27,7 +27,6 @@ class CreateFamilyPage extends Component {
         return event => {
           //admin will be changed after session handling to group creator
 
-          // need to make sure it is synchronous?
           let createFamilyResult = firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0]);
           console.log(createFamilyResult);
           if (createFamilyResult === MESSAGES.SUCCESS_MESSAGE){
@@ -42,9 +41,16 @@ class CreateFamilyPage extends Component {
       }
 
       handleModal(dataFromModal){
-        console.log('got dfata');
+        console.log(dataFromModal);
+        console.log(dataFromModal.values());
         let usersToAdd = this.state.familyMembers;
-        usersToAdd.push(dataFromModal);
+        console.log("users existing   "+ usersToAdd)
+        dataFromModal.map(item => {
+          if(this.state.familyMembers.indexOf(item) === -1){
+            usersToAdd.push(item);
+          }
+        })
+        console.log("users to add   "+ usersToAdd)
         this.setState({
           familyMembers: usersToAdd
         });
@@ -71,7 +77,7 @@ class CreateFamilyPage extends Component {
                 </FirebaseContext.Consumer>
                 <div>
                   {this.state.familyMembers.map(item => (
-                    <div key={item}>
+                    <div key={item.name}>
                       <MdPersonPinCircle></MdPersonPinCircle>
                       <p>{item.name}</p>
                     </div>

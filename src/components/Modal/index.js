@@ -17,6 +17,7 @@ class CustomModal extends Component {
         else{
           this.setState({showModal: false})
         }
+        this.setState({familyMember: ''});
     }
     handleChange(event) {
         const target = event.target;
@@ -52,7 +53,7 @@ class CustomModal extends Component {
                     </InputGroup>
                         <div>
                         {this.state.searchedUsers.map(item => (
-                            <div key={item}><p>{item}</p><Button onClick={() => this.props.action(this.state.searchedUsers)}>Add</Button></div>))}
+                            <div key={item}><p>{item.name}</p><Button onClick={() => this.props.action(this.state.searchedUsers)}>Add</Button></div>))}
                         </div>
                 </Modal.Body>
             </Modal>

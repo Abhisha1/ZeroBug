@@ -20,48 +20,53 @@ class Firebase {
   }
   // write data to the database
   updateUsers = (name, email) => {
-    var newPostKey = firebase.database().ref().child('users').push().key;
 
-    this.database().ref('users/' + newPostKey).set({
+    this.database().ref('users/' + name).set({
       name: name,
       email: email
-    }, (error) => {
-      if (error) {
+    }).then( () => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch( error => {
         // The write failed...
           console.log("Written data FAILED");
-      } else {
-          // Data saved successfully!
-          console.log("Successfully append the data!");
-      }
-    });
+      
+    })
   }
 
-  searchUsers = function(user, the){
+  searchUsers = (user, the) => {
     let searchedUsers = []
     let dbRef = this.database().ref('/users/');
-    dbRef.orderByChild("name").on("child_added", function(data) {
-        if(data.val().name === user){
-          searchedUsers.push(data.val());
+    dbRef.on("value", function(snapshot){
+      if (snapshot.val() == null){
+        return new Error("no matches");
+      }
+      else{
+        
+        for (let key in snapshot.val()){
+          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())){
+            searchedUsers.push(snapshot.val()[key]);
+          }
         }
-    });
-    the.setState({... the.state, searchedUsers: searchedUsers});
+        the.setState({... the.state, searchedUsers: searchedUsers});
+        return MESSAGES.SUCCESS_MESSAGE;
+      }
+      
+    })
   }
 
-  createFamily = function(users, name, admin){
+  createFamily = (users, name, admin) => {
+    return (
     this.database().ref('families/'+ name).set({
       users: users,
       name: name,
       admin: admin
-    }, (error) => {
-      if (error) {
-        console.log(error);
+    }).then( () => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
         return error;
-      }
-      else{
-        console.log(MESSAGES.SUCCESS_MESSAGE);
-        return MESSAGES.SUCCESS_MESSAGE;
-      }
-    });
+    })
+    )
   }
 
 
