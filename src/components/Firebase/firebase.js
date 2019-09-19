@@ -18,6 +18,23 @@ class Firebase {
     this.auth = app.auth();
     this.database = firebase.database;
   }
+  // write data to the database
+  updateUsers = (name, email) => {
+    var newPostKey = firebase.database().ref().child('users').push().key;
+
+    this.database().ref('users/' + newPostKey).set({
+      name: name,
+      email: email
+    }, (error) => {
+      if (error) {
+        // The write failed...
+          console.log("Written data FAILED");
+      } else {
+          // Data saved successfully!
+          console.log("Successfully append the data!");
+      }
+    });
+  }
 
   searchUsers = function(user, the){
     let searchedUsers = []
