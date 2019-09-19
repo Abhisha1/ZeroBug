@@ -27,14 +27,13 @@ class CreateFamilyPage extends Component {
         return event => {
           //admin will be changed after session handling to group creator
 
-          let createFamilyResult = firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0]);
-          console.log(createFamilyResult);
-          if (createFamilyResult === MESSAGES.SUCCESS_MESSAGE){
+          let createFamilyResult = firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0])
+          .then(() => {
             this.setState({message: "You successfully created a new family"});
-          }
-          else{
+          })
+          .catch(error => {
             this.setState({message: "Uh-oh. Something went wrong, try again later"});
-          }
+          })
           this.setState({showOutcomeModal: true});
           event.preventDefault();
         }
