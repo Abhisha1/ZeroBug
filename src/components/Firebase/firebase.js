@@ -68,6 +68,28 @@ class Firebase {
     });
   }
 
+  getURL = (th, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+      console.log(url);
+      th.setState({... th.state, imageURL: url});
+      return url;
+    }).catch(function(error) {
+      // ...
+    });
+  }
+
+  // testPutFilePathToDB = (filepath) => {
+    
+  //   var newPostRef = this.database().ref('/filesURL/').push();
+  //   var url = this.getURL(filepath);
+
+  //   newPostRef.set({
+  //     fileURL: url,
+  //   });
+    
+
+  // }
+
 
   // write data to the database
   testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {

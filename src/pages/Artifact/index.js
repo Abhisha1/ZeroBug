@@ -65,8 +65,8 @@ class Artifact extends Component{
               click to delete the image</button>
 
 
-              <button onClick={() => firebase.testGetListOfFileNames(this)}>
-              click to get the list of files</button>
+            <button onClick={() => firebase.testGetListOfFileNames(this)}>
+            click to get the list of files</button>
 
 
             <ul>
@@ -74,6 +74,10 @@ class Artifact extends Component{
               <li key={item}>{item}</li>
             ))}
             </ul>
+
+
+            {/*<button onClick={() => firebase.testPutFilePathToDB('images/aaa.png')}>
+            click to store file storage URL to Database</button>*/}
 
           </div>
  
