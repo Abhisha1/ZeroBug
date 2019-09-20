@@ -54,7 +54,7 @@ class CustomModal extends Component {
                     </InputGroup>
                         <div id="searchResults">
                         {this.state.searchedUsers.map(item => (
-                            <div id="searchResult" key={item}><p id="modalText">{item.name}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(this.state.searchedUsers)}>Add</button></div>))}
+                            <div id="searchResult" key={item.name}><p id="modalText">{item.name}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
                         </div>
                 </Modal.Body>
             </Modal>

@@ -10,7 +10,7 @@ import CustomDeck from '../../components/CardDeck';
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {familyName: '', familyMembers: [], showOutcomeModal: false, message: ''};
+        this.state = {familyName: '', familyMembers: [], showOutcomeModal: false, message: '',confirmationTitle:'Error'};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,9 +27,9 @@ class CreateFamilyPage extends Component {
         return event => {
           //admin will be changed after session handling to group creator
 
-          let createFamilyResult = firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0])
+          firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0])
           .then(() => {
-            this.setState({message: "You successfully created a new family"});
+            this.setState({message: "You created a new family", confirmationTitle: 'Success'});
           })
           .catch(error => {
             this.setState({message: "Uh-oh. Something went wrong, try again later"});
@@ -41,14 +41,11 @@ class CreateFamilyPage extends Component {
 
       handleModal(dataFromModal){
         console.log(dataFromModal);
-        console.log(dataFromModal.values());
         let usersToAdd = this.state.familyMembers;
         console.log("users existing   "+ usersToAdd)
-        dataFromModal.map(item => {
-          if(this.state.familyMembers.indexOf(item) === -1){
-            usersToAdd.push(item);
-          }
-        })
+        if(this.state.familyMembers.indexOf(dataFromModal) === -1){
+            usersToAdd.push(dataFromModal);
+        }
         console.log("users to add   "+ usersToAdd)
         this.setState({
           familyMembers: usersToAdd
@@ -77,7 +74,7 @@ class CreateFamilyPage extends Component {
                 <CustomDeck cards={this.state.familyMembers}></CustomDeck>
                 <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
                   <Modal.Header closeButton>
-                    <Modal.Title> Error</Modal.Title>
+                    <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
                   <Modal.Footer>

@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import {CardDeck, Card} from "react-bootstrap";
-import {MdPersonPinCircle} from "react-icons/md";
 class CustomDeck extends Component{
     constructor(props){
         super(props);
     }
 
     render(){
+        let cardImg = require('../../assets/bg2.jpg');
         return(
             <CardDeck>
             {this.props.cards.map(item => (
                 <Card key={item.name}>
-                <Card.Img variant="top"/>
+                <Card.Img variant="top" src={cardImg} />
                 <Card.Body>
                 <Card.Title>{item.name}</Card.Title>
                 </Card.Body>
