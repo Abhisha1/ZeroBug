@@ -11,7 +11,7 @@ class CustomDeck extends Component{
             <CardDeck>
             {this.props.cards.map(item => (
                 <Card key={item.name}>
-                <Card.Img variant="top" src={<MdPersonPinCircle></MdPersonPinCircle>}/>
+                <Card.Img variant="top"/>
                 <Card.Body>
                 <Card.Title>{item.name}</Card.Title>
                 </Card.Body>

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {Modal} from "react-bootstrap";
 import {InputGroup, FormControl, Button} from "react-bootstrap";
 import {FirebaseContext} from "../../components/Firebase";
-
+import './modal.scss';
+import '../Button/button.scss';
 class CustomModal extends Component {
     constructor(props){
         super(props);
@@ -46,14 +47,14 @@ class CustomModal extends Component {
                         <InputGroup.Append>
                         <FirebaseContext.Consumer>
                         {firebase => 
-                        <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember,this)} id="add-user-button">Button</Button>
+                        <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember,this)} id="add-user-button">Search</Button>
                         }
                         </FirebaseContext.Consumer>
                         </InputGroup.Append>
                     </InputGroup>
-                        <div>
+                        <div id="searchResults">
                         {this.state.searchedUsers.map(item => (
-                            <div key={item}><p>{item.name}</p><Button onClick={() => this.props.action(this.state.searchedUsers)}>Add</Button></div>))}
+                            <div id="searchResult" key={item}><p id="modalText">{item.name}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(this.state.searchedUsers)}>Add</button></div>))}
                         </div>
                 </Modal.Body>
             </Modal>
