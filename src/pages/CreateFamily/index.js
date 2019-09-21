@@ -54,7 +54,7 @@ class CreateFamilyPage extends Component {
     
       render() {
         return (
-            <div>
+            <div id="create-family-page">
                 <h1 id="create-family-heading">Create a new family</h1>
                 <MdGroupAdd size={400} id="family-avatar"></MdGroupAdd>
                 <FirebaseContext.Consumer>
