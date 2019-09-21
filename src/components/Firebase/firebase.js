@@ -35,7 +35,7 @@ class Firebase {
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image) => {
     var aaa = this.storage().ref().child('images/'+image.name).put(image);
-    console.log(aaa);
+    //console.log(aaa);
   }
 
   //delete the file
@@ -70,9 +70,10 @@ class Firebase {
 
   getURL = (th, filepath) => {
     this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+      console.log("aaaaa");
       console.log(url);
       th.setState({... th.state, imageURL: url});
-      return url;
+      //return url;
     }).catch(function(error) {
       // ...
     });
