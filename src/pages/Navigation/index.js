@@ -2,52 +2,42 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AuthUserContext } from '../../components/Session'
 import SignOutButton from '../../components/SignOut';
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
+import {IoMdPeople, IoMdPerson, IoMdHome} from "react-icons/io"
+import './navigation.scss';
+import logo from "../../assets/templogo.png";
 
 
 const Navigation = () => (
-  <div>
-    <AuthUserContext.Consumer>
+  <Navbar collapseOnSelect expand="lg" bg="light" variant="light" id="nav-bar">
+  <a href={ROUTES.LANDING} className="navbar-left" alt-text="Homepage" id="homepage-logo"><img src={logo} id="logo-image"></img></a>
+  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+  <Navbar.Collapse id="responsive-navbar-nav">
+  <AuthUserContext.Consumer>
       {authUser =>
         authUser ? <NavigationAuth /> : <NavigationNonAuth />
       }
     </AuthUserContext.Consumer>
-  </div>
+  </Navbar.Collapse>
+</Navbar>
 );
 
 const NavigationAuth = () => (
-  <div>
-    <ul>
-      <li>
-        <Link to={ROUTES.HOME}>Home</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ACCOUNT}>Account</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
-      <li>
-        <SignOutButton/>
-      </li>
-    </ul>
-  </div>
+  <Nav className="ml-auto">
+      <Nav.Link href={ROUTES.HOME}><IoMdHome size={30}></IoMdHome></Nav.Link>
+      <Nav.Link href={ROUTES.ACCOUNT}><IoMdPerson size={30}></IoMdPerson></Nav.Link>
+      <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
+      <SignOutButton/>
+    </Nav>
 );
 
 const NavigationNonAuth = () => (
-    <div>
-      <ul>
-        <li>
-          <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.LANDING}>Landing</Link>
-        </li>
-    </ul>
-    </div>
+      <Nav className="ml-auto">
+        <Nav.Link href={ROUTES.SIGN_IN}>Log In</Nav.Link>
+        <Nav.Link href={ROUTES.SIGN_UP}>Sign Up</Nav.Link>
+    </Nav>
 );
+
 
 export default Navigation;
