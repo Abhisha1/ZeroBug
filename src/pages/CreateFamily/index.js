@@ -86,12 +86,12 @@ class CreateFamilyPage extends Component {
                 </OverlayTrigger>
                 :<Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange(firebase)} />
                 }
+                    <div id="family-buttons">
                     <Form.Group controlId="validationFormikUsername">
-                    <Form.Label>Add Members</Form.Label>
-                    
                     <CustomModal action={this.handleModal}></CustomModal>
                     </Form.Group>
-                    <button variant="primary" disabled={this.state.isExistingFamily} type="submit" value="Create">Create</button>
+                    <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily} type="submit" value="Create">Create</button>
+                    </div>
                 </Form>
                   }
                 </FirebaseContext.Consumer>
