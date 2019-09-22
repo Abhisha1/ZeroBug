@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../../components/Button/button.scss";
-import {Form, Modal} from "react-bootstrap";
+import {Form, Modal, Popover, OverlayTrigger} from "react-bootstrap";
 import {MdGroupAdd} from "react-icons/md"
 import "./createFamily.scss";
 import {FirebaseContext} from "../../components/Firebase";
@@ -10,17 +10,32 @@ import CustomDeck from '../../components/CardDeck';
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {familyName: '', familyMembers: [], showOutcomeModal: false, message: '',confirmationTitle:'Error'};
+        this.state = {familyName: '',
+            familyMembers: [],
+            showOutcomeModal: false,
+            message: '',
+            confirmationTitle:'Error',
+            isExistingFamily: false};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
     
-      handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        this.setState({[name]: value});
+      handleChange(firebase) {
+        return event => {
+          const target = event.target;
+          const value = target.value;
+          const name = target.name;
+          this.setState({[name]: value}, () => {
+            let isExistingFamily = firebase.isExistingFamily(this.state.familyName);
+            if (isExistingFamily && this.state.familyName !== isExistingFamily){
+              this.setState({isExistingFamily: isExistingFamily})
+            }
+            if (!isExistingFamily && this.state.familyName !== isExistingFamily){
+              this.setState({isExistingFamily: isExistingFamily})
+            }
+          });  
+        }
       }
     
       handleSubmit(firebase){
@@ -40,19 +55,23 @@ class CreateFamilyPage extends Component {
       }
 
       handleModal(dataFromModal){
-        console.log(dataFromModal);
         let usersToAdd = this.state.familyMembers;
-        console.log("users existing   "+ usersToAdd)
         if(this.state.familyMembers.indexOf(dataFromModal) === -1){
             usersToAdd.push(dataFromModal);
         }
-        console.log("users to add   "+ usersToAdd)
         this.setState({
           familyMembers: usersToAdd
         });
       }
-    
       render() {
+        const popover = (
+        <Popover id="popover-basic">
+          <Popover.Title as="h3">Family name error</Popover.Title>
+          <Popover.Content>
+            This family already exists! Please change the family group's name.
+          </Popover.Content>                    
+        </Popover>
+        )
         return (
             <div id="create-family-page">
                 <h1 id="create-family-heading">Create a new family</h1>
@@ -61,13 +80,18 @@ class CreateFamilyPage extends Component {
                   {firebase => 
                 <Form onSubmit={this.handleSubmit(firebase)} id="new-family-form">
                 <Form.Label> Family Name </Form.Label>
-                    <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange} />
+                {this.state.isExistingFamily ?
+                <OverlayTrigger placement="right" overlay={popover}>
+                <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange(firebase)} />
+                </OverlayTrigger>
+                :<Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange(firebase)} />
+                }
                     <Form.Group controlId="validationFormikUsername">
                     <Form.Label>Add Members</Form.Label>
                     
                     <CustomModal action={this.handleModal}></CustomModal>
                     </Form.Group>
-                    <button variant="primary" type="submit" value="Create">Create</button>
+                    <button variant="primary" disabled={this.state.isExistingFamily} type="submit" value="Create">Create</button>
                 </Form>
                   }
                 </FirebaseContext.Consumer>
