@@ -15,6 +15,7 @@ const Navigation = () => (
         <NavDropdown.Item href={ROUTES.ACCOUNT}>Account</NavDropdown.Item>
         <NavDropdown.Item href={ROUTES.SIGN_IN}>Log In</NavDropdown.Item>
         <NavDropdown.Item href={ROUTES.SIGN_UP}>Sign Up</NavDropdown.Item>
+        <NavDropdown.Item href={ROUTES.ARTIFACT}>Artifact</NavDropdown.Item>
       </NavDropdown>
       <Nav.Link href={ROUTES.HOME}><IoMdHome size={30}></IoMdHome></Nav.Link>
       <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30}></IoMdPeople></Nav.Link>
