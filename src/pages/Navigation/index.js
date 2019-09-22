@@ -27,6 +27,7 @@ const NavigationAuth = () => (
   <Nav className="ml-auto">
       <Nav.Link href={ROUTES.HOME}><IoMdHome size={30}></IoMdHome></Nav.Link>
       <Nav.Link href={ROUTES.ACCOUNT}><IoMdPerson size={30}></IoMdPerson></Nav.Link>
+      <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30}></IoMdPeople></Nav.Link>
       <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
       <SignOutButton/>
     </Nav>
