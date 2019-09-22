@@ -1,0 +1,39 @@
+  #create-family-page{
+    display:flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    width: 100%;
+    height:100%;
+  }
+  
+  #family-avatar{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #ffe960;
+    border-width: thick;
+    border-radius: 50vw;
+    padding: 1vw 2vw 1vw 2vw; 
+    width: 40vw !important;
+    height: 40vw !important;
+  }
+  #create-family-heading{
+      text-align: center;
+      margin: 0 auto;
+      font-size: 10vw;
+      font-family: Montserrat;
+      font-weight: 600 !important;
+  }
+  #add-user-button{
+    border-color: #ffe960;
+    background-color: #ffe960;
+    font-family: Montserrat;
+  }
+
+  #new-family-form{
+    width: 50%;
+    margin: auto;
+    left: 0; bottom: 10vw; right: 0;
+  }
+
+  

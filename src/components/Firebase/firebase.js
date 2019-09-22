@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
+import * as MESSAGES from '../../constants/messages';
 
 
 
@@ -30,6 +31,21 @@ class Firebase {
       // ...
     });
   }
+  // write data to the database
+  updateUsers = (name, email) => {
+
+    this.database().ref('users/' + name).set({
+      name: name,
+      email: email
+    }).then( () => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch( error => {
+        // The write failed...
+          console.log("Written data FAILED");
+      
+    })
+  }
+
 
   //upload the files
   //used by the pages/Artifact/imageUpload.js
@@ -97,6 +113,45 @@ class Firebase {
     });
   }
 
+
+  
+  searchUsers = (user, the) => {
+    let searchedUsers = []
+    let dbRef = this.database().ref('/users/');
+    dbRef.on("value", function(snapshot){
+      if (snapshot.val() == null){
+        return new Error("no matches");
+      }
+      else{
+        
+        for (let key in snapshot.val()){
+          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())){
+            searchedUsers.push(snapshot.val()[key]);
+          }
+        }
+        the.setState({... the.state, searchedUsers: searchedUsers});
+        return MESSAGES.SUCCESS_MESSAGE;
+      }
+      
+    })
+  }
+
+  createFamily = (users, name, admin) => {
+    return (
+    this.database().ref('families/'+ name).set({
+      users: users,
+      name: name,
+      admin: admin
+    }).then( () => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
+        return error;
+    })
+    )
+  }
+
+
   // write data to the database
   testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
     this.database().ref('testUploadArtifactData/' + artifactID).set({
@@ -114,7 +169,7 @@ class Firebase {
       }
     });
   }
-
+  
   // write to the database with generated random key
   // not use at the moment
   testUpdateArtifactData2 = () => {
@@ -197,6 +252,7 @@ class Firebase {
   // Autherisation API
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
+    
 
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);

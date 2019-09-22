@@ -6,7 +6,7 @@ const SignInPage = () => (
   <div>
   <div className="split right">
     <div className="centred">
-      <h1>Log In</h1>
+      <h1 id="logIn">Log In</h1>
       <SignInForm />
       <SignUpLink />
     </div>
