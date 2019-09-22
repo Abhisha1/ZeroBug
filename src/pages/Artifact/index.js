@@ -79,6 +79,10 @@ class Artifact extends Component{
             {/*<button onClick={() => firebase.testPutFilePathToDB('images/aaa.png')}>
             click to store file storage URL to Database</button>*/}
 
+            <button onClick={() => firebase.testUpdateArtifactData2()}>
+              click to upload the test artifact data</button>
+
+
           </div>
  
         ]}

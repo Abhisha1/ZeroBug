@@ -22,13 +22,10 @@ class ImageUpload extends Component{
 
     handleUpload = () => {
         const {image} = this.state;
-        const uploadTask = this.props.firebase.uploadthings(image, this);
-        console.log("dddddd");
-        //this.props.firebase.getURL(this,'images/'+image.name);
-        
 
-      //  console.log(image.name);
-       // console.log(url);
+        //here give the artifactName
+        const uploadTask = this.props.firebase.uploadthings(image, this, "artifactName");
+
 
     }
 
