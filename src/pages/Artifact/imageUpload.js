@@ -22,9 +22,9 @@ class ImageUpload extends Component{
 
     handleUpload = () => {
         const {image} = this.state;
-        const uploadTask = this.props.firebase.uploadthings(image);
+        const uploadTask = this.props.firebase.uploadthings(image, this);
         console.log("dddddd");
-        const url = this.props.firebase.getURL(this,'images/'+image.name);
+        //this.props.firebase.getURL(this,'images/'+image.name);
         
 
       //  console.log(image.name);
@@ -37,11 +37,6 @@ class ImageUpload extends Component{
             <div>
                 <input type="file" onChange={this.handleChange} />
                 <button onClick={this.handleUpload}>Upload</button>
-                <br/>
-                <p>Please Click multiple times until below showed the image: the upload 
-                    image to the storage will take some times 
-                    so sometimes may not render the picture immediately
-                </p>
                 <br/>
                 <img src={this.state.imageURL} alt="Uploaded images" height="120" width="330"/>
                 

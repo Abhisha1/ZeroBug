@@ -33,8 +33,13 @@ class Firebase {
 
   //upload the files
   //used by the pages/Artifact/imageUpload.js
-  uploadthings = (image) => {
-    var aaa = this.storage().ref().child('images/'+image.name).put(image);
+  uploadthings = (image, th) => {
+   // var aaa = this.storage().ref().child('images/'+image.name).put(image);
+    var aaa = this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
+      this.getURL(th, 'images/'+image.name);
+    }
+
+    );
     //console.log(aaa);
   }
 
@@ -68,28 +73,38 @@ class Firebase {
     });
   }
 
+  //store the file path of the storage to the database
+  testPutFilePathToDB = (filepath) => {
+    console.log(filepath);
+    var newPostRef = this.database().ref('/filesURL/').push();
+    console.log(newPostRef);
+
+    newPostRef.set({
+      fileURL: filepath,
+    });
+    
+
+  }
+
+  //get the image file path that store in the firebase storage
   getURL = (th, filepath) => {
-    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+    this.storage().ref().child(filepath).getDownloadURL().then((url) => {
       console.log("aaaaa");
       console.log(url);
+      
       th.setState({... th.state, imageURL: url});
+
+      console.log("test test");
+      this.testPutFilePathToDB(url);
+      console.log(url);
+      
       //return url;
     }).catch(function(error) {
       // ...
     });
   }
 
-  // testPutFilePathToDB = (filepath) => {
-    
-  //   var newPostRef = this.database().ref('/filesURL/').push();
-  //   var url = this.getURL(filepath);
-
-  //   newPostRef.set({
-  //     fileURL: url,
-  //   });
-    
-
-  // }
+  
 
 
   // write data to the database
