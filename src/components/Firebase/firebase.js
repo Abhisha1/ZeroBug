@@ -47,11 +47,26 @@ class Firebase {
             searchedUsers.push(snapshot.val()[key]);
           }
         }
-        the.setState({... the.state, searchedUsers: searchedUsers});
+        the.setState({...the.state, searchedUsers: searchedUsers});
         return MESSAGES.SUCCESS_MESSAGE;
       }
       
     })
+  }
+
+  isExistingFamily = (name) => {
+    let dbRef = this.database().ref('/families/');
+    let isMatch = false
+    dbRef.on("value", function(snapshot){
+      if (snapshot.val() != null){
+        for (let key in snapshot.val()){
+          if (key.toLowerCase() === name.toLowerCase()){
+            isMatch = true;
+          }
+        }
+      }
+    })
+    return isMatch;
   }
 
   createFamily = (users, name, admin) => {
@@ -61,7 +76,6 @@ class Firebase {
       name: name,
       admin: admin
     }).then( () => {
-      console.log(MESSAGES.SUCCESS_MESSAGE);
       return MESSAGES.SUCCESS_MESSAGE;
     }).catch(error => {
         return error;
