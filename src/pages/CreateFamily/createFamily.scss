@@ -49,8 +49,17 @@
     height: fit-content;
   }
 
-  #family-buttons{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+  @media only screen and (max-width: 4000px) {
+    #family-buttons{
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    #family-buttons{
+      display: flex;
+      flex-direction: column;
+    }
   }

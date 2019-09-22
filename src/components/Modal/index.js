@@ -47,7 +47,7 @@ class CustomModal extends Component {
                         <InputGroup.Append>
                         <FirebaseContext.Consumer>
                         {firebase => 
-                        <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember,this)} id="add-user-button">Search</Button>
+                        <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember,this)} id="find-user-button">Search</Button>
                         }
                         </FirebaseContext.Consumer>
                         </InputGroup.Append>
