@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
  } from 'react-router-dom';
+import { withFirebase } from './components/Firebase';
+import { AuthUserContext } from './components/Session';
 
 import Navigation from './pages/Navigation'
 import LandingPage from './pages/Landing';
@@ -16,6 +18,8 @@ import AccountPage from './pages/Account';
 import AdminPage from './pages/Admin';
 
 import * as ROUTES from './constants/routes';
+import { withAuthentication } from './components/Session'
+
 
 
 
@@ -23,7 +27,7 @@ const App = () => (
   <Router>
     <div>
       <Navigation />
-
+      <hr />
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -37,4 +41,4 @@ const App = () => (
   </Router>
 );
 
-export default App;
+export default withAuthentication(App);
