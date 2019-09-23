@@ -23,14 +23,7 @@ class Firebase {
     this.storage = firebase.storage;
   }
 
-  //download the file from the storage
-  testDownloadFile  = (the, filepath) => {
-    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
-      the.setState({... the.state, imageURL: url})
-    }).catch(function(error) {
-      // ...
-    });
-  }
+  /************************************************************************************* */
   // write data to the database
   updateUsers = (name, email) => {
 
@@ -45,12 +38,124 @@ class Firebase {
       
     })
   }
+  
+  searchUsers = (user, the) => {
+    let searchedUsers = []
+    let dbRef = this.database().ref('/users/');
+    dbRef.on("value", function(snapshot){
+      if (snapshot.val() == null){
+        return new Error("no matches");
+      }
+      else{
+        
+        for (let key in snapshot.val()){
+          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())){
+            searchedUsers.push(snapshot.val()[key]);
+          }
+        }
+        the.setState({... the.state, searchedUsers: searchedUsers});
+        return MESSAGES.SUCCESS_MESSAGE;
+      }
+      
+    })
+  }
+
+  createFamily = (users, name, admin) => {
+    return (
+    this.database().ref('families/'+ name).set({
+      users: users,
+      name: name,
+      admin: admin
+    }).then( () => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
+        return error;
+    })
+    )
+  }
+
+  // artifact string info
+  createArtifact = (name, year, origin, currentOwner, description) => {
+    return (
+      this.database().ref('artifacts/'+ name).set({
+        date: year,
+        origin: origin,
+        owner: currentOwner,
+        description: description
+      }).then( () => {
+        console.log(MESSAGES.SUCCESS_MESSAGE);
+        return MESSAGES.SUCCESS_MESSAGE;
+      }).catch(error => {
+        return error;
+      })
+    )
+  }
+
+  //th: is reference the class objet who call the function 
+  uploadArtifactImages = (image, th, anArtifactName) => {
+    this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
+      this.getStorageURL(th, 'images/'+image.name, anArtifactName);
+    }).then( () => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
+      return error;
+    });
+  }
+
+  //th: is reference the class objet who call the function
+  getStorageURL = (th, filepath, anArtifactName) => {
+    this.storage().ref().child(filepath).getDownloadURL().then((url) => {
+      
+      //get the url to show the upload images
+      th.setState({... th.state, imageURL: url});
+      //put the url to the firebase
+      this.putFilePathToDatabase(url, anArtifactName);
+      
+    }).then( () => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
+      return error;
+    })
+  }
+
+  //store the file path of the storage to the database
+  putFilePathToDatabase = (filepath, anArtifactName) => {
+    this.database().ref('artifactsFilepath/'+ anArtifactName).set({
+      fileURL: filepath,
+    }).then(() => {
+      console.log(MESSAGES.SUCCESS_MESSAGE);
+      return MESSAGES.SUCCESS_MESSAGE;
+    }).catch(error => {
+      return error;
+    });
+  }
+
+
+  /************************************************************************************* */
+  /************************************************************************************* */
+  /************************************************************************************* */
+
+
+
+
+
+  //download the file from the storage
+  testDownloadFile  = (the, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+      the.setState({... the.state, imageURL: url})
+    }).catch(function(error) {
+      // ...
+    });
+  }
 
 
   //upload the files
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image, th, anArtifactName) => {
-    var aaa = this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
+    this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
       this.getURL(th, 'images/'+image.name, anArtifactName);
     }
     );
@@ -114,42 +219,7 @@ class Firebase {
   }
 
 
-  
-  searchUsers = (user, the) => {
-    let searchedUsers = []
-    let dbRef = this.database().ref('/users/');
-    dbRef.on("value", function(snapshot){
-      if (snapshot.val() == null){
-        return new Error("no matches");
-      }
-      else{
-        
-        for (let key in snapshot.val()){
-          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())){
-            searchedUsers.push(snapshot.val()[key]);
-          }
-        }
-        the.setState({... the.state, searchedUsers: searchedUsers});
-        return MESSAGES.SUCCESS_MESSAGE;
-      }
-      
-    })
-  }
 
-  createFamily = (users, name, admin) => {
-    return (
-    this.database().ref('families/'+ name).set({
-      users: users,
-      name: name,
-      admin: admin
-    }).then( () => {
-      console.log(MESSAGES.SUCCESS_MESSAGE);
-      return MESSAGES.SUCCESS_MESSAGE;
-    }).catch(error => {
-        return error;
-    })
-    )
-  }
 
 
   // write data to the database

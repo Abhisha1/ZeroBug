@@ -16,6 +16,7 @@ class ImageUpload extends Component{
     handleChange = e => {
         if(e.target.files[0]){
             const file = e.target.files[0];
+            //console.log(file);
             this.setState({... this.state, image: file})
         }
     }
