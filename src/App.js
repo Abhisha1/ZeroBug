@@ -23,10 +23,12 @@ import { withAuthentication } from './components/Session'
 
 
 
-
+let rootStyle = {
+    display: 'grid'
+  };
 const App = () => (
   <Router>
-    <div>
+    <div style={rootStyle}>
       <Navigation />
       <hr />
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
@@ -34,7 +36,7 @@ const App = () => (
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
       <Route path={ROUTES.CREATE_FAMILY} component={CreateFamilyPage} />
       <Route path={ROUTES.ARTIFACT} component={Artifact} />
-      <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} />
+      {/* <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} /> */}
       {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
       <Route path={ROUTES.HOME} component={HomePage} />
       {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}

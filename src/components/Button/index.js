@@ -6,26 +6,26 @@ import "./button.scss";
  */
 
 class Button extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
     /**
      * Handles the button click event through redirecting to specific webpage
      */
-    handleClick(){
+    handleClick() {
         window.location = this.props.target;
     }
     /**
      * @return Renders the button to webpage
      */
-	render() {
-		return(
+    render() {
+        return (
             <div>
-			    <button type="button" variant={this.props.variant} onClick={this.handleClick}>{this.props.value}</button>
+                <button type="button" variant={this.props.variant} onClick={this.handleClick}>{this.props.value}</button>
             </div>
-		);
-	}
+        );
+    }
 }
 
 export default Button;
