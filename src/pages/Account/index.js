@@ -21,14 +21,61 @@ class AccountPage extends Component {
 					</div>
 				</div>
 
-				<div>
+				
+				<div id="artifactWrapper">
 					<h1 id="account-heading">Artifacts Owned</h1>
+					<div id="artifactContainer">
+						<div id="artifactItems">
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+						</div>
+					</div>
 				</div>
 
-				<div>
+				<div id="familiesWrapper">
 					<h1 id="account-heading">Manage Families</h1>
+					<div id="familiesContainer">
+						<div id="familyItems">
+							<div className="familyOwned">
+								yooooooo
+							</div>
+							<div className="familyOwned">
+								yooooooo
+							</div>
+							<div className="familyOwned">
+								yooooooo
+							</div>
+							<div className="familyOwned">
+								yooooooo
+							</div>
+							<div className="familyOwned">
+								yooooooo
+							</div>
+							<div className="familyOwned">
+								yooooooo
+							</div>
+						</div>
+					</div>
 				</div>
-
 			</div>
 			
 		);

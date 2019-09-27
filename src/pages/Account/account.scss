@@ -27,6 +27,68 @@
     padding-top: 128px;
 }
 
+#artifactWrapper{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    height: 680px;
+    padding-top: 128px;
+    flex: 1;
+    background-color: greenyellow;
+}
+
+#familiesWrapper{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    height: 680px;
+    padding-top: 128px;
+    flex: 1;
+    background-color: pink;
+}
+
+#artifactContainer{
+    width: 100%;
+    height: 360px;
+    background-color: yellow;
+    overflow: scroll;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex: 6;
+    align-items: center;
+}
+
+#artifactItems{
+    width: auto;
+    height: 360px;
+    background-color: yellow;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#familiesContainer{
+    width: 100%;
+    height: 360px;
+    background-color: purple;
+    overflow: scroll;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex: 6;
+    align-items: center;
+}
+
+#familyItems{
+    width: auto;
+    height: 360px;
+    background-color: purple;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 #topContainer{
     display: -webkit-flex; /* Safari */
     display: flex;
@@ -34,6 +96,22 @@
     justify-content: flex-start;
     height: 100%;
     flex-wrap: wrap;
+}
+
+div.artifactOwned{
+    width: 600px;
+    height: 300px;
+    background-color:  black;
+    margin-left: 50px;
+    
+}
+
+div.familyOwned{
+    width: 600px;
+    height: 300px;
+    background-color:  black;
+    margin-left: 50px;
+    
 }
 
 button.aButton{
