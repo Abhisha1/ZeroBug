@@ -68,6 +68,19 @@ class Firebase {
     })
     return isMatch;
   }
+  viewFamily = (name) => {
+    console.log("VIEWING FAMILIAS");
+    let dbRef = this.database().ref('/families/'+name);
+    let family = null;
+    dbRef.on("value", function(snapshot){
+      if (snapshot.val() == null){
+        return new Error("Could not retrieve this family");
+      }
+      else{
+        return snapshot.val();
+      }
+    });
+  }
 
   createFamily = (users, name, admin) => {
     return (
