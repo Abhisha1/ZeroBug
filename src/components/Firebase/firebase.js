@@ -87,17 +87,14 @@ class Firebase {
    * @return The associated family's data or an error
    */
   viewFamily = (name) => {
-    let dbRef = this.database().ref('/families/' + name);
-    dbRef.on("value", function (snapshot) {
-      if (snapshot.val() == null) {
-        return new Error("Could not retrieve this family");
-      }
-      else {
-        return snapshot.val();
-      }
+    return new Promise((resolve, reject) => {
+      const onData = snap =>{
+        resolve(snap.val());
+      } 
+      const onError = error => reject(error);
+      this.database().ref('/families/' + name).on("value", onData, onError)
     });
-  }
-
+}
   /**
    * Creates a new family and uploads to database
    * @param users The family members
