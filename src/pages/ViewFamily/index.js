@@ -50,7 +50,6 @@ class FamilyDetails extends Component {
             .catch(error => {
                 console.log(error);
             });
-
     }
     /**
      * Renders the family details or a loading screen depending on
