@@ -1,8 +1,9 @@
 import React from "react";
+import Cards from "./../../components/Card";
 
 const HomePage = () => (
   <div>
-    <h1>HOME! TEST!</h1>
+    <Cards/>
   </div>
 );
 

@@ -34,7 +34,7 @@ const App = () => (
       <Route path={ROUTES.CREATE_FAMILY} component={CreateFamilyPage} />
       <Route path={ROUTES.ARTIFACT} component={Artifact} />
       {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
-      {/* <Route path={ROUTES.HOME} component={HomePage} /> */}
+      <Route path={ROUTES.HOME} component={HomePage} />
       {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
       {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
     </div>
