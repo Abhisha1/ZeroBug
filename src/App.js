@@ -18,7 +18,7 @@ import AccountPage from './pages/Account';
 import AdminPage from './pages/Admin';
 
 import * as ROUTES from './constants/routes';
-import { withAuthentication } from './components/Session'
+import { withAuthentication } from './components/Session';
 
 
 

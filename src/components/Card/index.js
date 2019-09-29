@@ -9,7 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-
+import Divider from '@material-ui/core/Divider';
 import './card.scss'
 const useStyles = makeStyles({
   card: {
@@ -26,10 +26,10 @@ class Cards extends Component{
         super(props);
     }
     render(){
-        const classes = useStyles;
+
         return (
             <div>
-            <Box boxShadow={3} height="400px" width="345px">
+            <Box boxShadow={3} height="350px" width="300px">
               <Card class= "card">
                 <CardActionArea>
                   <CardMedia
@@ -37,22 +37,23 @@ class Cards extends Component{
                     image="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
                     title="Contemplative Reptile"
                   />
+                  </CardActionArea>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Lizard
+                      *Artifact Name*
+                    </Typography>
+                    <Divider/>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      *Desciption*
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                      Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                      across all continents except Antarctica
+                      *Date*
                     </Typography>
                   </CardContent>
-                </CardActionArea>
+
                 <CardActions>
                   <Button size="small" color="primary">
-                    Share
-                  </Button>
-                  <Button size="small" color="primary">
-                    Learn More
+                    Explore!
                   </Button>
                 </CardActions>
               </Card>

@@ -17,7 +17,7 @@ class LandingPage extends Component {
 
 					</div>
 
-					
+
 					<div className="parallax">
 					</div>
 					<div className="parallax">
