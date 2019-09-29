@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./account.scss";
+import ImageUpload from "./imageUpload";
 import {FirebaseContext} from "../../components/Firebase";
 
 class AccountPage extends Component {
@@ -7,18 +8,10 @@ class AccountPage extends Component {
     render() {
 		return(
 			<div id="profileContainer">
-				<div id="topWraper">
-					<h1 id="account-heading">Your Profile</h1>
-					<div id="topContainer">
-						<div id="avatarContainer">
-							<img id="avatarBox"></img>
-							<button className="aButton">Change Avatar</button>
-						</div>
-						<div id="profileInformationContainer">
-							<h2 id="profile-name">Name</h2>
-							<button className="aButton" id="changePasswordButton">Change Password</button>
-						</div>
-					</div>
+				
+
+				<div>
+				<ImageUpload />
 				</div>
 
 				
@@ -76,7 +69,12 @@ class AccountPage extends Component {
 						</div>
 					</div>
 				</div>
+
+
+				
 			</div>
+
+			
 			
 		);
 	}

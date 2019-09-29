@@ -46,6 +46,50 @@ class Firebase {
     })
   }
 
+  /********************************************************************** */
+  //upload the user profile images
+  //used by the pages/Account/imageUpload.js
+  uploadProfileImage = (image, th) => {
+    var aaa = this.storage().ref().child('profileImages/'+image.name).put(image).then((snapshot) => {
+       this.getProfileImageURL(th, 'profileImages/'+image.name);
+
+    }).catch( error => {
+      console.log("Written data FAILED");
+    });
+   }
+
+   //store the file path of the storage to the database
+  putProfileImageFilePathToDB = (filepath, username) => {
+    var newPostRef = this.database().ref('/profileImages/').push();
+
+    newPostRef.set({
+      fileURL: filepath,
+      username: username,
+      
+    }).catch( error => {
+        console.log("Written data FAILED");
+    });
+  }
+
+  //get the image file path that store in the firebase storage
+  getProfileImageURL = (th, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then((url) => {
+      
+      th.setState({... th.state, imageURL: url});
+      this.putProfileImageFilePathToDB(url, "test username");
+      
+    }).catch( error => {
+        console.log("Written data FAILED");
+    });
+  }
+
+  /********************************************************************** */
+
+
+
+
+ 
+
 
   //upload the files
   //used by the pages/Artifact/imageUpload.js

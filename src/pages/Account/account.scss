@@ -124,12 +124,37 @@ button.aButton{
     border: 2px solid #73AD21;
 }
 
+button.aButton:focus{
+    color: red;
+}
+
+input.testInput{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#chooseFile{
+    border-radius: 40px;
+    border: 2px solid yellow;
+    margin-top: 45px;
+    background-color: white;
+    padding-left: 50px;
+    padding-right: 12px;
+    font-size: 2vw;
+    font-family: Montserrat;
+}
+
+
 @media only screen and (max-width: 6000px) {
     #avatarBox{
         background-color: cyan;
         height: 256px;
         width: 256px;
-        border-radius: 50%
+        border-radius: 50%;
     }
     .aButton{
         border-radius: 40px;
