@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { shadows } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -28,6 +29,7 @@ class Cards extends Component{
         const classes = useStyles;
         return (
             <div>
+            <Box boxShadow={3} height="400px" width="345px">
               <Card class= "card">
                 <CardActionArea>
                   <CardMedia
@@ -54,6 +56,7 @@ class Cards extends Component{
                   </Button>
                 </CardActions>
               </Card>
+              </Box>
             </div>
         );
     }
