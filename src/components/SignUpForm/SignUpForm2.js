@@ -15,6 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
 import CreateRoundedIcon from '@material-ui/icons/CreateRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -36,10 +37,14 @@ const INIT_STATE = {
 const primary = yellow[800];
 
 const useStyles = makeStyles(theme => ({
-  overrides: {
-    MuiTypography: {
-      colorPrimary: primary,
-    },
+  root: {
+    height: '100vh',
+  },
+  image: {
+    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
   '@global': {
     body: {
@@ -108,91 +113,94 @@ export default function SignUp() {
 
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <CreateRoundedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h4" color='primary' align='center'>
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="userName"
-                variant="outlined"
-                required
-                fullWidth
-                id="userName"
-                label="User Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl variant='outline' required='true'>
-                <InputLabel>Email</InputLabel>
-                <OutlinedInput
-                  id="email"
-                  type='email'
-                  value={values.email}
-                  onChange={handleChange('email')}
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <CreateRoundedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h4" color='primary' align='center'>
+            Sign up
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="userName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="userName"
+                  label="User Name"
+                  autoFocus
                 />
-            </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl variant='outlined' required='true'>
-                <InputLabel htmlFor="adornment-password">Password</InputLabel>
-                <OutlinedInput
-                  id="adornment-password"
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  onChange={handleChange('password')}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant='outline' required='true'>
+                  <InputLabel>Email</InputLabel>
+                  <OutlinedInput
+                    id="email"
+                    type='email'
+                    value={values.email}
+                    onChange={handleChange('email')}
+                  />
               </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant='outlined' required='true'>
+                  <InputLabel htmlFor="adornment-password">Password</InputLabel>
+                  <OutlinedInput
+                    id="adornment-password"
+                    type={values.showPassword ? 'text' : 'password'}
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl margin='normal' variant='outlined' required='true'>
+                  <InputLabel htmlFor="adornment-password">Confirm Password</InputLabel>
+                  <OutlinedInput
+                    id="adornment-password"
+                    type={values.showPassword ? 'text' : 'password'}
+                    value={values.confirmPassword}
+                    onChange={handleChange('confirmPassword')}
+                  />
+                </FormControl>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <FormControl margin='normal' variant='outlined' required='true'>
-                <InputLabel htmlFor="adornment-password">Confirm Password</InputLabel>
-                <OutlinedInput
-                  id="adornment-password"
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.confirmPassword}
-                  onChange={handleChange('confirmPassword')}
-                />
-              </FormControl>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+            <Grid container justify="center">
+              <Grid item>
+                <Link href="/signin" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          <Grid container justify="center">
-            <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+          </form>
+        </div>
+      </Grid>
+    </Grid>
   );
 }
