@@ -85,10 +85,42 @@ class Firebase {
 
   /********************************************************************** */
 
+   // get a list of Artifact name data
+   getListArtifactName = (the) => {
+    var testArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/');
+    tempRef.on('child_added', (data) => {      
+      testArtifactName.push(data.val().artifactName);
+      the.setState({... the.state, artifactList: testArtifactName})
+    });
+  }
+
+
+ // get a list of Family name data
+  getListFamilyName = (the) => {
+    var testFamilyName = [];
+    var tempRef = this.database().ref('/families/');
+    tempRef.on("value", (data) => {
+      
+      for (let key in data.val()){
+
+        for(let user in data.val()[key].users){
+
+          //here just for Jessica Text
+          if(data.val()[key].users[user].name == "Jessica Test"){
+            testFamilyName.push(data.val()[key].name);
+
+          }
+        }
+      }
+
+      the.setState({... the.state, familyList: testFamilyName})
+    });
+  }
 
 
 
- 
+
 
 
   //upload the files
@@ -261,15 +293,7 @@ class Firebase {
     })
   }
 
-  // get a list of Artifact name data
-  getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', function(data) {      
-      testArtifactName.push(data.val().artifactName);
-    });
-    the.setState({... the.state, artifactList: testArtifactName})
-  }
+ 
 
 
    // get a sorted list of Artifact name data by their name

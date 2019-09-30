@@ -107,11 +107,17 @@ div.artifactOwned{
 }
 
 div.familyOwned{
-    width: 600px;
-    height: 300px;
-    background-color:  black;
+    width: 400px;
+    height: 400px;
+    background-color: goldenrod;
     margin-left: 50px;
-    
+    border-radius: 90%;
+    font-size: 2vw;
+    font-family: Montserrat;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button.aButton{
