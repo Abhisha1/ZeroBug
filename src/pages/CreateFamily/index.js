@@ -4,7 +4,7 @@ import {Form, Modal, Popover, OverlayTrigger} from "react-bootstrap";
 import {MdGroupAdd} from "react-icons/md"
 import "./createFamily.scss";
 import {FirebaseContext} from "../../components/Firebase";
-import CustomModal from "../../components/Modal";
+import CustomModal from "../../components/AddUserModal";
 import {HOME} from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 class CreateFamilyPage extends Component {

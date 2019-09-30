@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
-import { Spinner } from 'react-bootstrap';
-import { HOME } from "../../constants/routes";
+import EditModal from '../../components/EditModal';
+import LoadingAnimation from '../../components/LoadingAnimation';
 /**
  * Page which views a particular family, as chosen by users actions from
  * previous webpage
@@ -26,9 +26,7 @@ class ViewFamily extends Component {
 /**
  * A loading spinner to be displayed when content is being fetched
  */
-const loading = <Spinner animation="border" role="status">
-    <span className="sr-only">Loading...</span>
-</Spinner>
+const loading = <LoadingAnimation></LoadingAnimation>
 
 /**
  * The family details as per receieved from the database, with ability
@@ -37,7 +35,17 @@ const loading = <Spinner animation="border" role="status">
 class FamilyDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = { family: null, loading: true }
+        this.state = { showModal:false, family: null, loading: true }
+        this.handleModal = this.handleModal.bind(this);
+    }
+    handleModal() {
+        if (this.state.showModal === false) {
+            this.setState({ showModal: true });
+        }
+        else {
+            this.setState({ showModal: false })
+        }
+        this.setState({ familyMember: '' });
     }
     /**
      * Fetches the specified family's data from the database
@@ -63,6 +71,7 @@ class FamilyDetails extends Component {
                         <h1>Family name</h1>
                         <p>{this.props.name}</p>
                         <h1>Members</h1>
+                        <EditModal action={this.handleModal} family={this.state.family}></EditModal>
                         <CustomSlider cards={this.state.family["users"]}></CustomSlider>
                     </div>
                 }

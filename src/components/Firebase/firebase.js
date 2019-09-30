@@ -115,6 +115,51 @@ class Firebase {
       })
     )
   }
+  /**
+   * Adds a user to the specified family
+   * @param user The user to be added
+   * @param family The family 
+   * @return A success message or error
+   */
+  addToFamily = (user, family) => {
+    let newFamily = family["users"];
+    newFamily.push(user);
+    let familyName = family["name"];
+    this.database().ref('/families/' + familyName).update({users: newFamily})
+    .then(() => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    })
+    .catch(error => {
+      return error;
+    })
+  }
+  /**
+   * Removes a user to the specified family
+   * @param user The user to be removed
+   * @param family The family 
+   * @return A success message or error
+   */
+  removeFromFamily = (user, family) => {
+    let newFamily = family["users"];
+    let removeIndex = -1;
+    for (let i = 0; i < family["users"].length; i++) {
+      if (family["users"][i].name === user.name){
+        removeIndex = i
+      }
+    }
+    newFamily.splice(removeIndex, 1);
+    let familyName = family["name"];
+    if (removeIndex == -1){
+      return new Error("could not find user in family");
+    }
+    this.database().ref('/families/' + familyName).update({users: newFamily})
+    .then(() => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    })
+    .catch(error => {
+      return error;
+    })
+  }
 
 
   // write data to the database
