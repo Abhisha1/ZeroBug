@@ -23,7 +23,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import yellow from '@material-ui/core/colors/yellow';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../Firebase';
+import Firebase from '../Firebase/firebase';
 import * as ROUTES from '../../constants/routes';
 
 const INIT_STATE = {
@@ -31,6 +31,7 @@ const INIT_STATE = {
   email: ' ',
   password: '',
   confirmpassword: '',
+  showPassword: false,
   error: null,
 };
 
@@ -41,16 +42,12 @@ const useStyles = makeStyles(theme => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(https://i.pinimg.com/originals/54/3f/ac/543facb00c1e59d9bb987bd7bccfc2ac.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
+
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -63,7 +60,7 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
 
   },
   submit: {
@@ -73,13 +70,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     userName: '',
     email: '',
     password: '',
     confirmPassword: '',
+    error: null,
     showPassword: false,
   });
 
@@ -96,16 +94,13 @@ export default function SignUp() {
   };
 
   const onSubmit = event => {
-    const { username, email, password } = this.state;
 
-    this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, password)
-      .then(authUser => {
-        this.setState({ ...INIT_STATE });
+    Firebase.doCreateUserWithEmailAndPassword(values.email, values.password).then(authUser => {
+        setValues({ ...INIT_STATE });
         this.props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        this.setState({ error });
+        setValues({ error });
       })
 
       event.preventDefault();
@@ -113,49 +108,59 @@ export default function SignUp() {
 
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main" className={classes.root} spacing={4}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+
+          <Avatar className={classes.avatar} align='center'>
             <CreateRoundedIcon />
           </Avatar>
-          <Typography component="h1" variant="h4" color='primary' align='center'>
-            Sign up
+
+          <Typography component="h5" variant="h5" color='primary'>
+            Sign Up
           </Typography>
+
           <form className={classes.form} noValidate onSubmit={onSubmit}>
+
             <Grid container spacing={2}>
+
               <Grid item xs={12}>
                 <TextField
                   name="userName"
                   variant="outlined"
-                  required
-                  fullWidth
+                  required={true}
+                  fullWidth={true}
                   id="userName"
-                  label="User Name"
+                  label="Name"
                   autoFocus
+                  onChange={handleChange("userName")}
                 />
               </Grid>
+
               <Grid item xs={12}>
-                <FormControl variant='outline' required='true'>
-                  <InputLabel>Email</InputLabel>
-                  <OutlinedInput
-                    id="email"
-                    type='email'
-                    value={values.email}
-                    onChange={handleChange('email')}
-                  />
-              </FormControl>
+                <TextField
+                  name="email"
+                  variant="outlined"
+                  required={true}
+                  fullWidth={true}
+                  id="email"
+                  label="Email"
+                  autoFocus
+                  onChange={handleChange("email")}
+                />
               </Grid>
+
               <Grid item xs={12}>
-                <FormControl variant='outlined' required='true'>
+                <FormControl variant='outlined' required={true} fullWidth>
                   <InputLabel htmlFor="adornment-password">Password</InputLabel>
                   <OutlinedInput
                     id="adornment-password"
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.password}
                     onChange={handleChange('password')}
+                    notched={true}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -171,13 +176,14 @@ export default function SignUp() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl margin='normal' variant='outlined' required='true'>
+                <FormControl margin='normal' variant='outlined' required={true} fullWidth>
                   <InputLabel htmlFor="adornment-password">Confirm Password</InputLabel>
                   <OutlinedInput
                     id="adornment-password"
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.confirmPassword}
                     onChange={handleChange('confirmPassword')}
+                    notched
                   />
                 </FormControl>
               </Grid>
@@ -185,6 +191,7 @@ export default function SignUp() {
             <Button
               type="submit"
               fullWidth
+              onSubmit={onSubmit}
               variant="contained"
               color="primary"
               className={classes.submit}
@@ -198,6 +205,7 @@ export default function SignUp() {
                 </Link>
               </Grid>
             </Grid>
+            {values.error && <p>{values.error.message}</p>}
           </form>
         </div>
       </Grid>
