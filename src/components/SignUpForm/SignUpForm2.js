@@ -106,6 +106,12 @@ export default function SignUp(props) {
       event.preventDefault();
   };
 
+  const isInvalid =
+    values.password !== values.confirmPassword ||
+    values.password === '' ||
+    values.userName === '' ||
+    values.email.search(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) === -1;
+
 
   return (
     <Grid container component="main" className={classes.root} spacing={4}>
@@ -160,7 +166,7 @@ export default function SignUp(props) {
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.password}
                     onChange={handleChange('password')}
-                    notched={true}
+                    notched
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -175,18 +181,21 @@ export default function SignUp(props) {
                   />
                 </FormControl>
               </Grid>
+
               <Grid item xs={12}>
-                <FormControl margin='normal' variant='outlined' required={true} fullWidth>
-                  <InputLabel htmlFor="adornment-password">Confirm Password</InputLabel>
-                  <OutlinedInput
-                    id="adornment-password"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.confirmPassword}
-                    onChange={handleChange('confirmPassword')}
-                    notched
-                  />
-                </FormControl>
+                <TextField
+                  id="adornment-password"
+                  variant="outlined"
+                  label="Repeat"
+                  autoFocus
+                  required
+                  type={values.showPassword ? 'text' : 'password'}
+                  value={values.confirmPassword}
+                  onChange={handleChange('confirmPassword')}
+                  fullWidth
+                />
               </Grid>
+
             </Grid>
             <Button
               type="submit"
@@ -195,6 +204,7 @@ export default function SignUp(props) {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={isInvalid}
             >
               Sign Up
             </Button>
