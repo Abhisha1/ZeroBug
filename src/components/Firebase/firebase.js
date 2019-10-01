@@ -119,8 +119,14 @@ class Firebase {
     )
   }
 
-
-  // write data to the database
+  /**
+   * Write the artifact information to the database
+   * @param artifact ID
+   * @param artifact name
+   * @param artifact origin
+   * @param artifact current owner
+   * @param artifact description
+   */
   testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
     this.database().ref('testUploadArtifactData/' + artifactID).set({
       artifactName: artifactName,
@@ -138,12 +144,13 @@ class Firebase {
     });
   }
 
-  // write to the database with generated random key
-  // not use at the moment
+  /**
+   * write to the database with generated random key
+   */
   testUpdateArtifactData2 = () => {
     // Create a new post reference with an auto-generated id
     var newPostRef = this.database().ref('/testUploadArtifactData/').push();
-    //console.log(newPostRef);
+
     newPostRef.set({
       artifactName: "test3",
       origin: "test3",
@@ -152,7 +159,15 @@ class Firebase {
     });
   }
 
-  // update or delete the data
+  
+  /**
+   * update or delete the artifact data
+   * @param updated artifact ID
+   * @param updated artifact name
+   * @param updated artifact origin
+   * @param updated artifact current owner
+   * @param updated artifact description
+   */
   testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
 
     // A post entry
@@ -170,7 +185,11 @@ class Firebase {
   }
 
 
-  // get the artifact data
+  /**
+   * get the artifact data
+   * @param artifact ID
+   * @param the component to be set the state
+   */
   getArtifactData = (artifactID, the) => {
     let artifactName = "?";
     this.database().ref('/testUploadArtifactData/05' + "").once('value').then(function (snapshot) {
@@ -179,7 +198,11 @@ class Firebase {
     })
   }
 
-  // get a list of Artifact name data
+  
+  /**
+   * Get a list of Artifact name data
+   * @param the component to be set the state
+   */
   getListArtifactName = (the) => {
     var testArtifactName = [];
     var tempRef = this.database().ref('/testUploadArtifactData/');
@@ -190,7 +213,10 @@ class Firebase {
   }
 
 
-  // get a sorted list of Artifact name data by their name
+  /**
+   * Get a sorted list of Artifact name data by their name
+   * @param the component to be set the state
+   */
   getSortedListArtifactName = (the) => {
     var testSortedArtifactName = [];
     var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
@@ -201,7 +227,10 @@ class Firebase {
   }
 
 
-  // get top 5 Artifact name data order by ArtifactName
+  /**
+   * Get top 5 Artifact name data order by ArtifactName
+   * @param the component to be set the state
+   */
   getTopFiveArtifactName = (the) => {
     var topFiveArtifactName = [];
     var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
