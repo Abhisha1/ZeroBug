@@ -6,7 +6,7 @@ import "./createFamily.scss";
 import {FirebaseContext} from "../../components/Firebase";
 import CustomModal from "../../components/Modal";
 import {HOME} from '../../constants/routes';
-import CustomDeck from '../../components/CardDeck';
+import CustomSlider from '../../components/CardSlider';
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
@@ -95,7 +95,7 @@ class CreateFamilyPage extends Component {
                 </Form>
                   }
                 </FirebaseContext.Consumer>
-                <CustomDeck cards={this.state.familyMembers}></CustomDeck>
+                <CustomSlider cards={this.state.familyMembers}></CustomSlider>
                 <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
                   <Modal.Header closeButton>
                     <Modal.Title> {this.state.confirmationTitle}</Modal.Title>

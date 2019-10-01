@@ -8,12 +8,12 @@ class LandingPage extends Component {
 
 	render() {
 		return(
-			<div className="landingpage">
+			<div id="landingpage">
 
 					<div className="parallax">
 					<h1 id="title-landing">A family artefact register.</h1>
 					<h3 id="subtitle-landing">Safe. Secure. Shareable</h3>
-					<ScrollButton></ScrollButton>
+					<ScrollButton newElementInView="about-card"></ScrollButton>
 
 					</div>
 

@@ -1,0 +1,34 @@
+#cardDeck{
+    display: flex;
+    justify-content: center;
+    // max-width:50%;
+    // margin: 0 auto;
+}
+
+#cardUser{
+    // margin-top: 10px;
+    // border: none;
+    max-width: 200px;
+}
+#sliderCard{
+    width: 10%;
+    height: 10%;
+    border: none;
+}
+#memberAvatar{
+    margin-left: 50%
+}
+#memberName{
+    text-align: center;
+}
+
+#slider{
+    width: 50%;
+    align-self: center;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #ffe960;
+  size: 100;
+}
