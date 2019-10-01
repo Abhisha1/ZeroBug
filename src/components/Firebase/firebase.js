@@ -20,7 +20,7 @@ class Firebase {
   }
   updateUsers = (name, email) => {
 
-    this.database().ref('users/' + name).set({
+    this.database().ref('users/' + email).set({
       name: name,
       email: email
     }).then(() => {
