@@ -2,6 +2,11 @@ import React from 'react';
 import AuthUserContext from './context';
 import { withFirebase } from '../Firebase'
 
+/**
+ * withAuthentication is used to handle the different states the program
+ *  could be in 
+ */
+
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
       constructor(props){
