@@ -1,20 +1,26 @@
 button[variant="primary"]{
     background-color: #ffe960 !important;
-    color: black;
+    color: #6c757d;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.75vw;
+    font-size: 1rem;
+    font-weight: 400;
     border-radius: 7px;
     border: 2px solid #ffe960;
 }
 
 button[variant="secondary"]{
     background-color: #f9bdbf !important;
-    color: black;
+    color: #6c757d;
     border-color: #f9bdbf;
     border: #f9bdbf;
     font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 button:disabled{
     opacity: 0.4 !important;
+}
+button:hover{
+    color:white;
 }
