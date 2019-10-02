@@ -18,9 +18,17 @@ class Firebase {
     this.auth = app.auth();
     this.database = firebase.database;
   }
-  updateUsers = (name, email) => {
 
-    this.database().ref('users/' + name).set({
+
+  /**
+   * Stores user in database
+   * @param name name of user
+   * @param email email user signed up with
+   * @return a success message when successful, or an error
+   */
+  addUserToDb = (name, email) => {
+
+    this.database().ref('users/' + email).set({
       name: name,
       email: email
     }).then(() => {
