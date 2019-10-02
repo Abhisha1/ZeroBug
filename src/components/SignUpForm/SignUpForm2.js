@@ -101,16 +101,17 @@ function SignUp(props) {
 
   // Handles submission of a new created user to Firebase
   const onSubmit = event => {
-    props.firebase.doCreateUserWithEmailAndPassword(values.email, values.password)
-    .then(() => {
+    props.firebase.doCreateUserWithEmailAndPassword(values.email, values.password, values.userName)
+      .then(() => {
+        props.firebase.addUserToDb(values.userName, values.email)
         setValues(INIT_STATE);
         props.history.push(ROUTES.HOME);
       })
       .catch(error => {
-        setValues({ ...values, error: error})
+        setValues({ ...values, error: error })
       })
 
-      event.preventDefault();
+    event.preventDefault();
   };
 
   // The component to render if an error message is present
@@ -146,64 +147,64 @@ function SignUp(props) {
             Sign Up
           </Typography>
           <form className={classes.form} noValidate onSubmit={onSubmit}>
-                <TextField
-                  margin='normal'
-                  name="userName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="userName"
-                  label="Name"
-                  autoFocus
-                  onChange={handleChange("userName")}
-                />
-                <TextField
-                  margin='normal'
-                  name="email"
-                  autoComplete="email"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  autoFocus
-                  onChange={handleChange("email")}
-                />
-                <FormControl variant='outlined' required={true} fullWidth margin='normal'>
-                  <InputLabel htmlFor="adornment-password" variant="outlined">Password</InputLabel>
-                  <OutlinedInput
-                    id="password"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    notched
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <TextField
-                  classes={{ root: classes.root}}
-                  margin='normal'
-                  id="adornment-password"
-                  variant="outlined"
-                  label="Confirm Password"
-                  autoFocus
-                  required
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.confirmPassword}
-                  onChange={handleChange('confirmPassword')}
-                  fullWidth
-                />
-              <p align='center'>{error}</p>
+            <TextField
+              margin='normal'
+              name="userName"
+              variant="outlined"
+              required
+              fullWidth
+              id="userName"
+              label="Name"
+              autoFocus
+              onChange={handleChange("userName")}
+            />
+            <TextField
+              margin='normal'
+              name="email"
+              autoComplete="email"
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              autoFocus
+              onChange={handleChange("email")}
+            />
+            <FormControl variant='outlined' required={true} fullWidth margin='normal'>
+              <InputLabel htmlFor="adornment-password" variant="outlined">Password</InputLabel>
+              <OutlinedInput
+                id="password"
+                type={values.showPassword ? 'text' : 'password'}
+                value={values.password}
+                onChange={handleChange('password')}
+                notched
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <TextField
+              classes={{ root: classes.root }}
+              margin='normal'
+              id="adornment-password"
+              variant="outlined"
+              label="Confirm Password"
+              autoFocus
+              required
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.confirmPassword}
+              onChange={handleChange('confirmPassword')}
+              fullWidth
+            />
+            <div align='center'>{error}</div>
             <Button
               type="submit"
               fullWidth

@@ -27,13 +27,14 @@ class Firebase {
    * @return a success message when successful, or an error
    */
   addUserToDb = (name, email) => {
-
-    this.database().ref('users/' + email).set({
+    let newPostKey = firebase.database().ref().child('users').push().key;
+    this.database().ref('/users/' + newPostKey).set({
       name: name,
       email: email
     }).then(() => {
       return MESSAGES.SUCCESS_MESSAGE;
     }).catch(error => {
+      console.log(error.message);
       return error;
     })
   }
