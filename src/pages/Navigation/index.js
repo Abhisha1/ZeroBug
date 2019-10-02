@@ -1,31 +1,51 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import { AuthUserContext } from '../../components/Session'
+import SignOutButton from '../../components/SignOut';
+import { Navbar, Nav } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
+import { IoMdPeople, IoMdPerson, IoMdHome } from "react-icons/io"
+import './navigation.scss';
+import logo from "../../assets/templogo.png";
 
-const Naviation = () => (
-  <div>
-    <ul>
-      <li>
-        <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.LANDING}>Landing</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.HOME}>Home</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ACCOUNT}>Account</Link>
-      </li>
-      <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
-      </li>
-    </ul>
-  </div>
+/**
+ * The Navigation bar that is used on website that renders differently depending on whether
+ * the user is signed in and authorised, or if it is not
+ */
+const Navigation = () => (
+  <Navbar collapseOnSelect expand="lg" bg="light" variant="light" id="nav-bar">
+    <a href={ROUTES.LANDING} className="navbar-left" id="homepage-logo"><img src={logo} id="logo-image" alt="Logo"></img></a>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <AuthUserContext.Consumer>
+        {/* Renders the approaprriate links depending on whether user is signed in/authorised or not */}
+        {authUser =>
+          authUser ? <NavigationAuth /> : <NavigationNonAuth />
+        }
+      </AuthUserContext.Consumer>
+    </Navbar.Collapse>
+  </Navbar>
+);
+/**
+ * The Navigation bar links when the user is authorised/ signed into their acount
+ */
+const NavigationAuth = () => (
+  <Nav className="ml-auto">
+    <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><IoMdPerson size={30} alt="Account"></IoMdPerson></Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
+    <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
+    <SignOutButton />
+  </Nav>
+);
+/**
+ * The Navigation bar links when the user is NOT authorised/signed into their acount
+ */
+const NavigationNonAuth = () => (
+  <Nav className="ml-auto">
+    <Nav.Link href={ROUTES.SIGN_IN}>Log In</Nav.Link>
+    <Nav.Link href={ROUTES.SIGN_UP}>Sign Up</Nav.Link>
+  </Nav>
 );
 
-export default Naviation;
+
+export default Navigation;
