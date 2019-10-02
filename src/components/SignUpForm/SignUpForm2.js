@@ -102,7 +102,8 @@ function SignUp(props) {
   // Handles submission of a new created user to Firebase
   const onSubmit = event => {
     console.log("enter onSubmit");
-    Firebase.doCreateUserWithEmailAndPassword(values.email, values.password).then(authUser => {
+    props.firebase.doCreateUserWithEmailAndPassword(values.email, values.password)
+    .then(() => {
         setValues({ ...INIT_STATE });
         console.log(values.email);
         props.history.push(ROUTES.HOME);

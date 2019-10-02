@@ -17,10 +17,9 @@ class Firebase {
   }
 
   // Autherisation API
-  doCreateUserWithEmailAndPassword = (email, password) =>{
-    console.log("Docreatewithemailandpass");
+  doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
-  }
+  
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
 
