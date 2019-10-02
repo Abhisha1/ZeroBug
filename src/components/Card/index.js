@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { shadows } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -11,14 +10,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import './card.scss'
-const useStyles = makeStyles({
-  card: {
-    maxWidth: 205,
-  },
-  media: {
-    height: 140,
-  },
-});
 
 
 class Cards extends Component{
@@ -26,7 +17,6 @@ class Cards extends Component{
         super(props);
     }
     render(){
-
         return (
             <div>
             <Box boxShadow={3} height="350px" width="300px">
@@ -50,7 +40,6 @@ class Cards extends Component{
                       *Date*
                     </Typography>
                   </CardContent>
-
                 <CardActions>
                   <Button size="small" color="primary">
                     Explore!
