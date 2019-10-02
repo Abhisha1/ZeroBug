@@ -1,5 +1,6 @@
 import React from 'react';
-import clsx from 'clsx';
+
+// Material UI API
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,22 +11,21 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import CreateRoundedIcon from '@material-ui/icons/CreateRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import Container from '@material-ui/core/Container';
 import yellow from '@material-ui/core/colors/yellow';
+
+// Firebase API
 import { withRouter } from 'react-router-dom';
-import Firebase from '../Firebase/firebase';
+import Firebase, { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
+// The Initial state of all values of a signup form
 const INIT_STATE = {
   username: '',
   email: ' ',
@@ -35,14 +35,16 @@ const INIT_STATE = {
   error: null,
 };
 
-const primary = yellow[800];
+// The Primary colour for buttons and glyphs
+const primary = yellow[500];
 
+// The styles sheet for the Material UI Element
 const useStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://i.pinimg.com/originals/54/3f/ac/543facb00c1e59d9bb987bd7bccfc2ac.jpg)',
+    backgroundImage: 'url(https://www.journeybeyond.com/wp-content/uploads/REX-Pinky-Beach-Aerial-shot-of-Bathurst-Lighthouse-and-Pinky-Beach_1920.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -70,7 +72,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SignUp(props) {
+function SignUp(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     userName: '',
@@ -81,23 +83,29 @@ export default function SignUp(props) {
     showPassword: false,
   });
 
+  // Updates the values of the state on change
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  // Changes the type of the password feilds to be regural charecters
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
+  // Prevents default behaviour for mouse clicks to allow for password
+  // visibility changing to work
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
 
+  // Handles submission of a new created user to Firebase
   const onSubmit = event => {
-
+    console.log("enter onSubmit");
     Firebase.doCreateUserWithEmailAndPassword(values.email, values.password).then(authUser => {
         setValues({ ...INIT_STATE });
-        this.props.history.push(ROUTES.HOME);
+        console.log(values.email);
+        props.history.push(ROUTES.HOME);
       })
       .catch(error => {
         setValues({ error });
@@ -106,6 +114,7 @@ export default function SignUp(props) {
       event.preventDefault();
   };
 
+  // Defines what value allocations should **DISABLE** the SIGN UP button
   const isInvalid =
     values.password !== values.confirmPassword ||
     values.password === '' ||
@@ -222,3 +231,5 @@ export default function SignUp(props) {
     </Grid>
   );
 }
+
+export default withRouter(withFirebase(SignUp));

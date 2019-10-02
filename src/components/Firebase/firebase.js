@@ -17,9 +17,10 @@ class Firebase {
   }
 
   // Autherisation API
-  doCreateUserWithEmailAndPassword = (email, password) =>
+  doCreateUserWithEmailAndPassword = (email, password) =>{
+    console.log("Docreatewithemailandpass");
     this.auth.createUserWithEmailAndPassword(email, password);
-
+  }
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
 
@@ -27,7 +28,7 @@ class Firebase {
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
-  
+
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
 }
