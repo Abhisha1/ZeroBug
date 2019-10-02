@@ -1,0 +1,222 @@
+#account-heading{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 4vw;
+    font-family: Montserrat;
+    font-weight: 600 !important;
+    margin-bottom: 32px;
+}
+
+#profile-name{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 3vw;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+#profileContainer{
+    width: 100%;
+}
+
+#topWraper{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    height: 1100px;
+    padding-top: 128px;
+    max-width: 100% !important;
+}
+
+#artifactWrapper{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    height: 680px;
+    padding-top: 128px;
+    flex: 1;
+    background-color: greenyellow;
+}
+
+#familiesWrapper{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    height: 680px;
+    padding-top: 128px;
+    flex: 1;
+    background-color: pink;
+}
+
+#artifactContainer{
+    width: 100%;
+    height: 360px;
+    background-color: yellow;
+    overflow: scroll;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex: 6;
+    align-items: center;
+}
+
+#artifactItems{
+    width: auto;
+    height: 360px;
+    background-color: yellow;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#familiesContainer{
+    width: 100%;
+    height: 360px;
+    background-color: purple;
+    overflow: scroll;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex: 6;
+    align-items: center;
+}
+
+#familyItems{
+    width: auto;
+    height: 360px;
+    background-color: purple;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#topContainer{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+div.artifactOwned{
+    width: 600px;
+    height: 300px;
+    background-color:  black;
+    margin-left: 50px;
+    
+}
+
+div.familyOwned{
+    width: 400px;
+    height: 400px;
+    background-color: goldenrod;
+    margin-left: 50px;
+    border-radius: 90%;
+    font-size: 2vw;
+    font-family: Montserrat;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button.aButton{
+    margin-top: 45px;
+    background-color: white;
+    padding-left: 32px;
+    padding-right: 32px;
+    font-size: 2vw;
+    font-family: Montserrat;
+    border: 2px solid #73AD21;
+}
+
+button.aButton:focus{
+    color: red;
+}
+
+input.testInput{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#chooseFile{
+    border-radius: 40px;
+    border: 2px solid yellow;
+    margin-top: 45px;
+    background-color: white;
+    padding-left: 50px;
+    padding-right: 12px;
+    font-size: 2vw;
+    font-family: Montserrat;
+}
+
+
+@media only screen and (max-width: 6000px) {
+    #avatarBox{
+        background-color: cyan;
+        height: 256px;
+        width: 256px;
+        border-radius: 50%;
+    }
+    .aButton{
+        border-radius: 40px;
+        height: 80px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    #avatarBox{
+        background-color: cyan;
+        height: 128px;
+        width: 128px;
+        border-radius: 50%
+    }
+    .aButton{
+        border-radius: 30px;
+        height: 60px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #avatarBox{
+        background-color: cyan;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%
+    }
+    #changeAvatarButton{
+        border-radius: 20px;
+        height: 40px;
+    }
+}
+
+#avatarContainer{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex: 2;
+    width: auto;
+    background-color: orange;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#profileInformationContainer{
+    flex: 3;
+    width: auto;
+    padding-left: 64px;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#changePasswordButton{
+    max-width: 512px;
+}

@@ -12,9 +12,9 @@ import SignUpPage from './pages/SignUp';
 import SignInPage from './pages/SignIn';
 import CreateFamilyPage from './pages/CreateFamily';
 import Artifact from './pages/Artifact';
+import AccountPage from './pages/Account';
 import PasswordForgetPage from './pages/PasswordForget';
 import HomePage from './pages/Home';
-import AccountPage from './pages/Account';
 import AdminPage from './pages/Admin';
 import ViewFamily from './pages/ViewFamily';
 
@@ -39,7 +39,7 @@ const App = () => (
       {/* <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} /> */}
       {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
       <Route path={ROUTES.HOME} component={HomePage} />
-      {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
+      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
       {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
     </div>
   </Router>
