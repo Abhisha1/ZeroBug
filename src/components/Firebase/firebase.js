@@ -24,10 +24,10 @@ class Firebase {
   }
 
   //download the file from the storage
-  testDownloadFile  = (the, filepath) => {
-    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
-      the.setState({...the.state, imageURL: url})
-    }).catch(function(error) {
+  testDownloadFile = (the, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then(function (url) {
+      the.setState({ ...the.state, imageURL: url })
+    }).catch(function (error) {
       // ...
     });
   }
@@ -52,83 +52,106 @@ class Firebase {
   }
 
   /********************************************************************** */
+  //upload the an artefact to its respective location
+  uploadArtefact = (image, th, location, dbGroupName) => {
+    this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
+      this.getProfileImageURL(th, location, location + image.name, dbGroupName);
+      console.log('success uploading');
+    }).catch(error => {
+      console.log("Written data FAILED");
+    });
+  }
+
+
   //upload the user profile images
   //used by the pages/Account/imageUpload.js
   uploadProfileImage = (image, th, location, dbGroupName) => {
-    this.storage().ref().child(location+image.name).put(image).then((snapshot) => {
-       this.getProfileImageURL(th, location, location+image.name, dbGroupName);
-        console.log('success uploading');
-    }).catch( error => {
+    this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
+      this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
+      console.log('success uploading');
+    }).catch(error => {
       console.log("Written data FAILED");
     });
-   }
+  }
 
-   //store the file path of the storage to the database
+  //store the file path of the storage to the database
   putProfileImageFilePathToDB = (filepath, location, username) => {
-    var newPostRef = this.database().ref('/'+location).push();
+    var newPostRef = this.database().ref('/' + location).push();
 
     newPostRef.set({
       fileURL: filepath,
       username: username,
-      
+
     })
-    .then(() => {
-      console.log("success putting");
-    }).catch( error => {
+      .then(() => {
+        console.log("success putting");
+      }).catch(error => {
         console.log("Written data FAILED");
-    });
+      });
   }
 
   //get the image file path that store in the firebase storage
   getProfileImageURL = (th, location, filepath, dbGroupName) => {
     this.storage().ref().child(filepath).getDownloadURL().then((url) => {
-      
-      th.setState({... th.state, imageURL: url, isUploaded: true});
+
+      th.setState({ ...th.state, imageURL: url, isUploaded: true });
       this.putProfileImageFilePathToDB(url, location, dbGroupName);
-      
-    }).catch( error => {
-        console.log("Written data FAILED");
+
+    }).catch(error => {
+      console.log("Written data FAILED");
     });
   }
 
   /********************************************************************** */
 
-
+  /**
+   * Finds an image from the server and returns a promise with its url
+   * @param location The folder the image is in on server
+   * @param name The name of the file in the server
+   */
   findImage = (location, name) => {
-    
+    return new Promise((resolve,reject) => {
+      let url = this.storage().ref().child('/' + location + name).getDownloadURL();
+      if (url) {
+        resolve(url);
+      }
+      else {
+        reject("Could not find avatar");
+      }
+    })
   }
 
 
-   // get a list of Artifact name data
-   getListArtifactName = (the) => {
+  // get a list of Artifact name data
+  getListArtifactName = (the) => {
     var testArtifactName = [];
     var tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', (data) => {      
+    tempRef.on('child_added', (data) => {
       testArtifactName.push(data.val().artifactName);
-      the.setState({... the.state, artifactList: testArtifactName})
+      the.setState({ ...the.state, artifactList: testArtifactName })
     });
   }
 
 
- // get a list of Family name data
+  // get a list of Family name data
   getListFamilyName = (the) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
-      
-      for (let key in data.val()){
 
-        for(let user in data.val()[key].users){
+      for (let key in data.val()) {
+
+        for (let user in data.val()[key].users) {
 
           //here just for Jessica Text
-          if(data.val()[key].users[user].name == "Jessica Test"){
+          if (data.val()[key].users[user].name == "Jessica Test") {
             testFamilyName.push(data.val()[key].name);
 
           }
         }
       }
 
-      the.setState({... the.state, familyList: testFamilyName})
+      the.setState({ ...the.state, familyList: testFamilyName })
     });
   }
 
@@ -140,9 +163,9 @@ class Firebase {
   //upload the files
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image, th) => {
-   // var aaa = this.storage().ref().child('images/'+image.name).put(image);
-    var aaa = this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
-      this.getURL(th, 'images/'+image.name);
+    // var aaa = this.storage().ref().child('images/'+image.name).put(image);
+    var aaa = this.storage().ref().child('images/' + image.name).put(image).then((snapshot) => {
+      this.getURL(th, 'images/' + image.name);
     }
 
     );
@@ -153,9 +176,9 @@ class Firebase {
   testDeleteFile = (the, filepath) => {
     var desertRef = this.storage().ref().child(filepath);
 
-    desertRef.delete().then(function() {
+    desertRef.delete().then(function () {
       console.log("delete the file");
-    }).catch(function(error) {
+    }).catch(function (error) {
       // ...
     });
   }
@@ -165,16 +188,16 @@ class Firebase {
     // Create a reference under which you want to list
     var listRef = this.storage().ref().child('images');
 
-    listRef.listAll().then(function(res) {
+    listRef.listAll().then(function (res) {
       var fileNames = [];
       var i;
 
-      for(i=0; i<res.items.length; i++){
+      for (i = 0; i < res.items.length; i++) {
         fileNames.push(res.items[i].name);
 
       }
-      the.setState({... the.state, listFileNames: fileNames})
-    }).catch(function(error) {
+      the.setState({ ...the.state, listFileNames: fileNames })
+    }).catch(function (error) {
       // ...
     });
   }
@@ -188,7 +211,7 @@ class Firebase {
     newPostRef.set({
       fileURL: filepath,
     });
-    
+
 
   }
 
@@ -197,15 +220,15 @@ class Firebase {
     this.storage().ref().child(filepath).getDownloadURL().then((url) => {
       console.log("aaaaa");
       console.log(url);
-      
-      th.setState({... th.state, imageURL: url});
+
+      th.setState({ ...th.state, imageURL: url });
 
       console.log("test test");
       this.testPutFilePathToDB(url);
       console.log(url);
-      
+
       //return url;
-    }).catch(function(error) {
+    }).catch(function (error) {
       // ...
     });
   }
@@ -268,13 +291,13 @@ class Firebase {
    */
   viewFamily = (name) => {
     return new Promise((resolve, reject) => {
-      const onData = snap =>{
+      const onData = snap => {
         resolve(snap.val());
-      } 
+      }
       const onError = error => reject(error);
       this.database().ref('/families/' + name).on("value", onData, onError)
     });
-}
+  }
   /**
    * Creates a new family and uploads to database
    * @param users The family members
@@ -305,13 +328,13 @@ class Firebase {
     let newFamily = family["users"];
     newFamily.push(user);
     let familyName = family["name"];
-    this.database().ref('/families/' + familyName).update({users: newFamily})
-    .then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    })
-    .catch(error => {
-      return error;
-    })
+    this.database().ref('/families/' + familyName).update({ users: newFamily })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
   }
   /**
    * Removes a user to the specified family
@@ -323,22 +346,22 @@ class Firebase {
     let newFamily = family["users"];
     let removeIndex = -1;
     for (let i = 0; i < family["users"].length; i++) {
-      if (family["users"][i].name === user.name){
+      if (family["users"][i].name === user.name) {
         removeIndex = i
       }
     }
     newFamily.splice(removeIndex, 1);
     let familyName = family["name"];
-    if (removeIndex == -1){
+    if (removeIndex == -1) {
       return new Error("could not find user in family");
     }
-    this.database().ref('/families/' + familyName).update({users: newFamily})
-    .then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    })
-    .catch(error => {
-      return error;
-    })
+    this.database().ref('/families/' + familyName).update({ users: newFamily })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
   }
 
   /**
@@ -381,7 +404,7 @@ class Firebase {
     });
   }
 
-  
+
   /**
    * update or delete the artifact data
    * @param updated artifact ID
@@ -420,7 +443,7 @@ class Firebase {
     })
   }
 
-  
+
   /**
    * Get a list of Artifact name data
    * @param the component to be set the state

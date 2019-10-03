@@ -3,6 +3,7 @@ import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
+import UploadFile from "../../components/ImageUpload";
 /**
  * Page which views a particular family, as chosen by users actions from
  * previous webpage
@@ -16,7 +17,7 @@ class ViewFamily extends Component {
      * url or the previous webpage
      */
     render() {
-        let familyName = this.props.location.state.name || this.props.match.params.name;
+        let familyName = this.props.match.params.name || this.props.location.state.name;
         return (
             <div>
                 <ViewFamilyDetails name={familyName} />
@@ -68,6 +69,7 @@ class FamilyDetails extends Component {
             <div>
                 {this.state.loading ? loading :
                     <div>
+                        <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
                         <h1>Family name</h1>
                         <p>{this.props.name}</p>
                         <h1>Members</h1>

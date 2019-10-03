@@ -54,11 +54,28 @@ class ImageUpload extends Component {
      */
     readyToUpload() {
         if (this.props.readyToSubmit && !this.state.isUploaded) {
-            this.handleUpload();
+            this.handleUpload()
+        }
+    }
+
+    componentDidMount() {
+        if (!this.props.isCreate) {
+            console.log("db location is " + this.props.dbLocation + " and name is " + this.props.name);
+
+            this.props.firebase.findImage(this.props.dbLocation, this.props.name)
+            .then(url => {
+                console.log(url);
+                this.setState({imageURL: url});
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     }
 
     render() {
+        
+        console.log(this.state.imageURL);
         return (
             <div id="uploadBox">
                 <Grid container justify="center" alignItems="center">
