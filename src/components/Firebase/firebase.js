@@ -377,7 +377,7 @@ class Firebase {
     }
     newFamily.splice(removeIndex, 1);
     let familyName = family["name"];
-    if (removeIndex == -1) {
+    if (removeIndex === -1) {
       return new Error("could not find user in family");
     }
     this.database().ref('/families/' + familyName).update({ users: newFamily })
@@ -462,7 +462,7 @@ class Firebase {
    */
   getArtifactData = (artifactID, the) => {
     let artifactName = "?";
-    this.database().ref('/testUploadArtifactData/05' + "").once('value').then(function (snapshot) {
+    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
       artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
       the.setState({ ...the.state, artifactName: artifactName })
     })
