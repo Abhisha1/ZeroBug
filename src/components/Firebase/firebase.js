@@ -52,7 +52,13 @@ class Firebase {
   }
 
   /********************************************************************** */
-  //upload the an artefact to its respective location
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the image's name
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
   uploadArtefact = (image, th, location, dbGroupName) => {
     this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + image.name, dbGroupName);
@@ -63,8 +69,13 @@ class Firebase {
   }
 
 
-  //upload the user profile images
-  //used by the pages/Account/imageUpload.js
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
   uploadProfileImage = (image, th, location, dbGroupName) => {
     this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
@@ -74,13 +85,18 @@ class Firebase {
     });
   }
 
-  //store the file path of the storage to the database
-  putProfileImageFilePathToDB = (filepath, location, username) => {
+  /**
+   * Stores the url and name of the group the image belongs to in the database
+   * @param filepath the filepath of the image in server
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  putProfileImageFilePathToDB = (filepath, location, dbGroupName) => {
     var newPostRef = this.database().ref('/' + location).push();
 
     newPostRef.set({
       fileURL: filepath,
-      username: username,
+      username: dbGroupName,
 
     })
       .then(() => {
@@ -90,12 +106,21 @@ class Firebase {
       });
   }
 
-  //get the image file path that store in the firebase storage
+  /**
+   * Updates preview to new image
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
   getProfileImageURL = (th, location, filepath, dbGroupName) => {
     this.storage().ref().child(filepath).getDownloadURL().then((url) => {
 
       th.setState({ ...th.state, imageURL: url, isUploaded: true });
-      this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      // If the image being uploaded to is an artefact, we store it in the realtime database
+      if (dbGroupName === "/artefactImages"){
+        this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      }
 
     }).catch(error => {
       console.log("Written data FAILED");
@@ -111,13 +136,13 @@ class Firebase {
    */
   findImage = (location, name) => {
     return new Promise((resolve,reject) => {
-      let url = this.storage().ref().child('/' + location + name).getDownloadURL();
-      if (url) {
+      this.storage().ref().child('/' + location + name).getDownloadURL()
+      .then(url => {
         resolve(url);
-      }
-      else {
-        reject("Could not find avatar");
-      }
+      })
+      .catch(error => {
+        reject(error);
+      })
     })
   }
 
