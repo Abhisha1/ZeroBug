@@ -19,7 +19,6 @@
     "react-slick": "^0.25.2",
     "recompose": "^0.30.0",
     "slick-carousel": "^1.8.1",
-    "recompose": "^0.30.0",
     "simple-flexbox": "^2.3.0"
   },
   "scripts": {
