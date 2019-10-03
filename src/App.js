@@ -19,7 +19,7 @@ import AdminPage from './pages/Admin';
 import ViewFamily from './pages/ViewFamily';
 
 import * as ROUTES from './constants/routes';
-import { withAuthentication } from './components/Session'
+import { withAuthentication } from './components/Session';
 
 
 
