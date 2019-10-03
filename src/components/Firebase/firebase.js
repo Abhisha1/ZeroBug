@@ -93,6 +93,12 @@ class Firebase {
 
   /********************************************************************** */
 
+
+  findImage = (location, name) => {
+    
+  }
+
+
    // get a list of Artifact name data
    getListArtifactName = (the) => {
     var testArtifactName = [];
