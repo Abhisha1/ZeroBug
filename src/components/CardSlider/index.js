@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { MdPeople } from "react-icons/md";
 import Slider from "react-slick";
+import Cards from "../Card";
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import './customslider.scss';

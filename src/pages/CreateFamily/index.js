@@ -7,6 +7,7 @@ import {FirebaseContext} from "../../components/Firebase";
 import CustomModal from "../../components/AddUserModal";
 import {HOME} from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
+import UploadFile from "../../components/ImageUpload";
 class CreateFamilyPage extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +16,8 @@ class CreateFamilyPage extends Component {
             showOutcomeModal: false,
             message: '',
             confirmationTitle:'Error',
-            isExistingFamily: false};
+            isExistingFamily: false,
+            readyToSubmit: false};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,7 +46,7 @@ class CreateFamilyPage extends Component {
 
           firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0])
           .then(() => {
-            this.setState({message: "You created a new family", confirmationTitle: 'Success'});
+            this.setState({message: "You created a new family", confirmationTitle: 'Success', readyToSubmit: true});
           })
           .catch(error => {
             this.setState({message: "Uh-oh. Something went wrong, try again later"});
@@ -72,10 +74,11 @@ class CreateFamilyPage extends Component {
           </Popover.Content>                    
         </Popover>
         )
+        let invalid = (this.state.familyName === '' || this.state.familyMembers.length === 0)
         return (
             <div id="create-family-page">
                 <h1 id="create-family-heading">Create a new family</h1>
-                <MdGroupAdd size={400} id="family-avatar"></MdGroupAdd>
+                <UploadFile dbLocation="familyImages/" isCreate={true} name={this.state.familyName} readyToSubmit={this.state.readyToSubmit}/>
                 <FirebaseContext.Consumer>
                   {firebase => 
                 <Form onSubmit={this.handleSubmit(firebase)} id="new-family-form">
@@ -90,7 +93,7 @@ class CreateFamilyPage extends Component {
                     <Form.Group controlId="validationFormikUsername">
                     <CustomModal action={this.handleModal}></CustomModal>
                     </Form.Group>
-                    <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily} type="submit" value="Create">Create</button>
+                    <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
                     </div>
                 </Form>
                   }

@@ -1,0 +1,15 @@
+#uploadBox{
+    display: flex;
+    justify-content: center;
+    flex-flow: column wrap;
+}
+#avatarIcon{
+    border-radius: 50vw;
+    padding: 1vw 2vw 1vw 2vw; 
+    width: 20vw !important;
+    height: 20vw !important;
+}
+
+#chooseFileButton{
+    // display: none;
+}

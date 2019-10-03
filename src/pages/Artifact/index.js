@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import {FirebaseContext} from "../../components/Firebase";
 
+import ImageUpload from "./imageUpload"
+
 class Artifact extends Component{
   state = {
     artifactName: "No Artifact Name",
     artifactList: null,
     artifactSortedList: null,
     topFive: null,
+    imageURL: null,
+    listFileNames: null,
   }
+
 
   render() {
     return (<div>
@@ -46,6 +51,33 @@ class Artifact extends Component{
               ))}
             </ul>
 
+            
+            <div>
+            <ImageUpload />
+            </div>
+            
+            <button onClick={() => firebase.testDownloadFile(this,'images/aaa.png')}>
+              click to download the image</button>
+            <img src={this.state.imageURL} style={{width: 680, height: 360}}/>
+
+
+            <button onClick={() => firebase.testDeleteFile(this,'images/'+'Web 1920 – 3.png')}>
+              click to delete the image</button>
+
+
+            <button onClick={() => firebase.testGetListOfFileNames(this)}>
+            click to get the list of files</button>
+
+
+            <ul>
+            {(this.state.listFileNames || []).map(item => (
+              <li key={item}>{item}</li>
+            ))}
+            </ul>
+
+
+            {/*<button onClick={() => firebase.testPutFilePathToDB('images/aaa.png')}>
+            click to store file storage URL to Database</button>*/}
 
           </div>
  

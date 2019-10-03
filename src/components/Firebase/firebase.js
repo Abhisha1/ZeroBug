@@ -3,6 +3,9 @@ import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
 
+
+
+
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -17,6 +20,16 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.database = firebase.database;
+    this.storage = firebase.storage;
+  }
+
+  //download the file from the storage
+  testDownloadFile  = (the, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then(function(url) {
+      the.setState({...the.state, imageURL: url})
+    }).catch(function(error) {
+      // ...
+    });
   }
 
 
@@ -36,6 +49,159 @@ class Firebase {
     }).catch(error => {
       return error;
     })
+  }
+
+  /********************************************************************** */
+  //upload the user profile images
+  //used by the pages/Account/imageUpload.js
+  uploadProfileImage = (image, th, location, dbGroupName) => {
+    this.storage().ref().child(location+image.name).put(image).then((snapshot) => {
+       this.getProfileImageURL(th, location, location+image.name, dbGroupName);
+        console.log('success uploading');
+    }).catch( error => {
+      console.log("Written data FAILED");
+    });
+   }
+
+   //store the file path of the storage to the database
+  putProfileImageFilePathToDB = (filepath, location, username) => {
+    var newPostRef = this.database().ref('/'+location).push();
+
+    newPostRef.set({
+      fileURL: filepath,
+      username: username,
+      
+    })
+    .then(() => {
+      console.log("success putting");
+    }).catch( error => {
+        console.log("Written data FAILED");
+    });
+  }
+
+  //get the image file path that store in the firebase storage
+  getProfileImageURL = (th, location, filepath, dbGroupName) => {
+    this.storage().ref().child(filepath).getDownloadURL().then((url) => {
+      
+      th.setState({... th.state, imageURL: url, isUploaded: true});
+      this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      
+    }).catch( error => {
+        console.log("Written data FAILED");
+    });
+  }
+
+  /********************************************************************** */
+
+   // get a list of Artifact name data
+   getListArtifactName = (the) => {
+    var testArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/');
+    tempRef.on('child_added', (data) => {      
+      testArtifactName.push(data.val().artifactName);
+      the.setState({... the.state, artifactList: testArtifactName})
+    });
+  }
+
+
+ // get a list of Family name data
+  getListFamilyName = (the) => {
+    var testFamilyName = [];
+    var tempRef = this.database().ref('/families/');
+    tempRef.on("value", (data) => {
+      
+      for (let key in data.val()){
+
+        for(let user in data.val()[key].users){
+
+          //here just for Jessica Text
+          if(data.val()[key].users[user].name == "Jessica Test"){
+            testFamilyName.push(data.val()[key].name);
+
+          }
+        }
+      }
+
+      the.setState({... the.state, familyList: testFamilyName})
+    });
+  }
+
+
+
+
+
+
+  //upload the files
+  //used by the pages/Artifact/imageUpload.js
+  uploadthings = (image, th) => {
+   // var aaa = this.storage().ref().child('images/'+image.name).put(image);
+    var aaa = this.storage().ref().child('images/'+image.name).put(image).then((snapshot) => {
+      this.getURL(th, 'images/'+image.name);
+    }
+
+    );
+    //console.log(aaa);
+  }
+
+  //delete the file
+  testDeleteFile = (the, filepath) => {
+    var desertRef = this.storage().ref().child(filepath);
+
+    desertRef.delete().then(function() {
+      console.log("delete the file");
+    }).catch(function(error) {
+      // ...
+    });
+  }
+
+  //get a list of storage files Names
+  testGetListOfFileNames = (the) => {
+    // Create a reference under which you want to list
+    var listRef = this.storage().ref().child('images');
+
+    listRef.listAll().then(function(res) {
+      var fileNames = [];
+      var i;
+
+      for(i=0; i<res.items.length; i++){
+        fileNames.push(res.items[i].name);
+
+      }
+      the.setState({... the.state, listFileNames: fileNames})
+    }).catch(function(error) {
+      // ...
+    });
+  }
+
+  //store the file path of the storage to the database
+  testPutFilePathToDB = (filepath) => {
+    console.log(filepath);
+    var newPostRef = this.database().ref('/filesURL/').push();
+    console.log(newPostRef);
+
+    newPostRef.set({
+      fileURL: filepath,
+    });
+    
+
+  }
+
+  //get the image file path that store in the firebase storage
+  getURL = (th, filepath) => {
+    this.storage().ref().child(filepath).getDownloadURL().then((url) => {
+      console.log("aaaaa");
+      console.log(url);
+      
+      th.setState({... th.state, imageURL: url});
+
+      console.log("test test");
+      this.testPutFilePathToDB(url);
+      console.log(url);
+      
+      //return url;
+    }).catch(function(error) {
+      // ...
+    });
   }
 
   /**
