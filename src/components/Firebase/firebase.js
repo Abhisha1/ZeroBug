@@ -2,6 +2,7 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
+import cookie from 'js-cookie';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,7 +19,6 @@ class Firebase {
     this.auth = app.auth();
     this.database = firebase.database;
   }
-
 
   /**
    * Stores user in database
@@ -168,7 +168,7 @@ class Firebase {
     });
   }
 
-  
+
   /**
    * update or delete the artifact data
    * @param updated artifact ID
@@ -207,7 +207,7 @@ class Firebase {
     })
   }
 
-  
+
   /**
    * Get a list of Artifact name data
    * @param the component to be set the state
@@ -249,19 +249,63 @@ class Firebase {
     the.setState({ ...the.state, topFive: topFiveArtifactName })
   }
 
+  /**
+   * Set Document cookie for user's current session which expires upon closing
+   * of the session.
+   *
+   *           'https://www.w3schools.com/js/js_cookies.asp'
+   *
+   * @param cname the name of the cookie
+   * @param cvalue the value of the cookie
+   */
+  setCookie = (cname, cvalue) => {
+    document.cookie = cname + "=" + cvalue + ";" + ";path=/";
+  }
+
+  /**
+   * Get Document cookie value for given cookie name.
+   *
+   *           'https://www.w3schools.com/js/js_cookies.asp'
+   *
+   * @param cname the name of the cookie
+   * @return String value for cookie name
+   */
+  getCookie = (cname) => {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  /**
+   * Sign up a user using their provided email and password
+   * @param email the email address of the user to register by
+   * @param password the password for the user to register by
+   * @param username the username for the new user
+   */
+  doCreateUserWithEmailAndPassword = (email, password, username) => {
+    // Create the new user in Firebase
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
 
 
+  /**
+   * Sign in the a registered user account
+   * @param email the email address of the registered user
+   * @param password the password for the registered user's account
+   */
+  doSignInWithEmailAndPassword = (email, password) => {
 
-
-
-
-  // Autherisation API
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
-
-
-  doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
+  }
 
   doSignOut = () => this.auth.signOut();
 

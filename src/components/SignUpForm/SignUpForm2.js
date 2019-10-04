@@ -103,6 +103,14 @@ function SignUp(props) {
   const onSubmit = event => {
     props.firebase.doCreateUserWithEmailAndPassword(values.email, values.password, values.userName)
       .then(() => {
+        props.firebase.auth.currentUser.updateProfile({
+          displayName: values.userName,
+          photoURL: "https://dwrhx129r2-flywheel.netdna-ssl.com/wp-content/uploads/2015/08/blank-avatar.png"
+        }).then(function(){
+          console.log("User profile successfully added");
+        }, function(error) {
+          console.error(error.message);
+        });
         props.firebase.addUserToDb(values.userName, values.email)
         setValues(INIT_STATE);
         props.history.push(ROUTES.HOME);
