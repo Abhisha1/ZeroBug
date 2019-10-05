@@ -2,7 +2,6 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
-import cookie from 'js-cookie';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -304,7 +303,7 @@ class Firebase {
    */
   doSignInWithEmailAndPassword = (email, password) => {
 
-    this.auth.signInWithEmailAndPassword(email, password);
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 
   doSignOut = () => this.auth.signOut();
