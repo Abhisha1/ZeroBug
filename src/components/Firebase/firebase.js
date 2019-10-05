@@ -13,6 +13,8 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
+const axios = require("axios");
+
 class Firebase {
   constructor() {
     app.initializeApp(config);
@@ -46,24 +48,19 @@ class Firebase {
    * @return a success message when successful, or an error
    */
   searchUsers = (user, the) => {
-    let searchedUsers = []
-    let dbRef = this.database().ref('/users/');
-    dbRef.on("value", function (snapshot) {
-      if (snapshot.val() == null) {
-        return new Error("no matches");
+    console.log(user);
+    // Calls API to fetch all users that match the name
+    axios.post("https://boiling-castle-30087.herokuapp.com/api/getAllUsers", {
+      name: user
+    })
+    .then(response => {
+      console.log(response);
+      if (response.data.msg === "Success"){
+        the.setState({ ...the.state, searchedUsers: response.data.users});
       }
-      else {
-        for (let key in snapshot.val()) {
-          // checks if the sanitised names of input and database match
-          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())) {
-            searchedUsers.push(snapshot.val()[key]);
-          }
-        }
-        // sends matched users data back to parent class
-        the.setState({ ...the.state, searchedUsers: searchedUsers });
-        return MESSAGES.SUCCESS_MESSAGE;
-      }
-
+    })
+    .catch(error => {
+      return new Error(error.data.msg);
     })
   }
 
@@ -303,8 +300,7 @@ class Firebase {
    * @param password the password for the registered user's account
    */
   doSignInWithEmailAndPassword = (email, password) => {
-
-    this.auth.signInWithEmailAndPassword(email, password);
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 
   doSignOut = () => this.auth.signOut();

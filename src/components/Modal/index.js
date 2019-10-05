@@ -75,7 +75,7 @@ class CustomModal extends Component {
                         {/* Renders the search result in modal */}
                         <div id="searchResults">
                             {this.state.searchedUsers.map(item => (
-                                <div id="searchResult" key={item.name}><p id="modalText">{item.name}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                                <div id="searchResult" key={item.displayName}><p id="modalText">{item.displayName}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
                         </div>
                     </Modal.Body>
                 </Modal>

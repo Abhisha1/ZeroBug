@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import "./signup.css"
 
 import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes'

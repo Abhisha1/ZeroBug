@@ -49,7 +49,7 @@ class CustomSlider extends Component {
           {this.props.cards.map(item => (
             <div key={item} id="sliderCard">
               <MdPeople id="memberAvatar"></MdPeople>
-              <h5 id="memberName">{item.name}</h5>
+              <h5 id="memberName">{item.displayName}</h5>
             </div>
           ))}
 
