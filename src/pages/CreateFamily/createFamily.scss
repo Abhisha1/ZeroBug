@@ -26,8 +26,15 @@
   }
   #add-user-button{
     border-color: #ffe960;
+    background-color: white;
+    font-family: Montserrat;
+    margin: 1vw 0 1vw 0;
+  }
+  #add-user-button:hover{
+    border-color: #ffe960;
     background-color: #ffe960;
     font-family: Montserrat;
+    margin: 1vw 0 1vw 0;
   }
 
   #new-family-form{
@@ -36,4 +43,23 @@
     left: 0; bottom: 10vw; right: 0;
   }
 
-  
+  #create-family-button{
+    margin: 1vw 0 1vw 0 !important;
+    padding: 6px 12px;
+    height: fit-content;
+  }
+
+  @media only screen and (max-width: 4000px) {
+    #family-buttons{
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    #family-buttons{
+      display: flex;
+      flex-direction: column;
+    }
+  }
