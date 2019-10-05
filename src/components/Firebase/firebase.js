@@ -441,11 +441,15 @@ class Firebase {
   }
 
 
+
   /**
    * Sign in the a registered user account
    * @param email the email address of the registered user
    * @param password the password for the registered user's account
    */
+  doCreateUserWithEmailAndPassword = (email, password) =>
+    this.auth.createUserWithEmailAndPassword(email, password);
+
   doSignInWithEmailAndPassword = (email, password) => {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
