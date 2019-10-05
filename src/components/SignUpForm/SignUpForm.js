@@ -7,7 +7,7 @@ import "./signupform.scss";
 
 const INIT_STATE = {
   username: '',
-  email: ' ',
+  email: '',
   password: '',
   confirmpassword: '',
   error: null,
@@ -57,8 +57,8 @@ class SignUpFormBase extends Component {
     const isInvalid =
       password !== confirmpassword ||
       password === '' ||
-      username === '' ||
-      email.search(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) !== -1;
+      email === '' ||
+      username === '';
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -84,7 +84,7 @@ class SignUpFormBase extends Component {
             placeholder="Password"
           />
           <input
-            name="confirmPassword"
+            name="confirmpassword"
             value={confirmpassword}
             onChange={this.onChange}
             type="password"
