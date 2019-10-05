@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
-import { FirebaseContext } from "../../components/Firebase";
+import { withFirebase } from '../../components/Firebase'
 import CustomModal from "../../components/Modal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
@@ -10,7 +10,7 @@ import "../../components/Button/button.scss";
 /**
  * The page which allows users to create a family (easily share artefacts with multiple people at once!)
  */
-class CreateFamilyPage extends Component {
+class CreateFamily extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,20 +21,42 @@ class CreateFamilyPage extends Component {
       message: '',
       confirmationTitle: 'Error',
       isExistingFamily: false,
-      readyToSubmit: false
+      readyToSubmit: false,
+      // the current signed in user
+      authUser: null
     };
     this.handleModal = this.handleModal.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(firebase) {
+  componentDidMount() {
+    this.props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        let authUser = {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email
+        }
+        this.setState({authUser: authUser});
+        // User logged in already or has just logged in.
+        console.log(user.uid);
+      } else {
+        this.setState({authUser: null});
+        // User not logged in or has just logged out.
+      }
+    });
+  }
+  /**
+   * Changes the inputted family name and ensures it does not already exist in the database
+   */
+  handleChange() {
     return event => {
       const target = event.target;
       const value = target.value;
       const name = target.name;
       this.setState({ [name]: value }, () => {
-        let isExistingFamily = firebase.isExistingFamily(this.state.familyName);
+        let isExistingFamily = this.props.firebase.isExistingFamily(this.state.familyName);
         if (isExistingFamily && this.state.familyName !== isExistingFamily) {
           this.setState({ isExistingFamily: isExistingFamily })
         }
@@ -45,11 +67,13 @@ class CreateFamilyPage extends Component {
     }
   }
 
-  handleSubmit(firebase) {
+  /**
+   * On submission of the form, the new family is created and stored in the firebase server
+   */
+  handleSubmit() {
     return event => {
-      //admin will be changed after session handling to group creator
-
-      firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.familyMembers[0])
+      
+      this.props.firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.authUser)
         .then(() => {
           this.setState({ message: "You created a new family", confirmationTitle: 'Success', readyToSubmit: true });
         })
@@ -61,8 +85,13 @@ class CreateFamilyPage extends Component {
     }
   }
 
+  /**
+   * Handles the data coming from the child modal component which searches for users
+   * @param dataFromModal The users matching the search query
+   */
   handleModal(dataFromModal) {
     let usersToAdd = this.state.familyMembers;
+    // adds the retrieved users to the array of users to add to a family
     if (this.state.familyMembers.indexOf(dataFromModal) === -1) {
       usersToAdd.push(dataFromModal);
     }
@@ -71,44 +100,51 @@ class CreateFamilyPage extends Component {
     });
   }
   render() {
+    // An error popover that is displayed when a family already exists under this name
     const popover = (
       <Popover id="popover-basic">
         <Popover.Title as="h3">Family name error</Popover.Title>
         <Popover.Content>
           This family already exists! Please change the family group's name.
-          </Popover.Content>
+        </Popover.Content>
       </Popover>
     )
 
 
-    
+    // ensures a family has a name and family members
     let invalid = (this.state.familyName === '' || this.state.familyMembers.length === 0)
     return (
       <div id="create-family-page">
         <h1 id="create-family-heading">Create a new family</h1>
+        
+        {/* An avatar for the family */}
         <UploadFile dbLocation="familyImages/" isCreate={true} name={this.state.familyName} readyToSubmit={this.state.readyToSubmit} />
-        <FirebaseContext.Consumer>
-          {firebase =>
-            <Form onSubmit={this.handleSubmit(firebase)} id="new-family-form">
-              <Form.Label> Family Name </Form.Label>
-              {this.state.isExistingFamily ?
-                <OverlayTrigger placement="right" overlay={popover}>
-                  <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange(firebase)} />
-                </OverlayTrigger>
-                : <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange(firebase)} />
-              }
-              <div id="family-buttons">
-                <Form.Group controlId="validationFormikUsername">
-                  <CustomModal action={this.handleModal}></CustomModal>
-                </Form.Group>
-                <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
-              </div>
-            </Form>
+        
+        {/* The form for creating a family */}
+        <Form onSubmit={this.handleSubmit()} id="new-family-form">
+          <Form.Label> Family Name </Form.Label>
+          
+          {/* Displays popover is family exists */}
+          {this.state.isExistingFamily ?
+            <OverlayTrigger placement="right" overlay={popover}>
+              <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+            </OverlayTrigger>
+            : <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
           }
-        </FirebaseContext.Consumer>
+
+          {/* Handles the functionality to add users to a family using a custom modal */}
+          <div id="family-buttons">
+            <Form.Group controlId="validationFormikUsername">
+              <CustomModal action={this.handleModal}></CustomModal>
+            </Form.Group>
+            <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
+          </div>
+        </Form>
+
+        {/* Renders the members that have been added to the family so far */}
         <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
-        
+        {/* A modal that shows whether the action was successful or not successful in creating a family */}
         <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
           <Modal.Header closeButton>
             <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
@@ -123,4 +159,10 @@ class CreateFamilyPage extends Component {
   }
 
 }
+
+const CreateFamilyForm = withFirebase(CreateFamily);
+const CreateFamilyPage = (props) => (
+  <CreateFamilyForm history={props.history}></CreateFamilyForm>
+);
+
 export default CreateFamilyPage;

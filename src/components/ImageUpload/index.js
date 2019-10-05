@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import "./imageUpload.scss";
 class ImageUpload extends Component {
     constructor(props) {
@@ -65,7 +66,21 @@ class ImageUpload extends Component {
                     <img id="avatarBox" src={this.state.imageURL}></img>
 
                 </Grid>
-                <input type="file" onChange={this.handleChange} id="chooseFileButton" />
+                <input
+                    id="imageUpload"
+                    multiple
+                    type="file"
+                    onChange={this.handleChange}
+                />
+                <div id="styledUpload">
+                <label htmlFor="imageUpload">
+                    <Button variant="outlined" component="span" id="uploadStyledButton">
+                        Upload
+                    </Button>
+                </label>
+                </div>
+
+
                 {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
                 When the page is creating a new object, it ensures the uploading is done only when the creation page says
                 it is ready to upload.

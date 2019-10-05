@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 import { FirebaseContext } from "../../components/Firebase";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './modal.scss';
 import '../Button/button.scss';
 
@@ -13,7 +14,7 @@ import '../Button/button.scss';
 class CustomModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, searchedUsers: [], familyMember: '' };
+        this.state = { showModal: false, searchedUsers: [], familyMember: '',loading: false};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -29,7 +30,7 @@ class CustomModal extends Component {
         else {
             this.setState({ showModal: false })
         }
-        this.setState({ familyMember: '' });
+        this.setState({ familyMember: '' , searchedUsers: []});
     }
 
     /**
@@ -40,8 +41,18 @@ class CustomModal extends Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        this.setState({ [name]: value });
+        // Resets the displayed users when the user starts searching for someone
+        this.setState({ [name]: value , searchedUsers: []});
     }
+
+    searchForUsers(firebase){
+        this.setState({loading:true});
+        firebase.searchUsers(this.state.familyMember, this)
+
+    }
+
+
+
     /**
      * Returns the custom modal to the webpage
      */
@@ -67,15 +78,21 @@ class CustomModal extends Component {
                                 <FirebaseContext.Consumer>
                                     {firebase =>
                                         // Searches database for users matching input search
-                                        <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember, this)} id="find-user-button">Search</Button>
+                                        <Button variant="outline-secondary" onClick={() => this.searchForUsers(firebase)} id="find-user-button">Search</Button>
                                     }
                                 </FirebaseContext.Consumer>
                             </InputGroup.Append>
                         </InputGroup>
                         {/* Renders the search result in modal */}
                         <div id="searchResults">
-                            {this.state.searchedUsers.map(item => (
-                                <div id="searchResult" key={item.name}><p id="modalText">{item.name}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                            {
+                                this.state.searchedUsers.map(item => (
+                                <div id="searchResult" key={item.displayName}><p id="modalText">{item.displayName}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                        </div>
+                        {/* Displays a loader for when the API is still fetching the results */}
+                        <div id="loader">
+                                {this.state.loading ?
+                                <CircularProgress />: <div></div>}
                         </div>
                     </Modal.Body>
                 </Modal>
