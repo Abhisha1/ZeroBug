@@ -111,7 +111,6 @@ function SignUp(props) {
         }, function(error) {
           console.error(error.message);
         });
-        props.firebase.addUserToDb(values.userName, values.email)
         setValues(INIT_STATE);
         props.history.push(ROUTES.HOME);
       })

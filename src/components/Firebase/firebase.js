@@ -23,25 +23,6 @@ class Firebase {
   }
 
   /**
-   * Stores user in database
-   * @param name name of user
-   * @param email email user signed up with
-   * @return a success message when successful, or an error
-   */
-  addUserToDb = (name, email) => {
-    let newPostKey = firebase.database().ref().child('users').push().key;
-    this.database().ref('/users/' + newPostKey).set({
-      name: name,
-      email: email
-    }).then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    }).catch(error => {
-      console.log(error.message);
-      return error;
-    })
-  }
-
-  /**
    * Finds whether the user exists and sends users which match, back to parent class
    * @param user the input string for a user
    * @param the the parent class
