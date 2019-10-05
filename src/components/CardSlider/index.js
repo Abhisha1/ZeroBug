@@ -49,7 +49,7 @@ class CustomSlider extends Component {
           {/* Passes through users data to render in slider */}
           {this.props.cards.map(item => (
             <div key={item} id="sliderCard">
-              <MdPeople id="memberAvatar"></MdPeople>
+              <img alt="memberAvatar" id="memberAvatar" src={item.photoURL} />
               <h5 id="memberName">{item.displayName}</h5>
             </div>
           ))}

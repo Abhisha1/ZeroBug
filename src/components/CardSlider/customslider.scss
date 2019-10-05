@@ -10,14 +10,16 @@
     border: none;
 }
 #memberAvatar{
-    margin-left: 50%
+    margin-left: 50%;
+    width: 10vw !important;
+    height: 10vw !important;
 }
 #memberName{
     text-align: center;
 }
 
 #slider{
-    width: 20% !important;
+    width: 40% !important;
     align-self: center;
 }
 
