@@ -169,7 +169,7 @@ class Firebase {
         for (let user in data.val()[key].users) {
 
           //here just for Jessica Text
-          if (data.val()[key].users[user].name == "Jessica Test") {
+          if (data.val()[key].users[user].displayName == "Abhisha Nirmalathas") {
             testFamilyName.push(data.val()[key].name);
 
           }

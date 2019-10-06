@@ -32,10 +32,11 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 680px;
+    height: 880px;
     padding-top: 128px;
     flex: 1;
     background-color: greenyellow;
+    align-items: center;
 }
 
 #familiesWrapper{
@@ -50,24 +51,44 @@
 
 #artifactContainer{
     width: 100%;
-    height: 360px;
-    background-color: yellow;
-    overflow: scroll;
+    height: auto;
     display: -webkit-flex; /* Safari */
     display: flex;
-    flex: 6;
+    flex: 8;
+    overflow: visible;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
 }
 
-#artifactItems{
-    width: auto;
-    height: 360px;
-    background-color: yellow;
-    display: -webkit-flex; /* Safari */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.slick-prev{
+    left: -180px;
+    z-index: 12;
 }
+
+.nextButton{
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 0, 0.393);
+    font-size: 2vw;
+    border-radius: 50px;
+    border: 2px solid yellow;
+    color: white;
+    font-weight: 800;
+    
+}
+
+#artifactItems{
+    width: 87%;
+    height: auto;
+}
+
+.oneArtifactItem{
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+}
+
 
 #familiesContainer{
     width: 100%;
@@ -100,10 +121,10 @@
 }
 
 div.artifactOwned{
-    width: 600px;
-    height: 300px;
-    background-color:  black;
-    margin-left: 50px;
+    height: auto;
+    margin-right: 50px;
+    background-color: green;
+    padding: 32px;
     
 }
 

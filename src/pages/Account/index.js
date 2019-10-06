@@ -3,6 +3,7 @@ import "./account.scss";
 import UploadFile from "../../components/ImageUpload";
 import { FirebaseContext } from "../../components/Firebase";
 import RenderFamilies from "./renderFamilies";
+import ArtefactSlider from "./cardSlider";
 
 class AccountPage extends Component {
 
@@ -30,31 +31,9 @@ class AccountPage extends Component {
 
 				<div id="artifactWrapper">
 					<h1 id="account-heading">Artifacts Owned</h1>
-					<div id="artifactContainer">
-						<div id="artifactItems">
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-							<div className="artifactOwned">
-								yooooooo
-							</div>
-						</div>
-					</div>
+					<ArtefactSlider cards={
+							[1, 2, 3, 4, 5, 6]
+					} />
 				</div>
 
 				<div>
