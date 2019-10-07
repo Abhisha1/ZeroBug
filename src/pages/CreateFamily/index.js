@@ -132,8 +132,6 @@ class CreateFamily extends Component {
             </OverlayTrigger>
             : <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
           }
-          {/* Renders the members that have been added to the family so far */}
-        <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
           {/* Handles the functionality to add users to a family using a custom modal */}
           <div id="family-buttons">
@@ -143,6 +141,9 @@ class CreateFamily extends Component {
             <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
           </div>
         </Form>
+
+        {/* Renders the members that have been added to the family so far */}
+        <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
         <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
