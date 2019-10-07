@@ -243,6 +243,9 @@ class Firebase {
         if (response.data.msg === "Success") {
           the.setState({ ...the.state, searchedUsers: response.data.users, loading: false });
         }
+        if(response.data.msg === "No matches"){
+          the.setState({ ...the.state, noMatches: true, loading:false})
+        }
       })
       .catch(error => {
         return new Error(error.data.msg);
