@@ -4,10 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import "./imageUpload.scss";
-/**
- * An image upload component which allows a particular entity, like a family, user or artefact to upload an image
- * an store it on the firebase storage
- */
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -59,38 +55,15 @@ class ImageUpload extends Component {
      */
     readyToUpload() {
         if (this.props.readyToSubmit && !this.state.isUploaded) {
-            this.handleUpload()
-        }
-    }
-    /**
-     * If the page is of an existing object (family or user), then we render the current profile image
-     */
-    componentDidMount() {
-        if (!this.props.isCreate) {
-            console.log("db location is " + this.props.dbLocation + " and name is " + this.props.name);
-            // retireves image from storage
-            this.props.firebase.findImage(this.props.dbLocation, this.props.name)
-                .then(url => {
-                    console.log(url);
-                    this.setState({ imageURL: url });
-                })
-                // catches error for when the file does not exist
-                .catch(error => {
-                    console.log(error);
-                })
+            this.handleUpload();
         }
     }
 
-    /**
-     * Renders the upload avatar/image functionality on the page
-     */
     render() {
-
-        console.log(this.state.imageURL);
         return (
             <div id="uploadBox">
                 <Grid container justify="center" alignItems="center">
-                    <img id="avatarBox" alt="avatar" src={this.state.imageURL}></img>
+                    <img id="avatarBox" src={this.state.imageURL}></img>
 
                 </Grid>
                 <input
@@ -123,4 +96,3 @@ class ImageUpload extends Component {
 }
 const UploadFile = withRouter(withFirebase(ImageUpload));
 export default UploadFile;
-
