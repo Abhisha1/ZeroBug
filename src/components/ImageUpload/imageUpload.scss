@@ -10,6 +10,32 @@
     height: 20vw !important;
 }
 
-#chooseFileButton{
-    // display: none;
+#avatarBox{
+    background-color: #ffe960 !important;
+}
+#styledUpload{
+    align-self: center !important;
+    margin-top: 1vw;
+}
+#uploadStyledButton{
+    border-color: #ffe960;
+    font-family: Montserrat !important;
+    text-transform: capitalize;
+    margin: 1vw 0 1vw 0;
+    text-emphasis-color: #212529;
+}
+#uploadStyledButton:hover{
+    border-color: #ffe960;
+    background-color: #ffe960;
+    color: white;
+    font-family: Montserrat !important;
+    text-transform: capitalize;
+    margin: 1vw 0 1vw 0;
+}
+#imageUpload{
+    display:none;
+}
+#loader{
+    display: flex;
+    justify-content: center;
 }
