@@ -46,7 +46,7 @@ class CustomModal extends Component {
     }
 
     searchForUsers(firebase){
-        this.setState({loading:true});
+        this.setState({loading:true, noMatches: false});
         firebase.searchUsers(this.state.familyMember, this)
 
     }
@@ -88,12 +88,14 @@ class CustomModal extends Component {
                             {
                                 this.state.searchedUsers.map(item => (
                                 <div id="searchResult" key={item.displayName}><p id="modalText">{item.displayName}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                            {this.state.noMatches && <p>No Matches</p>}
                         </div>
                         {/* Displays a loader for when the API is still fetching the results */}
                         <div id="loader">
                                 {this.state.loading ?
                                 <CircularProgress />: <div></div>}
                         </div>
+                        
                     </Modal.Body>
                 </Modal>
             </div>
