@@ -7,6 +7,10 @@ class HomePage extends Component {
         return(
           <div class="container">
                 <Cards/>
+                <Cards/>
+                <Cards/>
+                <Cards/>
+                <Cards/>
           </div>
         );
 
