@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { MdPeople } from "react-icons/md";
 import Slider from "react-slick";
+import Avatar from "@material-ui/core/Avatar"
+import Cards from "../Card";
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import './customslider.scss';
@@ -48,8 +50,8 @@ class CustomSlider extends Component {
           {/* Passes through users data to render in slider */}
           {this.props.cards.map(item => (
             <div key={item} id="sliderCard">
-              <MdPeople id="memberAvatar"></MdPeople>
-              <h5 id="memberName">{item.name}</h5>
+              <Avatar alt="memberAvatar" id="memberAvatar" src={item.photoURL} />
+              <h5 id="memberName">{item.displayName}</h5>
             </div>
           ))}
 

@@ -1,10 +1,16 @@
-import React from "react";
+import React, { Component } from "react";
+import Cards from "./../../components/Card";
 
-const HomePage = () => (
-  <div>
-    <h1>HOME! TEST!</h1>
-  </div>
-);
 
+
+class HomePage extends Component {
+    render(){
+        return(
+          <div>
+            <Cards/>
+          </div>
+        );
+    }
+}
 
 export default HomePage;
