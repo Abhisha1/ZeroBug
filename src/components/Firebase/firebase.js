@@ -2,6 +2,7 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
+import cookie from 'js-cookie';
 
 
 
@@ -14,6 +15,8 @@ const config = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
+
+const axios = require("axios");
 
 class Firebase {
   constructor() {
@@ -30,25 +33,6 @@ class Firebase {
     }).catch(function (error) {
       // ...
     });
-  }
-
-
-  /**
-   * Stores user in database
-   * @param name name of user
-   * @param email email user signed up with
-   * @return a success message when successful, or an error
-   */
-  addUserToDb = (name, email) => {
-
-    this.database().ref('users/' + email).set({
-      name: name,
-      email: email
-    }).then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    }).catch(error => {
-      return error;
-    })
   }
 
   /********************************************************************** */
@@ -265,25 +249,23 @@ class Firebase {
    * @return a success message when successful, or an error
    */
   searchUsers = (user, the) => {
-    let searchedUsers = []
-    let dbRef = this.database().ref('/users/');
-    dbRef.on("value", function (snapshot) {
-      if (snapshot.val() == null) {
-        return new Error("no matches");
-      }
-      else {
-        for (let key in snapshot.val()) {
-          // checks if the sanitised names of input and database match
-          if (snapshot.val()[key].name.toLowerCase().includes(user.toLowerCase())) {
-            searchedUsers.push(snapshot.val()[key]);
-          }
-        }
-        // sends matched users data back to parent class
-        the.setState({ ...the.state, searchedUsers: searchedUsers });
-        return MESSAGES.SUCCESS_MESSAGE;
-      }
-
+    console.log(user);
+    // Calls API to fetch all users that match the name
+    axios.post("https://boiling-castle-30087.herokuapp.com/api/getAllUsers", {
+      name: user
     })
+      .then(response => {
+        console.log(response);
+        if (response.data.msg === "Success") {
+          the.setState({ ...the.state, searchedUsers: response.data.users, loading: false });
+        }
+        if(response.data.msg === "No matches"){
+          the.setState({ ...the.state, noMatches: true, loading:false})
+        }
+      })
+      .catch(error => {
+        return new Error(error.data.msg);
+      })
   }
 
   /**
@@ -510,19 +492,66 @@ class Firebase {
     the.setState({ ...the.state, topFive: topFiveArtifactName })
   }
 
+  /**
+   * Set Document cookie for user's current session which expires upon closing
+   * of the session.
+   *
+   *           'https://www.w3schools.com/js/js_cookies.asp'
+   *
+   * @param cname the name of the cookie
+   * @param cvalue the value of the cookie
+   */
+  setCookie = (cname, cvalue) => {
+    document.cookie = cname + "=" + cvalue + ";" + ";path=/";
+  }
+
+  /**
+   * Get Document cookie value for given cookie name.
+   *
+   *           'https://www.w3schools.com/js/js_cookies.asp'
+   *
+   * @param cname the name of the cookie
+   * @return String value for cookie name
+   */
+  getCookie = (cname) => {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  /**
+   * Sign up a user using their provided email and password
+   * @param email the email address of the user to register by
+   * @param password the password for the user to register by
+   * @param username the username for the new user
+   */
+  doCreateUserWithEmailAndPassword = (email, password, username) => {
+    // Create the new user in Firebase
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
 
 
 
-
-
-
-  // Autherisation API
+  /**
+   * Sign in the a registered user account
+   * @param email the email address of the registered user
+   * @param password the password for the registered user's account
+   */
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
 
-
-  doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+  doSignInWithEmailAndPassword = (email, password) => {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
 
   doSignOut = () => this.auth.signOut();
 

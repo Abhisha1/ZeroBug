@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import "./imageUpload.scss";
-/**
- * An image upload component which allows a particular entity, like a family, user or artefact to upload an image
- * an store it on the firebase storage
- */
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -58,9 +55,10 @@ class ImageUpload extends Component {
      */
     readyToUpload() {
         if (this.props.readyToSubmit && !this.state.isUploaded) {
-            this.handleUpload()
+            this.handleUpload();
         }
     }
+
     /**
      * If the page is of an existing object (family or user), then we render the current profile image
      */
@@ -80,27 +78,39 @@ class ImageUpload extends Component {
         }
     }
 
-    /**
-     * Renders the upload avatar/image functionality on the page
-     */
     render() {
-
-        console.log(this.state.imageURL);
         return (
             <div id="uploadBox">
                 <Grid container justify="center" alignItems="center">
-                    <img id="avatarBox" alt="avatar" src={this.state.imageURL}></img>
+                    <img id="avatarBox" src={this.state.imageURL}></img>
 
                 </Grid>
-                <input type="file" onChange={this.handleChange} id="chooseFileButton" />
-                {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
+                <input
+                    id="imageUpload"
+                    multiple
+                    type="file"
+                    onChange={this.handleChange}
+                />
+                 {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
                 When the page is creating a new object, it ensures the uploading is done only when the creation page says
                 it is ready to upload.
                 If the page is not creating a new object and changing the avatar of an existing user/artefact/family, it will
                 display a button which will upload the new file after clicking the button */}
-                {this.props.isCreate ?
-                    this.readyToUpload()
-                    : <button className="aButton" onClick={this.handleUpload}>Change Profile Image</button>}
+                <div id="styledUpload">
+                    <label htmlFor="imageUpload">
+                        {this.props.isCreate ?
+                            (<Button variant="outlined" component="span" id="uploadStyledButton">
+                                Upload
+                            </Button> && this.readyToUpload())
+                    : (
+                    <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
+                            Upload
+                    </Button>
+                    )}
+                    </label>
+                </div>
+
+
 
             </div>
         )
@@ -108,4 +118,3 @@ class ImageUpload extends Component {
 }
 const UploadFile = withRouter(withFirebase(ImageUpload));
 export default UploadFile;
-
