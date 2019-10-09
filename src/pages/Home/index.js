@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Cards from "./../../components/Card";
-
+import { withAuthorization } from "./../../components/Session";
 
 
 class HomePage extends Component {
@@ -11,6 +11,9 @@ class HomePage extends Component {
           </div>
         );
     }
+
 }
 
-export default HomePage;
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(HomePage);

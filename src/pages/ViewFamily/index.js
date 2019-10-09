@@ -3,6 +3,8 @@ import {FirebaseContext} from "../../components/Firebase";
 import CustomDeck from "../../components/CardSlider";
 import {Modal} from 'react-bootstrap';
 import {HOME} from "../../constants/routes";
+import { withAuthorization } from "../../components/Session";
+
 const errorModal = () => (
 <Modal onHide={() => this.props.history.push(HOME)}>
     <Modal.Header closeButton>
@@ -24,7 +26,7 @@ class ViewFamily extends Component{
         console.log("Did mount");
         return(
             <FirebaseContext.Consumer>
-                  {firebase => 
+                  {firebase =>
                     firebase.viewFamily(this.props.match.params.name)
                     .then(item => {
                         console.log(item);
@@ -47,7 +49,7 @@ class ViewFamily extends Component{
                 <h1>Members</h1>
                 <CustomDeck cards={this.state.familyMembers}></CustomDeck>
                 <FirebaseContext.Consumer>
-                  {firebase => 
+                  {firebase =>
                     firebase.viewFamily(this.props.match.params.name)
                     .then(item => {
                         console.log(item);
@@ -63,4 +65,5 @@ class ViewFamily extends Component{
         );
     }
 }
-export default ViewFamily;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(ViewFamily);

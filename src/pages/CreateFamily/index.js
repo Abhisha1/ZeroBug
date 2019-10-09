@@ -7,6 +7,8 @@ import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
 import "./createFamily.scss";
 import "../../components/Button/button.scss";
+import { withAuthorization } from "../../components/Session";
+
 /**
  * The page which allows users to create a family (easily share artefacts with multiple people at once!)
  */
@@ -72,7 +74,7 @@ class CreateFamily extends Component {
    */
   handleSubmit() {
     return event => {
-      
+
       this.props.firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.authUser)
         .then(() => {
           this.setState({ message: "You created a new family", confirmationTitle: 'Success', readyToSubmit: true });
@@ -116,14 +118,14 @@ class CreateFamily extends Component {
     return (
       <div id="create-family-page">
         <h1 id="create-family-heading">Create a new family</h1>
-        
+
         {/* An avatar for the family */}
         <UploadFile dbLocation="familyImages/" isCreate={true} name={this.state.familyName} readyToSubmit={this.state.readyToSubmit} />
-        
+
         {/* The form for creating a family */}
         <Form onSubmit={this.handleSubmit()} id="new-family-form">
           <Form.Label> Family Name </Form.Label>
-          
+
           {/* Displays popover is family exists */}
           {this.state.isExistingFamily ?
             <OverlayTrigger placement="right" overlay={popover}>
@@ -164,4 +166,5 @@ const CreateFamilyPage = (props) => (
   <CreateFamilyForm history={props.history}></CreateFamilyForm>
 );
 
-export default CreateFamilyPage;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(CreateFamilyPage);
