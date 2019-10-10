@@ -1,27 +1,46 @@
-import React, { Component } from 'react';
-import { withFirebase } from '../../components/Firebase';
-import CustomSlider from "../../components/CardSlider";
-import EditModal from '../../components/EditModal';
-import LoadingAnimation from '../../components/LoadingAnimation';
-import UploadFile from "../../components/ImageUpload";
-/**
- * Page which views a particular family, as chosen by users actions from
- * previous webpage
- */
-class ViewFamily extends Component {
-    constructor(props) {
+
+import React,{Component} from 'react';
+import {FirebaseContext} from "../../components/Firebase";
+import CustomDeck from "../../components/CardSlider";
+import {Modal} from 'react-bootstrap';
+import {HOME} from "../../constants/routes";
+import { withAuthorization } from "../../components/Session";
+
+const errorModal = () => (
+<Modal onHide={() => this.props.history.push(HOME)}>
+    <Modal.Header closeButton>
+        <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>{this.state.message}</Modal.Body>
+    <Modal.Footer>
+        <button variant="primary" onClick={() => this.props.history.push(HOME)}>Close</button>
+    </Modal.Footer>
+</Modal>
+)
+class ViewFamily extends Component{
+    constructor(props){
         super(props);
     }
-    /**
-     * Renders the family details on screen, using the name of the family from
-     * url or the previous webpage
-     */
-    render() {
-        let familyName = this.props.match.params.name || this.props.location.state.name;
-        return (
-            <div>
-                <ViewFamilyDetails name={familyName} />
-            </div>)
+
+
+    componentDidMount(){
+        console.log("Did mount");
+        return(
+            <FirebaseContext.Consumer>
+                  {firebase =>
+                    firebase.viewFamily(this.props.match.params.name)
+                    .then(item => {
+                        console.log(item);
+                        this.setState({familyMembers: item.users, name: this.props.match.params.name});
+                    })
+                    .catch(error => {
+                        console.log("ERRHHRB");
+                        return(<errorModal></errorModal>)
+                    })
+                  }
+            </FirebaseContext.Consumer>
+        )
+
     }
 }
 /**
@@ -67,20 +86,30 @@ class FamilyDetails extends Component {
     render() {
         return (
             <div>
-                {this.state.loading ? loading :
-                    <div>
-                        <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
-                        <h1>Family name</h1>
-                        <p>{this.props.name}</p>
-                        <h1>Members</h1>
-                        <EditModal action={this.handleModal} family={this.state.family}></EditModal>
-                        <CustomSlider cards={this.state.family["users"]}></CustomSlider>
-                    </div>
-                }
+
+                <h1>Family name</h1>
+                    <p>{this.state.name}</p>
+                <h1>Members</h1>
+                <CustomDeck cards={this.state.familyMembers}></CustomDeck>
+                <FirebaseContext.Consumer>
+                  {firebase =>
+                    firebase.viewFamily(this.props.match.params.name)
+                    .then(item => {
+                        console.log(item);
+                        this.setState({familyMembers: item.users, name: this.props.match.params.name});
+                    })
+                    .catch(error => {
+                        console.log("ERRHHRB");
+                        return(<errorModal></errorModal>)
+                    })
+                  }
+            </FirebaseContext.Consumer>
+
             </div>
         );
     }
 }
-export default ViewFamily;
-const ViewFamilyDetails = withFirebase(FamilyDetails);
-export { ViewFamilyDetails }
+
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(ViewFamily);
+

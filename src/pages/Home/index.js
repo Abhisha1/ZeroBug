@@ -1,14 +1,21 @@
-import React from "react";
-import {Link} from 'react-router-dom';
 
-const HomePage = () => (
-  <div>
-    <h1>HOME! TEST!</h1>
-    <Link
-    to={{ pathname: '/family/Clients', state: { name: 'Clients'} }}
-    >TEST VIEW FAM</Link>
-  </div> 
-);
+import React, { Component } from "react";
+import Cards from "./../../components/Card";
+import { withAuthorization } from "./../../components/Session";
 
 
-export default HomePage;
+class HomePage extends Component {
+    render(){
+        return(
+          <div>
+            <Cards/>
+          </div>
+        );
+    }
+
+}
+
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(HomePage);
+
