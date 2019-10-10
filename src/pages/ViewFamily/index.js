@@ -5,6 +5,7 @@ import CustomDeck from "../../components/CardSlider";
 import {Modal} from 'react-bootstrap';
 import {HOME} from "../../constants/routes";
 import { withAuthorization } from "../../components/Session";
+import LoadingAnimation from '../../components/LoadingAnimation';
 
 const errorModal = () => (
 <Modal onHide={() => this.props.history.push(HOME)}>
