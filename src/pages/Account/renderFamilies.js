@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import { withRouter } from 'react-router-dom';
+import FamilySlider from "./cardSlider";
 
 class RenderFamilies extends Component{
     constructor(props){
         super(props);
         this.state = {
             familyList: null,
+            username: null,
         }
     }
 
     componentDidMount =() => {
-        const renderfam = this.props.firebase.getListFamilyName(this);
+        
+        this.props.firebase.auth.onAuthStateChanged((user)=>{
+            if(user){
+                this.setState({username: user.displayName});
+                this.props.firebase.getYourManagedFamilyName(this, this.state.username);
+            }
+        })
+        
+        
    
     }
 
@@ -19,15 +29,19 @@ class RenderFamilies extends Component{
         return(
             <div>
                 <div id="familiesWrapper">
-					<h1 id="account-heading">Manage Families</h1>
-					<div id="familiesContainer">
+					<h1 id="account-heading">Your Managed Families</h1>
+                    <FamilySlider cards={
+							(this.state.familyList || [])
+					} />
+				{/** 	<div id="familiesContainer">
 						<div id="familyItems">
                             {(this.state.familyList || []).map(item => (
                                 <div className="familyOwned" key={item}>
-                                    <p key={item.name}>Abhisha Nirmalathas in this family groups: {item}</p></div>
+                                    <p key={item.name}>{item}</p></div>
                             ))}
-						</div>
-					</div>
+                        </div>
+                        
+					</div> */}
 				</div>
             </div>
         )

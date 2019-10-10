@@ -147,9 +147,9 @@ class Firebase {
     });
   }
 
-
+  // for home page
   // get a list of Family name data
-  getListFamilyName = (the) => {
+  getListFamilyName = (the, username) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
@@ -157,10 +157,7 @@ class Firebase {
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
-
-          //here just for Jessica Text
-
-          if (data.val()[key].users[user].displayName == "Abhisha Nirmalathas") {
+          if (data.val()[key].users[user].displayName == username) {
 
             testFamilyName.push(data.val()[key].name);
 
@@ -170,6 +167,28 @@ class Firebase {
 
       the.setState({ ...the.state, familyList: testFamilyName })
     });
+  }
+
+  // render the family you managed
+  getYourManagedFamilyName = (the, username) => {
+    var testFamilyName = [];
+    var tempRef = this.database().ref('/families/');
+    console.log(username);
+    tempRef.on("value", (data) => {
+
+      for (let key in data.val()) {
+        console.log(data.val()[key].admin.name);
+        if(data.val()[key].admin.name == username ){
+          testFamilyName.push(data.val()[key].name);
+
+        }
+        }
+        the.setState({ ...the.state, familyList: testFamilyName });
+      })
+
+      
+    
+
   }
 
 

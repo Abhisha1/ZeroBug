@@ -52,9 +52,7 @@ class CustomSlider extends Component {
           {this.props.cards.map(item => (
             <div key={item} className="artifactOwned">
                 <div className="oneArtifactItem">
-                    <Card></Card>
-                    <h2>{item.toString()}</h2>
-                    <h5>a new artefact</h5>
+                    <p key={item.name}>{item}</p>
                 </div>
             </div>
           ))}

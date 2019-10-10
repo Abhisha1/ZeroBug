@@ -7,7 +7,7 @@ const HomePage = () => (
     <Link
     to={{ pathname: '/family/Clients', state: { name: 'Clients'} }}
     >TEST VIEW FAM</Link>
-  </div>
+  </div> 
 );
 
 
