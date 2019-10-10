@@ -47,6 +47,7 @@ class ImageUpload extends Component {
     handleUpload = () => {
         const { image } = this.state;
         this.props.firebase.uploadProfileImage(image, this, this.props.dbLocation, this.props.name);
+       // console.log(this.props.name);
 
 
     }

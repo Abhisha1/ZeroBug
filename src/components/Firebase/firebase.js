@@ -62,8 +62,9 @@ class Firebase {
    */
   uploadProfileImage = (image, th, location, dbGroupName) => {
 
-    this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
-      this.getProfileImageURL(th, location, location + image.name, dbGroupName);
+    //console.log(dbGroupName);
+    this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
+      this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
 
       console.log('success uploading');
     }).catch(error => {
@@ -111,6 +112,29 @@ class Firebase {
   }
 
   /********************************************************************** */
+
+  //use for profile image to get the user image first
+  getImageURL = (th, location, dbGroupName ) => {
+ 
+    this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
+
+      
+      th.setState({ ...th.state, imageURL: url});
+    }).catch(error => {
+      console.log("Show data FAILED");
+    });
+
+  }
+
+  // checkImageUpload = (location, dbGroupName) => {
+  //   if(this.storage().ref().child(location + dbGroupName) == null){
+  //     return "yoyooyoy";
+
+  //   }
+  //   return "aaaa";
+    
+  // }
+
 
 
   // get a list of Artifact name data

@@ -4,6 +4,7 @@ import UploadFile from "../../components/ImageUpload";
 import { FirebaseContext } from "../../components/Firebase";
 import RenderFamilies from "./renderFamilies";
 import ArtefactSlider from "./cardSlider";
+import Profile from "./profile";
 
 class AccountPage extends Component {
 
@@ -11,11 +12,19 @@ class AccountPage extends Component {
 		familiesOwned: null,
 	}
 
+
+
 	render() {
 		return (
+	
+
 			<div id="profileContainer">
 
+				<div>
+					<Profile />
+				</div>
 
+{/** 
 					<div id="topWraper">
 						<h1 id="account-heading">Your Profile</h1>
 						<div id="topContainer">
@@ -26,7 +35,7 @@ class AccountPage extends Component {
 							</div>
 						</div>
 					</div>
-
+*/}
 
 
 				<div id="artifactWrapper">
@@ -39,15 +48,15 @@ class AccountPage extends Component {
 				<div>
 					<RenderFamilies />
 				</div>
-
+				
+				
 
 
 
 
 			</div>
 
-
-
+			
 		);
 	}
 }

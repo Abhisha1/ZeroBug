@@ -23,7 +23,7 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 1100px;
+    height: 1400px;
     padding-top: 128px;
     max-width: 100% !important;
 }
@@ -120,6 +120,17 @@
     flex-wrap: wrap;
 }
 
+#user-information{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
 div.artifactOwned{
     height: auto;
     margin-right: 50px;
@@ -195,7 +206,7 @@ input.testInput{
         background-color: cyan;
         height: 128px;
         width: 128px;
-        border-radius: 50%
+        border-radius: 50%;
     }
     .aButton{
         border-radius: 30px;
