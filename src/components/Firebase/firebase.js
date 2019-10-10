@@ -173,11 +173,9 @@ class Firebase {
   getYourManagedFamilyName = (the, username) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
-    console.log(username);
     tempRef.on("value", (data) => {
 
       for (let key in data.val()) {
-        console.log(data.val()[key].admin.name);
         if(data.val()[key].admin.name == username ){
           testFamilyName.push(data.val()[key].name);
 

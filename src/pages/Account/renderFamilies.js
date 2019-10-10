@@ -33,15 +33,6 @@ class RenderFamilies extends Component{
                     <FamilySlider cards={
 							(this.state.familyList || [])
 					} />
-				{/** 	<div id="familiesContainer">
-						<div id="familyItems">
-                            {(this.state.familyList || []).map(item => (
-                                <div className="familyOwned" key={item}>
-                                    <p key={item.name}>{item}</p></div>
-                            ))}
-                        </div>
-                        
-					</div> */}
 				</div>
             </div>
         )
