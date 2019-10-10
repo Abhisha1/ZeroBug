@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import UploadFile from "../../components/ImageUpload";
 import "./account.scss";
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 
 class Profile extends Component{
     constructor(props){
@@ -11,6 +12,7 @@ class Profile extends Component{
         this.state = {
             username: null,
             imageURL: null,
+            password: null,
         }
     }
 
@@ -24,6 +26,23 @@ class Profile extends Component{
         })
         
    
+    }
+
+    handleChange = e => {
+        this.setState({...this.state, password: e.target.value});
+        
+    }
+
+    handleUpload = () => {
+        this.props.firebase.auth.onAuthStateChanged((user)=>{
+            user.updatePassword(this.state.password).then(function() {
+                // Update successful.
+                console.log("update password");
+              }).catch(function(error) {
+                // An error happened.
+              });
+            
+        })
     }
 
     
@@ -40,7 +59,12 @@ class Profile extends Component{
 						<div id="topContainer">
 							<UploadFile dbLocation="profileImages/" isCreate={false} name={this.state.username}/>
 							<div id="profileInformationContainer">
-								<button className="aButton" id="changePasswordButton">Change Password</button>
+                                <h2>Your Updated Password </h2>
+                                <h3>{this.state.password}</h3>
+                                <TextField
+                                    variant="outlined"
+                                    onChange={this.handleChange}></TextField>
+								<button className="aButton" id="changePasswordButton"  onClick={this.handleUpload}>Change Password</button>
 							</div>
 						</div>
 				</div>
