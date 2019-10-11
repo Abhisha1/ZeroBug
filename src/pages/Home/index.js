@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from 'react-router-dom';
+import { withAuthorization } from "./../../components/Session";
 
 const HomePage = () => (
   <div>
@@ -11,4 +12,6 @@ const HomePage = () => (
 );
 
 
-export default HomePage;
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(HomePage);

@@ -54,7 +54,7 @@ class ImageUpload extends Component {
      * Checks if the avatar image is ready to be uploaded to the server, for pages that create a new family or artefact
      */
     readyToUpload() {
-        if (this.props.readyToSubmit && !this.state.isUploaded) {
+        if (this.state.image && !this.state.isUploaded) {
             this.handleUpload();
         }
     }
@@ -97,11 +97,12 @@ class ImageUpload extends Component {
                 If the page is not creating a new object and changing the avatar of an existing user/artefact/family, it will
                 display a button which will upload the new file after clicking the button */}
                 <div id="styledUpload">
+                    {this.props.readyToSubmit && this.readyToUpload()}
                     <label htmlFor="imageUpload">
                         {this.props.isCreate ?
                             (<Button variant="outlined" component="span" id="uploadStyledButton">
                                 Upload
-                            </Button> && this.readyToUpload())
+                            </Button>)
                     : (
                     <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
                             Upload

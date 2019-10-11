@@ -3,6 +3,8 @@ import "./account.scss";
 import UploadFile from "../../components/ImageUpload";
 import { FirebaseContext } from "../../components/Firebase";
 import RenderFamilies from "./renderFamilies";
+import { withAuthorization } from "../../components/Session";
+
 
 class AccountPage extends Component {
 
@@ -72,5 +74,5 @@ class AccountPage extends Component {
 		);
 	}
 }
-
-export default AccountPage;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(AccountPage);

@@ -5,6 +5,7 @@ import EditModal from '../../components/EditModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Paper from '@material-ui/core/Paper';
 import UploadFile from "../../components/ImageUpload";
+import { withAuthorization } from "../../components/Session";
 import "./viewfamily.scss";
 /**
  * Page which views a particular family, as chosen by users actions from
@@ -104,7 +105,7 @@ class FamilyDetails extends Component {
         );
     }
 }
-
-export default ViewFamily;
 const ViewFamilyDetails = withFirebase(FamilyDetails);
 export { ViewFamilyDetails }
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(ViewFamily);
