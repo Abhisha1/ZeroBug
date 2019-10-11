@@ -52,7 +52,8 @@ class CustomSlider extends Component {
           {this.props.cards.map(item => (
             <div key={item} className="artifactOwned">
                 <div className="oneArtifactItem">
-                    <p key={item.name}>{item}</p>
+                    <img src={item.avatar} style={{width: "100px", height: "100px", backgroundColor: "cyan"}}></img>
+                    <p key={item.name}>{item.name}</p>
                 </div>
             </div>
           ))}

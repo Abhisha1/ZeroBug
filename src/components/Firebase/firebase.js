@@ -112,8 +112,12 @@ class Firebase {
   }
 
   /********************************************************************** */
-
-  //use for profile image to get the user image first
+  /**
+   * get the profile image before rendering the account page
+   * @para the component to be set the state
+   * @para the filepath
+   * @para the username
+   */
   getImageURL = (th, location, dbGroupName ) => {
  
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
@@ -126,15 +130,25 @@ class Firebase {
 
   }
 
-  // checkImageUpload = (location, dbGroupName) => {
-  //   if(this.storage().ref().child(location + dbGroupName) == null){
-  //     return "yoyooyoy";
 
-  //   }
-  //   return "aaaa";
-    
-  // }
+  /**
+   * get the list fo families images
+   * @para the component to be set the state
+   * @para the filepath
+   * @para the list of families names
+   */
+  getFamiliesImageURL = (th, location, familyNamesList) => {
+    var familyImages = [];
 
+    for(var i = 0; i < familyNamesList.length; i++ ){
+
+      this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url)=>{
+        
+        familyImages.push(url);
+        th.setState({...th.state, familyImageURL: familyImages});
+      })
+    }    
+  }
 
 
   // get a list of Artifact name data
@@ -148,7 +162,11 @@ class Firebase {
   }
 
   // for home page
-  // get a list of Family name data
+  /**
+   * get a list of Family name that the user have
+   * @para the component to be set the state
+   * @para users' names
+   */
   getListFamilyName = (the, username) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
@@ -166,10 +184,16 @@ class Firebase {
       }
 
       the.setState({ ...the.state, familyList: testFamilyName })
+      
     });
   }
 
-  // render the family you managed
+  //for account pages
+  /**
+   * get the family that you managed
+   * @para the component to be set the state
+   * @para the user name
+   */
   getYourManagedFamilyName = (the, username) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
@@ -182,12 +206,13 @@ class Firebase {
         }
         }
         the.setState({ ...the.state, familyList: testFamilyName });
-      })
-
-      
-    
+        this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
+        the.setState({dataReady: true})
+    })
 
   }
+
+
 
 
 
