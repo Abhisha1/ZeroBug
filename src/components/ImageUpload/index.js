@@ -54,7 +54,7 @@ class ImageUpload extends Component {
      * Checks if the avatar image is ready to be uploaded to the server, for pages that create a new family or artefact
      */
     readyToUpload() {
-        if (this.props.readyToSubmit && !this.state.isUploaded) {
+        if (this.props.readyToSubmit && !this.state.isUploaded && this.state.image) {
             this.handleUpload();
         }
     }

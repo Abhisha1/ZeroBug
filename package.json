@@ -22,15 +22,16 @@
     "react-scripts": "3.1.1",
     "react-slick": "^0.25.2",
     "recompose": "^0.30.0",
-    "slick-carousel": "^1.8.1",
     "simple-flexbox": "^2.3.0",
+    "slick-carousel": "^1.8.1",
     "typeface-roboto": "0.0.75"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "npx cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^3.4.1"
   }
 }
