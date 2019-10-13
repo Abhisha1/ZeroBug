@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
-//import './customslider.scss';
-import Card from "../../components/Card";
+import Card from '@material-ui/core/Card';
+import { CardMedia } from "@material-ui/core";
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * The CustomSlider class which renders list of users
@@ -52,8 +54,17 @@ class CustomSlider extends Component {
           {this.props.cards.map(item => (
             <div key={item} className="artifactOwned">
                 <div className="oneArtifactItem">
-                    <img src={item.avatar} style={{width: "100px", height: "100px", backgroundColor: "cyan"}}></img>
-                    <p key={item.name}>{item.name}</p>
+                    <Card>
+                        <CardMedia
+                            image={item.avatar}
+                            style={{width: "100%", height: "250px", backgroundColor: "cyan"}}
+                        />
+                        <CardContent>
+                            <Typography variant="h4" component="p">
+                                {item.name}
+                            </Typography>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
           ))}
