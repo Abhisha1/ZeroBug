@@ -138,7 +138,7 @@ class Firebase {
    * @para the list of families names
    */
   getFamiliesImageURL = (th, location, familyNamesList) => {
-    var familyImages = [];
+    let familyImages = [];
 
     for(var i = 0; i < familyNamesList.length; i++ ){
 
@@ -153,8 +153,8 @@ class Firebase {
 
   // get a list of Artifact name data
   getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
+    let testArtifactName = [];
+    let tempRef = this.database().ref('/testUploadArtifactData/');
     tempRef.on('child_added', (data) => {
       testArtifactName.push(data.val().artifactName);
       the.setState({ ...the.state, artifactList: testArtifactName })
@@ -195,8 +195,8 @@ class Firebase {
    * @para the user name
    */
   getYourManagedFamilyName = (the, username) => {
-    var testFamilyName = [];
-    var tempRef = this.database().ref('/families/');
+    let testFamilyName = [];
+    let tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
 
       for (let key in data.val()) {

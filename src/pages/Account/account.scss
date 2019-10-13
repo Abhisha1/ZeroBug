@@ -153,17 +153,16 @@ div.familyOwned{
 }
 
 button.aButton{
-    margin-top: 45px;
+    margin-top: 20px;
     background-color: white;
-    padding-left: 32px;
-    padding-right: 32px;
-    font-size: 2vw;
+    margin-left: 32px;
     font-family: Montserrat;
-    border: 2px solid #73AD21;
+    border: 2px solid rgba(250, 243, 30, 0.845);
 }
 
 button.aButton:focus{
-    color: red;
+    color: white;
+    background-color: rgba(250, 243, 30, 0.845);
 }
 
 input.testInput{
@@ -195,7 +194,7 @@ input.testInput{
         border-radius: 50%;
     }
     .aButton{
-        border-radius: 40px;
+        //border-radius: 90px;
         height: 80px;
     }
 }
@@ -208,7 +207,7 @@ input.testInput{
         border-radius: 50%;
     }
     .aButton{
-        border-radius: 30px;
+        //border-radius: 30px;
         height: 60px;
     }
 }

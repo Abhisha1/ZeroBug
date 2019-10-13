@@ -89,7 +89,7 @@ class ImageUpload extends Component {
                 display a button which will upload the new file after clicking the button */}
                 {this.props.isCreate ?
                     this.readyToUpload()
-                    : <button className="aButton" onClick={this.handleUpload}>Change Profile Image</button>}
+                    : <Button className="aButton" variant="outlined" onClick={this.handleUpload}>Change Profile Image</Button>}
 
             </div>
         )
