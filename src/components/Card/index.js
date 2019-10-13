@@ -11,6 +11,11 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import './card.scss'
 
+/**
+ * A modular card component implemented according to specifications discussed
+ * in our UI designs
+ */
+
 
 class Cards extends Component{
     constructor(props){
