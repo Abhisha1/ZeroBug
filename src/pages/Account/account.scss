@@ -11,7 +11,7 @@
     text-align: center;
     margin: 0 auto;
     font-size: 3vw;
-    font-family: 'Montserrat', sans-serif;
+    font-family: Montserrat;
     font-weight: 500;
 }
 
@@ -117,6 +117,7 @@
     justify-content: flex-start;
     height: 100%;
     flex-wrap: wrap;
+    margin-left: 32px;
 }
 
 #user-information{
@@ -155,7 +156,6 @@ div.familyOwned{
 button.aButton{
     margin-top: 20px;
     background-color: white;
-    margin-left: 32px;
     font-family: Montserrat;
     border: 2px solid rgba(250, 243, 30, 0.845);
 }
@@ -249,4 +249,8 @@ input.testInput{
 
 #changePasswordButton{
     max-width: 512px;
+}
+
+#passwordField{
+    margin-left: 32px;
 }

@@ -61,16 +61,15 @@ class Profile extends Component{
 						<h1 id="account-heading">Your Profile</h1>
                         <div id="user-information">
                             <img id="avatarBox" src={this.state.imageURL}></img>
-                            <h2 id="profile-name">{this.state.username}</h2>
+                            <h3 id="profile-name">{this.state.username}</h3>
                         </div>
 						<div id="topContainer">
 							<UploadFile dbLocation="profileImages/" isCreate={false} name={this.state.username}/>
 							<div id="profileInformationContainer">
-                                
-                                <h2>Your Updated Password </h2>
-                                <h3>{this.state.password}</h3>
                                 <TextField
                                     variant="outlined"
+                                    label="Update Password"
+                                    type="password"
                                     onChange={this.handleChange}></TextField>
                                 <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>
                                 
