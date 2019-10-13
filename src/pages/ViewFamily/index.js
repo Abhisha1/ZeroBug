@@ -67,6 +67,7 @@ class FamilyDetails extends Component {
                             name: user.displayName,
                             email: user.email
                         }
+                        console.log(value)
                         if (user.uid === value.admin.uid) {
                             this.setState({ family: value, loading: false, isAdmin: true });
                         }
