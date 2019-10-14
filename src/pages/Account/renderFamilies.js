@@ -23,7 +23,8 @@ class RenderFamilies extends Component{
 					<div id="familiesContainer">
 						<div id="familyItems">
                             {(this.state.familyList || []).map(item => (
-                                <div className="familyOwned" key={item.name}><p key={item.name}>Jessica Test in this family groups: {item}</p></div>
+                                <div className="familyOwned" key={item}>
+                                    <p key={item.name}>Jessica Test in this family groups: {item}</p></div>
                             ))}
 						</div>
 					</div>
