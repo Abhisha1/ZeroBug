@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
-
 import { FirebaseContext } from "../../components/Firebase";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import './modal.scss';

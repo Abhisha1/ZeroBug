@@ -1,46 +1,31 @@
 
-import React,{Component} from 'react';
-import {FirebaseContext} from "../../components/Firebase";
-import CustomDeck from "../../components/CardSlider";
-import {Modal} from 'react-bootstrap';
-import {HOME} from "../../constants/routes";
-import { withAuthorization } from "../../components/Session";
+import React, { Component } from 'react';
+import { withFirebase } from '../../components/Firebase';
+import CustomSlider from "../../components/CardSlider";
+import EditModal from '../../components/EditModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
-
-const errorModal = () => (
-<Modal onHide={() => this.props.history.push(HOME)}>
-    <Modal.Header closeButton>
-        <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>{this.state.message}</Modal.Body>
-    <Modal.Footer>
-        <button variant="primary" onClick={() => this.props.history.push(HOME)}>Close</button>
-    </Modal.Footer>
-</Modal>
-)
-class ViewFamily extends Component{
-    constructor(props){
+import Paper from '@material-ui/core/Paper';
+import UploadFile from "../../components/ImageUpload";
+import { withAuthorization } from "../../components/Session";
+import "./viewfamily.scss";
+/**
+ * Page which views a particular family, as chosen by users actions from
+ * previous webpage
+ */
+class ViewFamily extends Component {
+    constructor(props) {
         super(props);
     }
-
-
-    componentDidMount(){
-        console.log("Did mount");
-        return(
-            <FirebaseContext.Consumer>
-                  {firebase =>
-                    firebase.viewFamily(this.props.match.params.name)
-                    .then(item => {
-                        console.log(item);
-                        this.setState({familyMembers: item.users, name: this.props.match.params.name});
-                    })
-                    .catch(error => {
-                        console.log("ERRHHRB");
-                        return(<errorModal></errorModal>)
-                    })
-                  }
-            </FirebaseContext.Consumer>
-        )
+    /**
+     * Renders the family details on screen, using the name of the family from
+     * url or the previous webpage
+     */
+    render() {
+        let familyName = this.props.match.params.name || this.props.location.state.name;
+        return (
+            <div id="viewFamilyPage">
+                <ViewFamilyDetails name={familyName} />
+            </div>)
 
     }
 }
@@ -49,6 +34,7 @@ class ViewFamily extends Component{
  */
 const loading = <LoadingAnimation></LoadingAnimation>
 
+
 /**
  * The family details as per receieved from the database, with ability
  * to edit and change details
@@ -56,9 +42,11 @@ const loading = <LoadingAnimation></LoadingAnimation>
 class FamilyDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal:false, family: null, loading: true }
+        this.state = { showModal: false, family: null, loading: true, isAdmin: false }
         this.handleModal = this.handleModal.bind(this);
     }
+
+
     handleModal() {
         if (this.state.showModal === false) {
             this.setState({ showModal: true });
@@ -74,7 +62,23 @@ class FamilyDetails extends Component {
     async componentWillMount() {
         this.props.firebase.viewFamily(this.props.name)
             .then(value => {
-                this.setState({ family: value, loading: false });
+                this.props.firebase.auth.onAuthStateChanged((user) => {
+                    if (user) {
+                        let authUser = {
+                            uid: user.uid,
+                            name: user.displayName,
+                            email: user.email
+                        }
+                        console.log(value)
+                        if (user.uid === value.admin.uid) {
+                            this.setState({ family: value, loading: false, isAdmin: true });
+                        }
+                        this.setState({ family: value, loading: false });
+                    } else {
+                        this.setState({ family: value, loading: false });
+                        // User not logged in or has just logged out.
+                    }
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -88,29 +92,27 @@ class FamilyDetails extends Component {
         return (
             <div>
 
-                <h1>Family name</h1>
-                    <p>{this.state.name}</p>
-                <h1>Members</h1>
-                <CustomDeck cards={this.state.familyMembers}></CustomDeck>
-                <FirebaseContext.Consumer>
-                  {firebase =>
-                    firebase.viewFamily(this.props.match.params.name)
-                    .then(item => {
-                        console.log(item);
-                        this.setState({familyMembers: item.users, name: this.props.match.params.name});
-                    })
-                    .catch(error => {
-                        console.log("ERRHHRB");
-                        return(<errorModal></errorModal>)
-                    })
-                  }
-            </FirebaseContext.Consumer>
+                {this.state.loading ? <div id="loader">{loading}</div> :
+                    <div>
+                        <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
+                        <h1>Family name</h1>
+                        <p>{this.props.name}</p>
+                        <Paper id="paperCard">
+                            <h1>Members</h1>
+                            {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
+                            }
+                            <CustomSlider cards={this.state.family["users"]}></CustomSlider>
+                        </Paper>
+                    </div>
+                }
 
             </div>
         );
     }
 }
 
+const ViewFamilyDetails = withFirebase(FamilyDetails);
+export { ViewFamilyDetails }
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
 

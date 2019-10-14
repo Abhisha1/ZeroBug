@@ -1,19 +1,17 @@
 
-import React, { Component } from "react";
-import Cards from "./../../components/Card";
+import React from "react";
+import {Link} from 'react-router-dom';
 import { withAuthorization } from "./../../components/Session";
 
+const HomePage = () => (
+  <div>
+    <h1>HOME! TEST!</h1>
+    <Link
+    to={{ pathname: '/family/Monkees', state: { name: 'Monkees'} }}
+    >TEST VIEW FAM</Link>
+  </div>
+);
 
-class HomePage extends Component {
-    render(){
-        return(
-          <div>
-            <Cards/>
-          </div>
-        );
-    }
-
-}
 
 const condition = authUser => !!authUser;
 

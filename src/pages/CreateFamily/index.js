@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
 import { withFirebase } from '../../components/Firebase'
-import CustomModal from "../../components/Modal";
+import CustomModal from "../../components/AddUserModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
@@ -148,13 +147,13 @@ class CreateFamily extends Component {
         <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
-        <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
+        <Modal show={this.state.showOutcomeModal} onHide={() => window.location.assign(HOME)}>
           <Modal.Header closeButton>
             <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
           <Modal.Footer>
-            <button variant="primary" onClick={() => this.props.history.push(HOME)}>Close</button>
+            <button variant="primary" onClick={() => window.location.assign(HOME)}>Close</button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -164,8 +163,8 @@ class CreateFamily extends Component {
 }
 
 const CreateFamilyForm = withFirebase(CreateFamily);
-const CreateFamilyPage = (props) => (
-  <CreateFamilyForm history={props.history}></CreateFamilyForm>
+const CreateFamilyPage = () => (
+  <CreateFamilyForm></CreateFamilyForm>
 );
 
 const condition = authUser => !!authUser;
