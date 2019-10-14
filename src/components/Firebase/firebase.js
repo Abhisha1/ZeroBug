@@ -36,9 +36,14 @@ class Firebase {
   }
 
   /********************************************************************** */
-  //upload the user profile images
-  //used by the pages/Account/imageUpload.js
-  uploadProfileImage = (image, th, location, dbGroupName) => {
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the image's name
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  uploadArtefact = (image, th, location, dbGroupName) => {
     this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + image.name, dbGroupName);
       console.log('success uploading');
@@ -47,13 +52,36 @@ class Firebase {
     });
   }
 
+
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  uploadProfileImage = (image, th, location, dbGroupName) => {
+
+    //console.log(dbGroupName);
+    this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
+      this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
+
+      console.log('success uploading');
+    }).catch(error => {
+      console.log("Written data FAILED");
+    });
+  }
+
+
   //store the file path of the storage to the database
   putProfileImageFilePathToDB = (filepath, location, username) => {
+
     var newPostRef = this.database().ref('/' + location).push();
 
     newPostRef.set({
       fileURL: filepath,
       username: username,
+
 
     })
       .then(() => {
@@ -63,12 +91,20 @@ class Firebase {
       });
   }
 
-  //get the image file path that store in the firebase storage
+  /**
+   * Updates preview to new image
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
   getProfileImageURL = (th, location, filepath, dbGroupName) => {
     this.storage().ref().child(filepath).getDownloadURL().then((url) => {
 
       th.setState({ ...th.state, imageURL: url, isUploaded: true });
+
       this.putProfileImageFilePathToDB(url, location, dbGroupName);
+
 
     }).catch(error => {
       console.log("Written data FAILED");
@@ -76,20 +112,62 @@ class Firebase {
   }
 
   /********************************************************************** */
+  /**
+   * get the profile image before rendering the account page
+   * @para the component to be set the state
+   * @para the filepath
+   * @para the username
+   */
+  getImageURL = (th, location, dbGroupName ) => {
+
+    this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
+
+
+      th.setState({ ...th.state, imageURL: url});
+    }).catch(error => {
+      console.log("Show data FAILED");
+    });
+
+  }
+
+
+  /**
+   * get the list fo families images
+   * @para the component to be set the state
+   * @para the filepath
+   * @para the list of families names
+   */
+  getFamiliesImageURL = (th, location, familyNamesList) => {
+    let familyImages = [];
+
+    for(var i = 0; i < familyNamesList.length; i++ ){
+
+      this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url)=>{
+
+        familyImages.push(url);
+        th.setState({...th.state, familyImageURL: familyImages});
+      })
+    }
+  }
+
 
   // get a list of Artifact name data
   getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
+    let testArtifactName = [];
+    let tempRef = this.database().ref('/testUploadArtifactData/');
     tempRef.on('child_added', (data) => {
       testArtifactName.push(data.val().artifactName);
       the.setState({ ...the.state, artifactList: testArtifactName })
     });
   }
 
-
-  // get a list of Family name data
-  getListFamilyName = (the) => {
+  // for home page
+  /**
+   * get a list of Family name that the user have
+   * @para the component to be set the state
+   * @para users' names
+   */
+  getListFamilyName = (the, username) => {
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
@@ -97,9 +175,8 @@ class Firebase {
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
+          if (data.val()[key].users[user].displayName == username) {
 
-          //here just for Jessica Text
-          if (data.val()[key].users[user].name == "Jessica Test") {
             testFamilyName.push(data.val()[key].name);
 
           }
@@ -107,8 +184,35 @@ class Firebase {
       }
 
       the.setState({ ...the.state, familyList: testFamilyName })
+
     });
   }
+
+  //for account pages
+  /**
+   * get the family that you managed
+   * @para the component to be set the state
+   * @para the user name
+   */
+  getYourManagedFamilyName = (the, username) => {
+    let testFamilyName = [];
+    let tempRef = this.database().ref('/families/');
+    tempRef.on("value", (data) => {
+
+      for (let key in data.val()) {
+        if(data.val()[key].admin.name == username ){
+          testFamilyName.push(data.val()[key].name);
+
+        }
+        }
+        the.setState({ ...the.state, familyList: testFamilyName });
+        this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
+        the.setState({dataReady: true})
+    })
+
+  }
+
+
 
 
 
@@ -243,17 +347,14 @@ class Firebase {
    * @return The associated family's data or an error
    */
   viewFamily = (name) => {
-    let dbRef = this.database().ref('/families/' + name);
-    dbRef.on("value", function (snapshot) {
-      if (snapshot.val() == null) {
-        return new Error("Could not retrieve this family");
+    return new Promise((resolve, reject) => {
+      const onData = snap => {
+        resolve(snap.val());
       }
-      else {
-        return snapshot.val();
-      }
+      const onError = error => reject(error);
+      this.database().ref('/families/' + name).on("value", onData, onError)
     });
   }
-
   /**
    * Creates a new family and uploads to database
    * @param users The family members
@@ -273,6 +374,51 @@ class Firebase {
         return error;
       })
     )
+  }
+  /**
+   * Adds a user to the specified family
+   * @param user The user to be added
+   * @param family The family
+   * @return A success message or error
+   */
+  addToFamily = (user, family) => {
+    let newFamily = family["users"];
+    newFamily.push(user);
+    let familyName = family["name"];
+    this.database().ref('/families/' + familyName).update({ users: newFamily })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+  /**
+   * Removes a user to the specified family
+   * @param user The user to be removed
+   * @param family The family
+   * @return A success message or error
+   */
+  removeFromFamily = (user, family) => {
+    let newFamily = family["users"];
+    let removeIndex = -1;
+    for (let i = 0; i < family["users"].length; i++) {
+      if (family["users"][i].name === user.name) {
+        removeIndex = i
+      }
+    }
+    newFamily.splice(removeIndex, 1);
+    let familyName = family["name"];
+    if (removeIndex === -1) {
+      return new Error("could not find user in family");
+    }
+    this.database().ref('/families/' + familyName).update({ users: newFamily })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
   }
 
   /**
@@ -348,7 +494,7 @@ class Firebase {
    */
   getArtifactData = (artifactID, the) => {
     let artifactName = "?";
-    this.database().ref('/testUploadArtifactData/05' + "").once('value').then(function (snapshot) {
+    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
       artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
       the.setState({ ...the.state, artifactName: artifactName })
     })
