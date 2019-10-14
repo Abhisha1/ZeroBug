@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 /**
- * The CustomSlider class which renders list of users
+ * The CustomSlider class which renders list of families
  * horizontally 
  */
 class CustomSlider extends Component {
@@ -45,12 +45,10 @@ class CustomSlider extends Component {
    * Renders the slider onto the webpage
    */
   render() {
-    // initialises configuration for formatting of slider
-    
 
     let slickSlider = <Slider {...this.settings} ref={c => {this.slickSlider = c}}>
 
-          {/* Passes through users data to render in slider */}
+          {/* Passes through families data to render in slider */}
           {this.props.cards.map(item => (
             <div key={item} className="artifactOwned">
                 <div className="oneArtifactItem">
@@ -68,7 +66,6 @@ class CustomSlider extends Component {
                 </div>
             </div>
           ))}
-
         </Slider>
     
     let nextArrow = <button type="button" className="nextButton" onClick={() => {this.slickSlider.slickNext()}}>{">"}</button>;
@@ -76,14 +73,14 @@ class CustomSlider extends Component {
 
     return (
       <div id="artifactContainer">
-          {prevArrow}
+            {prevArrow}
         <div id="artifactItems">
             {slickSlider}
         </div>
-       {nextArrow}
-
+            {nextArrow}
       </div>
     )
   }
 }
+
 export default CustomSlider;

@@ -14,17 +14,14 @@ class RenderFamilies extends Component{
         }
     }
 
-    componentDidMount =() => {
-        
+    // get the families that the user managed
+    componentDidMount =() => { 
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
                 this.setState({username: user.displayName});
                 this.props.firebase.getYourManagedFamilyName(this, this.state.username);
             }
-        })
-        
-    
-   
+        })  
     }
 
     render(){

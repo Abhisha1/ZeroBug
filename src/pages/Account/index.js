@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import "./account.scss";
-import UploadFile from "../../components/ImageUpload";
-import { FirebaseContext } from "../../components/Firebase";
 import RenderFamilies from "./renderFamilies";
-
-import ArtefactSlider from "./cardSlider";
-import Profile from "./profile";
-
 import { withAuthorization } from "../../components/Session";
-
+import Paper from '@material-ui/core/Paper';
+import Profile from "./profile";
 
 
 class AccountPage extends Component {
@@ -17,34 +12,18 @@ class AccountPage extends Component {
 		familiesOwned: null,
 	}
 
-
-
 	render() {
 		return (
-	
-
 			<div id="profileContainer">
-
-				<div>
-					<Profile />
-				</div>
-
-				<div>
-					<RenderFamilies />
-				</div>
-{/** 
-				<div id="artifactWrapper">
-					<h1 id="account-heading">Artifacts Owned</h1>
-					<ArtefactSlider cards={
-							[1, 2, 3, 4, 5, 6]
-					} />
-				</div>
-*/}
-
-
-			</div>
-
-			
+					<div>
+						<Profile />
+					</div>				
+				<Paper id="familyPaper">
+					<div>
+						<RenderFamilies />
+					</div>
+				</Paper>
+			</div>	
 		);
 	}
 }

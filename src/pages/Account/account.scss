@@ -7,7 +7,7 @@
     margin-bottom: 32px;
 }
 
-#profile-name{
+#profileName{
     text-align: center;
     margin: 0 auto;
     font-size: 3vw;
@@ -19,12 +19,18 @@
     width: 100%;
 }
 
+#profileChange{
+    margin-top: 66px;
+    padding-left: 66px;
+    padding-right: 66px;
+}
+
 #topWraper{
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
     height: 1400px;
-    padding-top: 128px;
+    padding-top: 66px;
     max-width: 100% !important;
 }
 
@@ -36,6 +42,12 @@
     padding-top: 128px;
     flex: 1;
     align-items: center;
+}
+
+#familyPaper{
+    margin-left: 66px;
+    margin-right: 66px;
+    margin-bottom: 66px;
 }
 
 #familiesWrapper{
@@ -115,11 +127,22 @@
     flex-direction: row;
     justify-content: flex-start;
     height: 100%;
+    width: 100%;
     flex-wrap: wrap;
-    margin-left: 32px;
+    padding: 66px;
 }
 
-#user-information{
+#profileContainer{
+    padding-left: 66px;
+    padding-right: 66px;
+}
+
+#paperStyle{
+    padding: 66px;
+}
+
+
+#userInformation{
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
