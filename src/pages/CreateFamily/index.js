@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
 import { withFirebase } from '../../components/Firebase'
+import Button from "@material-ui/core/Button";
 import CustomModal from "../../components/AddUserModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
@@ -161,7 +162,7 @@ class CreateFamily extends Component {
             <Form.Group controlId="validationFormikUsername">
               <CustomModal action={this.handleModal}></CustomModal>
             </Form.Group>
-            <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
+            <Button id="create-family-button" variant="outlined" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</Button>
           </div>
         </Form>
 
@@ -175,7 +176,7 @@ class CreateFamily extends Component {
           </Modal.Header>
           <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
           <Modal.Footer>
-            <button variant="primary" onClick={() => window.location.assign(HOME)}>Close</button>
+            <Button variant="outlined" onClick={() => window.location.assign(HOME)}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
+import AdminModal from '../../components/AdminChangeModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Paper from '@material-ui/core/Paper';
 import UploadFile from "../../components/ImageUpload";
@@ -77,6 +78,20 @@ class FamilyDetails extends Component {
             }
         });
     }
+
+    /**
+     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
+     */
+    handleAdmins(dataFromModal) {
+        this.setState({
+            family: {
+                name: this.state.family.name,
+                users: this.state.family.users,
+                admin: dataFromModal
+            }
+        });
+    }
+
     /**
      * Fetches the specified family's data from the database
      */
@@ -120,7 +135,10 @@ class FamilyDetails extends Component {
 
                         <Paper id="paperCard">
                             <h1 id="familyMembers">Members</h1>
-                            {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
+                            {this.state.isAdmin && (<div id="adminConfigBar">
+                            <EditModal action={this.handleModal} family={this.state.family}></EditModal>
+                            <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
+                            </div>)
                             }
                             <CustomSlider cards={this.state.family["users"]}></CustomSlider>
                         </Paper>

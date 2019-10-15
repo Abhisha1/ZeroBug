@@ -20,19 +20,20 @@
   #create-family-heading{
       text-align: center;
       margin: 0 auto;
-      font-size: 10vw;
+      font-size: 7vw;
       font-family: Montserrat;
       font-weight: 600 !important;
   }
-  #add-user-button{
+  #add-user-button, #create-family-button:hover{
     border-color: #ffe960;
     background-color: white;
     font-family: Montserrat;
     margin: 1vw 0 1vw 0;
   }
-  #add-user-button:hover{
+  #add-user-button:hover, #create-family-button{
     border-color: #ffe960;
     background-color: #ffe960;
+    color:black;
     font-family: Montserrat;
     margin: 1vw 0 1vw 0;
   }

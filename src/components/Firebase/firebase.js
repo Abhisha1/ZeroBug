@@ -140,12 +140,12 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName ) => {
- 
+  getImageURL = (th, location, dbGroupName) => {
+
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
 
-      
-      th.setState({ ...th.state, imageURL: url});
+
+      th.setState({ ...th.state, imageURL: url });
     }).catch(error => {
       console.log("Show data FAILED");
     });
@@ -173,14 +173,14 @@ class Firebase {
   getFamiliesImageURL = (th, location, familyNamesList) => {
     let familyImages = [];
 
-    for(var i = 0; i < familyNamesList.length; i++ ){
+    for (var i = 0; i < familyNamesList.length; i++) {
 
-      this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url)=>{
-        
+      this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url) => {
+
         familyImages.push(url);
-        th.setState({...th.state, familyImageURL: familyImages});
+        th.setState({ ...th.state, familyImageURL: familyImages });
       })
-    }    
+    }
 
   }
 
@@ -222,7 +222,7 @@ class Firebase {
       }
 
       the.setState({ ...the.state, familyList: testFamilyName })
-      
+
     });
   }
 
@@ -238,14 +238,14 @@ class Firebase {
     tempRef.on("value", (data) => {
 
       for (let key in data.val()) {
-        if(data.val()[key].admin.name == username ){
+        if (data.val()[key].admin.name == username) {
           testFamilyName.push(data.val()[key].name);
 
         }
-        }
-        the.setState({ ...the.state, familyList: testFamilyName });
-        this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
-        the.setState({dataReady: true})
+      }
+      the.setState({ ...the.state, familyList: testFamilyName });
+      this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
+      the.setState({ dataReady: true })
     })
 
   }
@@ -336,14 +336,14 @@ class Firebase {
    * @param name The name of the file in the server
    */
   findImage = (location, name) => {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       this.storage().ref().child('/' + location + name).getDownloadURL()
-      .then(url => {
-        resolve(url);
-      })
-      .catch(error => {
-        reject(error);
-      })
+        .then(url => {
+          resolve(url);
+        })
+        .catch(error => {
+          reject(error);
+        })
     })
   }
 
@@ -441,7 +441,7 @@ class Firebase {
     let newUsers = collection["users"];
     newUsers.push(user);
     let name = collection["name"];
-    this.database().ref('/'+collectionName+'/' + name).update({ users: newUsers })
+    this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
       })
@@ -471,7 +471,7 @@ class Firebase {
     if (removeIndex === -1) {
       return new Error("could not find user in family");
     }
-    this.database().ref('/'+collectionName+'/' + name).update({ users: newUsers })
+    this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
       })
@@ -489,9 +489,11 @@ class Firebase {
   updateAdmin = (newAdmin, collectionName, collection) => {
     let name = collection["name"];
     // Checks if new admin is already in group and if so, simply updates new Admin as admin
-    for (let i = 0; i < collection["users"].length; i++) {
-      if (collection["users"][i].email === newAdmin.email) {
-        this.database().ref('/'+collectionName+'/' + name).update({ admin: newAdmin })
+    let exists = false
+    for (let key in collection["users"]) {
+      if (collection["users"][key].email === newAdmin.email) {
+        exists = true;
+        this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
           .then(() => {
             return MESSAGES.SUCCESS_MESSAGE;
           })
@@ -501,16 +503,18 @@ class Firebase {
       }
     }
     // New admin doesn't exist in group so we add to the family members then make admin
-    this.addToFamily(newAdmin, collectionName, collection)
-    .then(() => {
-      this.database().ref('/'+collectionName+'/' + name).update({ admin: newAdmin })
-      .then(() => {
-        return MESSAGES.SUCCESS_MESSAGE;
-      })
-      .catch(error => {
-        return error;
-      })
-    })
+    if (!exists) {
+      this.addToFamily(newAdmin, collectionName, collection)
+        .then(() => {
+          this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
+            .then(() => {
+              return MESSAGES.SUCCESS_MESSAGE;
+            })
+            .catch(error => {
+              return error;
+            })
+        })
+    }
   }
 
   /**
