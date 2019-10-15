@@ -1,17 +1,17 @@
 #sliderCard{
     border: none;
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
 }
 #memberAvatar{
-    margin-left: 50%;
-    width: 30%;
-    height: 30%;
+    align-self: center;
 }
 #memberName{
     text-align: center;
 }
 
 #slider{
-    width: 40% !important;
     align-self: center;
 }
 

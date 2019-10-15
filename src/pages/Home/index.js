@@ -8,7 +8,18 @@ import Cards from "./../../components/Card";
 import "./container.scss"
 import "./account.scss"
 
+import React from "react";
+import {Link} from 'react-router-dom';
+import { withAuthorization } from "./../../components/Session";
 
+const HomePage = () => (
+  <div>
+    <h1>HOME! TEST!</h1>
+    <Link
+    to={{ pathname: '/family/Monkees', state: { name: 'Monkees'} }}
+    >TEST VIEW FAM</Link>
+  </div>
+);
 
 class HomePage extends Component {
 
@@ -38,4 +49,6 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage;
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(HomePage);

@@ -62,10 +62,8 @@ class Firebase {
    */
   uploadProfileImage = (image, th, location, dbGroupName) => {
 
-    //console.log(dbGroupName);
     this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
-
       console.log('success uploading');
     }).catch(error => {
       console.log("Written data FAILED");
@@ -80,7 +78,8 @@ class Firebase {
 
     newPostRef.set({
       fileURL: filepath,
-      username: username,
+      username: dbGroupName,
+
 
 
     })
@@ -103,7 +102,11 @@ class Firebase {
 
       th.setState({ ...th.state, imageURL: url, isUploaded: true });
 
-      this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      // If the image being uploaded to is an artefact, we store it in the realtime database
+      if (dbGroupName === "/artefactImages"){
+        this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      }
+
 
 
     }).catch(error => {
@@ -290,6 +293,23 @@ class Firebase {
     }).catch(function (error) {
       // ...
     });
+  }
+
+  /**
+   * Finds an image from the server and returns a promise with its url
+   * @param location The folder the image is in on server
+   * @param name The name of the file in the server
+   */
+  findImage = (location, name) => {
+    return new Promise((resolve,reject) => {
+      this.storage().ref().child('/' + location + name).getDownloadURL()
+      .then(url => {
+        resolve(url);
+      })
+      .catch(error => {
+        reject(error);
+      })
+    })
   }
 
   /**
