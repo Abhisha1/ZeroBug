@@ -110,13 +110,33 @@ class Firebase {
       if (dbGroupName === "/artefactImages"){
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
-
+      
+      //update the photoURL
+      if (location == "profileImages/"){
+        this.updateUserImage(url);
+      }
 
     }).catch(error => {
       console.log("Written data FAILED");
     });
   }
 
+  /**
+   * set the user photoURL
+   * @para the new user photoURL
+   */
+  updateUserImage = (newURL) => {
+    this.auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        user.updateProfile({
+          displayName: user.displayName,
+          photoURL: newURL
+        })
+    //console.log(user.photoURL);
+      }
+  })
+}
   /********************************************************************** */
   /**
    * get the profile image before rendering the account page
@@ -124,18 +144,25 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName ) => {
+  getImageURL = (th, location, dbGroupName, user) => {
  
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
-
-      
+  
       th.setState({ ...th.state, imageURL: url});
+      
+      //update the user profile URL
+      user.updateProfile({
+        displayName: user.displayName,
+        photoURL: url
+      })
+      
+      //console.log(user.photoURL);
+      
     }).catch(error => {
       console.log("Show data FAILED");
     });
 
   }
-
 
   /**
    * get the list fo families images

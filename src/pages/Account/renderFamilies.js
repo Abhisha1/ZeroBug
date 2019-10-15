@@ -33,10 +33,12 @@ class RenderFamilies extends Component{
                 cardData.push(
                     {
                         avatar: this.state.familyImageURL[i],
-                        name: this.state.familyList[i]
-                    }
+                        name: this.state.familyList[i],
+                        
+                    }                 
                 )
             }
+            
         }
 
         return(

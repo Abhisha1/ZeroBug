@@ -26,7 +26,7 @@ class Profile extends Component{
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
                 this.setState({username: user.displayName});
-                this.props.firebase.getImageURL(this, "profileImages/", this.state.username);
+                this.props.firebase.getImageURL(this, "profileImages/", this.state.username, user);
             }
             
         })  
