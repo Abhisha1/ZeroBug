@@ -17,14 +17,14 @@
     align-self: center !important;
     margin-top: 1vw;
 }
-#uploadStyledButton{
+#uploadServerButton, #uploadLocalButton{
     border-color: #ffe960;
     font-family: Montserrat !important;
     text-transform: capitalize;
     margin: 1vw 0 1vw 0;
     text-emphasis-color: #212529;
 }
-#uploadStyledButton:hover{
+#uploadServerButton:hover, #uploadLocalButton:hover{
     border-color: #ffe960;
     background-color: #ffe960;
     color: black;

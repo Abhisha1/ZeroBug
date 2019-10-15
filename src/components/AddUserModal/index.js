@@ -45,6 +45,10 @@ class CustomModal extends Component {
         this.setState({ [name]: value , searchedUsers: []});
     }
 
+    /**
+     * Searches matching users
+     * @param firebase Returns an object to access firebase functions
+     */
     searchForUsers(firebase){
         this.setState({loading:true, noMatches: false});
         firebase.searchUsers(this.state.familyMember, this)

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 import { FirebaseContext } from "../../components/Firebase";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './editmodal.scss';
 import '../Button/button.scss';
 
@@ -13,7 +14,7 @@ import '../Button/button.scss';
 class EditModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, searchedUsers: [], familyMember: '' };
+        this.state = { showModal: false, searchedUsers: [], familyMember: '',loading: false};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -29,7 +30,7 @@ class EditModal extends Component {
         else {
             this.setState({ showModal: false })
         }
-        this.setState({ familyMember: '' });
+        this.setState({ familyMember: '', searchUsers: [] });
     }
 
     /**
@@ -40,7 +41,7 @@ class EditModal extends Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        this.setState({ [name]: value });
+        this.setState({ [name]: value, searchedUsers: [] });
     }
 
     /**
@@ -48,7 +49,7 @@ class EditModal extends Component {
      * @param user The user to be deleted
      * @param firebase The functions to connect to firebase server
      */
-    remove(user, firebase){
+    remove(user, firebase) {
         firebase.removeFromFamily(user, 'families', this.props.family);
         this.props.action(user, "remove");
         this.addOrRemoveMembers(user, firebase);
@@ -60,7 +61,7 @@ class EditModal extends Component {
      * @param user The user to be added
      * @param firebase The functions to connect to firebase server
      */
-    add(user, firebase){
+    add(user, firebase) {
         firebase.addToFamily(user, 'families', this.props.family);
         this.props.action(user, "add");
         this.addOrRemoveMembers(user, firebase);
@@ -88,10 +89,18 @@ class EditModal extends Component {
         return (<div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
             <button variant="primary" id="modalAdd" onClick={() => this.add(user, firebase)}>Add</button>
         </div>);
-        
+
     }
 
+    /**
+     * Searches matching users
+     * @param firebase Returns an object to access firebase functions
+     */
+    searchForUsers(firebase){
+        this.setState({loading:true, noMatches: false});
+        firebase.searchUsers(this.state.familyMember, this)
 
+    }
 
     /**
      * Returns the custom modal to the webpage
@@ -121,7 +130,7 @@ class EditModal extends Component {
                                         />
                                         <InputGroup.Append>
                                             {/* Searches database for users matching input search */}
-                                            <Button variant="outline-secondary" onClick={() => firebase.searchUsers(this.state.familyMember, this)} id="edit-button">Search</Button>
+                                            <Button variant="outline-secondary" onClick={() => this.searchForUsers(firebase)} id="edit-button">Search</Button>
 
                                         </InputGroup.Append>
                                     </InputGroup>
@@ -129,6 +138,12 @@ class EditModal extends Component {
                                     <div id="searchResults">
                                         {this.state.searchedUsers.map(user => (
                                             this.addOrRemoveMembers(user, firebase)))}
+                                        {this.state.noMatches && <p>No Matches</p>}
+                                    </div>
+                                    {/* Displays a loader for when the API is still fetching the results */}
+                                    <div id="loader">
+                                        {this.state.loading ?
+                                            <CircularProgress /> : <div></div>}
                                     </div>
                                 </div>
                             }

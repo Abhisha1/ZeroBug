@@ -41,7 +41,6 @@ class ImageUpload extends Component {
             const file = e.target.files[0];
             this.previewFile();
             this.setState({ ...this.state, image: file })
-            this.readyToUpload();
         }
     }
     /** Uploads the image to firebase storage
@@ -58,25 +57,30 @@ class ImageUpload extends Component {
      */
     readyToUpload() {
         if (!this.state.isUploaded) {
-            if (this.state.image) {
-                this.handleUpload();
+            if (this.props.isCreate && this.props.readyToSubmit){
+                if (this.state.image) {
+                    this.handleUpload();
+                }
+                else {
+                    // Sets a placeholder image for when an image isn't uploaded by users
+                    let self = this;
+                    var oReq = new XMLHttpRequest();
+                    oReq.open('get', PlaceHolderImage, true);
+                    oReq.responseType = 'blob';
+                    oReq.onload = function () {
+                        var blob = oReq.response;
+                        console.log(blob)
+                        self.props.firebase.uploadProfileImage(blob, self, self.props.dbLocation, self.props.name);
+                    };
+                    oReq.send();
+                }
             }
-            else {
-                // Sets a placeholder image for when an image isn't uploaded by users
-                let self = this;
-                var oReq = new XMLHttpRequest();
-                oReq.open('get', PlaceHolderImage, true);
-                oReq.responseType = 'blob';
-                oReq.onload = function () {
-                    var blob = oReq.response;
-                    console.log(blob)
-                    self.props.firebase.uploadProfileImage(blob, self, self.props.dbLocation, self.props.name);
-                };
-                oReq.send();
+            else{
+                if (this.state.image && !this.state.isUploaded){
+                    this.handleUpload();
+                }
             }
-
         }
-
     }
 
     /**
@@ -129,14 +133,15 @@ class ImageUpload extends Component {
                 If the page is not creating a new object and changing the avatar of an existing user/artefact/family, it will
                 display a button which will upload the new file after clicking the button */}
                 <div id="styledUpload">
-                    {this.props.readyToSubmit && this.readyToUpload()}
+
+                    {this.readyToUpload()}
                     <label htmlFor="imageUpload">
                         {this.props.isCreate ?
-                            (<Button variant="outlined" component="span" id="uploadStyledButton">
+                            (<Button variant="outlined" component="span" id="uploadServerButton">
                                 Upload
                             </Button>)
                             : (
-                                <Button variant="outlined" component="span" id="uploadStyledButton">
+                                <Button variant="outlined" component="span" id="uploadLocalButton">
                                     Upload
                     </Button>
                             )}
