@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
@@ -25,6 +26,7 @@ class ViewFamily extends Component {
             <div id="viewFamilyPage">
                 <ViewFamilyDetails name={familyName} />
             </div>)
+
     }
 }
 /**
@@ -89,6 +91,7 @@ class FamilyDetails extends Component {
     render() {
         return (
             <div>
+
                 {this.state.loading ? <div id="loader">{loading}</div> :
                     <div>
                         <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
@@ -102,11 +105,14 @@ class FamilyDetails extends Component {
                         </Paper>
                     </div>
                 }
+
             </div>
         );
     }
 }
+
 const ViewFamilyDetails = withFirebase(FamilyDetails);
 export { ViewFamilyDetails }
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
+

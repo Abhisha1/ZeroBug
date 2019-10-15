@@ -24,7 +24,7 @@ import { withAuthentication } from './components/Session';
 
 
 let rootStyle = {
-    display: 'grid'
+
   };
 const App = () => (
   <Router>
