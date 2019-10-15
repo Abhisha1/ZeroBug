@@ -1,27 +1,43 @@
-#modalAdd, #modalRemove{
-    float:right;
+#modalAdd,
+#modalRemove {
+    float: right;
 }
-#modalText{
+
+#modalText {
     display: contents;
 }
-#searchResults{
+
+#searchResults {
     display: grid;
 }
-#searchResult{
+
+#searchResult {
     padding-bottom: 0.5vw;
 }
-#edit-button{
+
+#edit-button {
     border-color: #ffe960;
     background-color: white;
     font-family: Montserrat;
 }
-#find-user-button:visited{
-    border-color: #ffe960;
-    background-color: rgb(243, 236, 236);
-    font-family: Montserrat;
-}
-#find-user-button:hover{
+#edit-button:hover, #modalRemove, #modalAdd{
     border-color: #ffe960;
     background-color: #ffe960;
+    color: black;
+}
+
+#find-user-button:visited, #modalRemove:hover, #modalAdd:hover {
+    border-color: #ffe960;
+    background-color: rgb(243, 236, 236);
+    color: black;
     font-family: Montserrat;
+}
+
+#find-user-button:hover {
+    border-color: #ffe960;
+    background-color: #ffe960;
+    color: black;
+    font-family: Montserrat !important;
+    text-transform: capitalize;
+    margin: 1vw 0 1vw 0;
 }

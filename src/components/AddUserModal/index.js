@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { InputGroup, FormControl } from "react-bootstrap";
+import Button from "@material-ui/core/Button";
 import { FirebaseContext } from "../../components/Firebase";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import './modal.scss';
@@ -45,6 +46,10 @@ class CustomModal extends Component {
         this.setState({ [name]: value , searchedUsers: []});
     }
 
+    /**
+     * Searches matching users
+     * @param firebase Returns an object to access firebase functions
+     */
     searchForUsers(firebase){
         this.setState({loading:true, noMatches: false});
         firebase.searchUsers(this.state.familyMember, this)
@@ -59,7 +64,7 @@ class CustomModal extends Component {
     render() {
         return (
             <div>
-                <Button variant="outline-secondary" onClick={this.handleModal} id="add-user-button">Add Users</Button>
+                <Button variant="outlined" onClick={this.handleModal} id="add-user-button">Add Users</Button>
                 <Modal show={this.state.showModal} onHide={this.handleModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Users</Modal.Title>
@@ -78,7 +83,7 @@ class CustomModal extends Component {
                                 <FirebaseContext.Consumer>
                                     {firebase =>
                                         // Searches database for users matching input search
-                                        <Button variant="outline-secondary" onClick={() => this.searchForUsers(firebase)} id="find-user-button">Search</Button>
+                                        <Button variant="outlined" onClick={() => this.searchForUsers(firebase)} id="find-user-button">Search</Button>
                                     }
                                 </FirebaseContext.Consumer>
                             </InputGroup.Append>
@@ -87,7 +92,7 @@ class CustomModal extends Component {
                         <div id="searchResults">
                             {
                                 this.state.searchedUsers.map(item => (
-                                <div id="searchResult" key={item.displayName}><p id="modalText">{item.displayName}</p><button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                                <div id="searchResult" key={item.email}><p id="modalText">{item.displayName}</p><Button variant="outlined" id="modalAdd" onClick={() => this.props.action(item)}>Add</Button></div>))}
                             {this.state.noMatches && <p>No Matches</p>}
                         </div>
                         {/* Displays a loader for when the API is still fetching the results */}

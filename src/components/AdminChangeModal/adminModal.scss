@@ -1,0 +1,19 @@
+#change-user-button, #search-button{
+    float:right;
+    border-color: #ffe960;
+    background-color: #ffe960;
+    color: black;
+    font-family: Montserrat !important;
+}
+#change-button{
+    border-color: #ffe960;
+    background-color: #ffe960;
+    color: black;
+    font-family: Montserrat !important;
+}
+#change-user-button:hover, #change-button:hover, #search-button:hover{
+    border-color: #ffe960 !important;
+    background-color: white;
+    font-family: Montserrat !important;
+    text-emphasis-color: #212529;
+}
