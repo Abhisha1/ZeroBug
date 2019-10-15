@@ -47,7 +47,7 @@ class ImageUpload extends Component {
     handleUpload = () => {
         const { image } = this.state;
         this.props.firebase.uploadProfileImage(image, this, this.props.dbLocation, this.props.name);
-       // console.log(this.props.name);
+        console.log(this.props.dbLocation);
 
 
     }
@@ -84,10 +84,17 @@ class ImageUpload extends Component {
     render() {
         return (
             <div id="uploadBox">
-                <Grid container justify="center" alignItems="center">
-                    <img id="avatarBox" src={this.state.imageURL}></img>
 
-                </Grid>
+                {this.props.dbLocation == "familyImages/" ?
+                    (
+                        <Grid container justify="center" alignItems="center">
+                        <img id="avatarBox" src={this.state.imageURL}></img>
+
+                    </Grid>):[]
+                }
+                
+
+
                 <input
                     id="imageUpload"
                     multiple
@@ -107,9 +114,15 @@ class ImageUpload extends Component {
                                 Upload
                             </Button>)
                     : (
-                    <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
-                            Upload
-                    </Button>
+                    <div id="profileButton">
+                        <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
+                                Upload
+                        </Button>
+
+                        <Button className="aButton" variant="outlined" onClick={this.handleUpload}>
+                            Change Profile Image
+                        </Button>
+                    </div>
                     )}
                     </label>
                 </div>
