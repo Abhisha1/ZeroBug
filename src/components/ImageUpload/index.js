@@ -48,6 +48,7 @@ class ImageUpload extends Component {
     handleUpload = () => {
         const { image } = this.state;
         this.props.firebase.uploadProfileImage(image, this, this.props.dbLocation, this.props.name);
+        console.log(this.props.dbLocation);
 
 
     }
@@ -72,6 +73,7 @@ class ImageUpload extends Component {
                 };
                 oReq.send();
             }
+
         }
 
     }
@@ -92,6 +94,7 @@ class ImageUpload extends Component {
                 .catch(error => {
                     console.log(error);
                 })
+
         }
 
     }
@@ -102,10 +105,17 @@ class ImageUpload extends Component {
     render() {
         return (
             <div id="uploadBox">
-                <Grid container justify="center" alignItems="center">
-                    <img id="avatarBox" src={this.state.imageURL}></img>
 
-                </Grid>
+                {this.props.dbLocation == "familyImages/" ?
+                    (
+                        <Grid container justify="center" alignItems="center">
+                        <img id="avatarBox" src={this.state.imageURL}></img>
+
+                    </Grid>):[]
+                }
+                
+
+
                 <input
                     id="imageUpload"
                     multiple
@@ -131,6 +141,7 @@ class ImageUpload extends Component {
                             )}
                     </label>
                 </div>
+
 
 
 
