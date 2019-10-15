@@ -372,11 +372,13 @@ class Firebase {
    * @return A success message or error
    */
   removeFromFamily = (user, collectionName, collection) => {
+    console.log(collection["users"])
+    console.log(user)
     let newUsers = collection["users"];
     let removeIndex = -1;
-    for (let i = 0; i < collection["users"].length; i++) {
-      if (collection["users"][i].email === user.email) {
-        removeIndex = i
+    for (let key in collection["users"]) {
+      if (collection["users"][key].email === user.email) {
+        removeIndex = key;
       }
     }
     newUsers.splice(removeIndex, 1);

@@ -41,6 +41,7 @@ class ImageUpload extends Component {
             const file = e.target.files[0];
             this.previewFile();
             this.setState({ ...this.state, image: file })
+            this.readyToUpload();
         }
     }
     /** Uploads the image to firebase storage
@@ -125,7 +126,7 @@ class ImageUpload extends Component {
                                 Upload
                             </Button>)
                             : (
-                                <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
+                                <Button variant="outlined" component="span" id="uploadStyledButton">
                                     Upload
                     </Button>
                             )}

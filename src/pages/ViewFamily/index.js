@@ -47,20 +47,26 @@ class FamilyDetails extends Component {
     /**
      * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
      */
-    handleModal(dataFromModal) {
+    handleModal(dataFromModal, action) {
         let usersToAdd = this.state.family["users"];
         // adds the retrieved users to the array of users to add to a family
         // whilst ensuring the user doesn't already exist in the added members
         let duplicate = false;
         console.log(dataFromModal)
-        for (let i = 0; i < this.state.family["users"].length; i++) {
-            if (this.state.family["users"][i].email === dataFromModal.email) {
+        for (let key in this.state.family["users"]) {
+            if (this.state.family["users"][key].email === dataFromModal.email) {
                 duplicate = true;
+                // When we have removed a user (that already exists in our list), we delete from our rendered members
+                if(action === "remove"){
+                    usersToAdd.splice(key,1)
+                }
             }
         }
-        if (!duplicate) {
+        // When we have added a user (that doesn't exists in our list), we add to our rendered members
+        if (!duplicate && action === "add") {
             usersToAdd.push(dataFromModal);
         }
+        //Updates the slider of family members
         this.setState({
             family: {
                 name: this.state.family.name,

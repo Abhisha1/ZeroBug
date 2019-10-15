@@ -42,6 +42,30 @@ class EditModal extends Component {
         const name = target.name;
         this.setState({ [name]: value });
     }
+
+    /**
+     * Removes a user and refreshes the page
+     * @param user The user to be deleted
+     * @param firebase The functions to connect to firebase server
+     */
+    remove(user, firebase){
+        firebase.removeFromFamily(user, 'families', this.props.family);
+        this.props.action(user, "remove");
+        this.addOrRemoveMembers(user, firebase);
+    }
+
+
+    /**
+     * Adds a user and refreshes the page
+     * @param user The user to be added
+     * @param firebase The functions to connect to firebase server
+     */
+    add(user, firebase){
+        firebase.addToFamily(user, 'families', this.props.family);
+        this.props.action(user, "add");
+        this.addOrRemoveMembers(user, firebase);
+    }
+
     /**
      * Checks if a user belongs in the family of interest, and renders an add option if they dont and remove if they do
      * @param user The user we are checking whether they exist or not
@@ -57,12 +81,12 @@ class EditModal extends Component {
             else if (existingUser === user.email) {
                 return (
                     <div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
-                        <button variant="primary" id="modalRemove" onClick={() => firebase.removeFromFamily(user, 'families', this.props.family)}>Remove</button>
+                        <button variant="primary" id="modalRemove" onClick={() => this.remove(user, firebase)}>Remove</button>
                     </div>)
             }
         }
         return (<div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
-            <button variant="primary" id="modalAdd" onClick={() => firebase.addToFamily(user, 'families', this.props.family)}>Add</button>
+            <button variant="primary" id="modalAdd" onClick={() => this.add(user, firebase)}>Add</button>
         </div>);
         
     }
