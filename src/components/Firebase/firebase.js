@@ -505,207 +505,205 @@ class Firebase {
     // New admin doesn't exist in group so we add to the family members then make admin
     if (!exists) {
       this.addToFamily(newAdmin, collectionName, collection)
+      this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
         .then(() => {
-          this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
-            .then(() => {
-              return MESSAGES.SUCCESS_MESSAGE;
-            })
-            .catch(error => {
-              return error;
-            })
+          return MESSAGES.SUCCESS_MESSAGE;
+        })
+        .catch(error => {
+          return error;
         })
     }
-  }
+}
 
-  /**
-   * Write the artifact information to the database
-   * @param artifact ID
-   * @param artifact name
-   * @param artifact origin
-   * @param artifact current owner
-   * @param artifact description
-   */
-  testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
-    this.database().ref('testUploadArtifactData/' + artifactID).set({
-      artifactName: artifactName,
-      origin: artifactOrigin,
-      currentOwner: artifactCurrentOwner,
-      description: artifactDescription
-    }, (error) => {
-      if (error) {
-        // The write failed...
-        console.log("Written data FAILED");
-      } else {
-        // Data saved successfully!
-        console.log("Successfully append the data!");
-      }
-    });
-  }
-
-  /**
-   * write to the database with generated random key
-   */
-  testUpdateArtifactData2 = () => {
-    // Create a new post reference with an auto-generated id
-    var newPostRef = this.database().ref('/testUploadArtifactData/').push();
-
-    newPostRef.set({
-      artifactName: "test3",
-      origin: "test3",
-      currentOwner: "test3",
-      description: "test3"
-    });
-  }
-
-
-  /**
-   * update or delete the artifact data
-   * @param updated artifact ID
-   * @param updated artifact name
-   * @param updated artifact origin
-   * @param updated artifact current owner
-   * @param updated artifact description
-   */
-  testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
-
-    // A post entry
-    var postData = {
-      artifactName: updateArtifactName,
-      origin: updateArtifactOrigin,
-      currentOwner: updateCurrentOwner,
-      description: updateDescription
-    };
-
-    var updates = {};
-    updates['/testUploadArtifactData/' + updateArtifactID] = postData;
-
-    return firebase.database().ref().update(updates);
-  }
-
-
-  /**
-   * get the artifact data
-   * @param artifact ID
-   * @param the component to be set the state
-   */
-  getArtifactData = (artifactID, the) => {
-    let artifactName = "?";
-    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
-      artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
-      the.setState({ ...the.state, artifactName: artifactName })
-    })
-  }
-
-
-  /**
-   * Get a list of Artifact name data
-   * @param the component to be set the state
-   */
-  getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', function (data) {
-      testArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, artifactList: testArtifactName })
-  }
-
-
-  /**
-   * Get a sorted list of Artifact name data by their name
-   * @param the component to be set the state
-   */
-  getSortedListArtifactName = (the) => {
-    var testSortedArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
-    tempRef.on('child_added', function (data) {
-      testSortedArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
-  }
-
-
-  /**
-   * Get top 5 Artifact name data order by ArtifactName
-   * @param the component to be set the state
-   */
-  getTopFiveArtifactName = (the) => {
-    var topFiveArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
-    tempRef.on('child_added', function (data) {
-      topFiveArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, topFive: topFiveArtifactName })
-  }
-
-  /**
-   * Set Document cookie for user's current session which expires upon closing
-   * of the session.
-   *
-   *           'https://www.w3schools.com/js/js_cookies.asp'
-   *
-   * @param cname the name of the cookie
-   * @param cvalue the value of the cookie
-   */
-  setCookie = (cname, cvalue) => {
-    document.cookie = cname + "=" + cvalue + ";" + ";path=/";
-  }
-
-  /**
-   * Get Document cookie value for given cookie name.
-   *
-   *           'https://www.w3schools.com/js/js_cookies.asp'
-   *
-   * @param cname the name of the cookie
-   * @return String value for cookie name
-   */
-  getCookie = (cname) => {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+/**
+ * Write the artifact information to the database
+ * @param artifact ID
+ * @param artifact name
+ * @param artifact origin
+ * @param artifact current owner
+ * @param artifact description
+ */
+testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
+  this.database().ref('testUploadArtifactData/' + artifactID).set({
+    artifactName: artifactName,
+    origin: artifactOrigin,
+    currentOwner: artifactCurrentOwner,
+    description: artifactDescription
+  }, (error) => {
+    if (error) {
+      // The write failed...
+      console.log("Written data FAILED");
+    } else {
+      // Data saved successfully!
+      console.log("Successfully append the data!");
     }
-    return "";
+  });
+}
+
+/**
+ * write to the database with generated random key
+ */
+testUpdateArtifactData2 = () => {
+  // Create a new post reference with an auto-generated id
+  var newPostRef = this.database().ref('/testUploadArtifactData/').push();
+
+  newPostRef.set({
+    artifactName: "test3",
+    origin: "test3",
+    currentOwner: "test3",
+    description: "test3"
+  });
+}
+
+
+/**
+ * update or delete the artifact data
+ * @param updated artifact ID
+ * @param updated artifact name
+ * @param updated artifact origin
+ * @param updated artifact current owner
+ * @param updated artifact description
+ */
+testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
+
+  // A post entry
+  var postData = {
+    artifactName: updateArtifactName,
+    origin: updateArtifactOrigin,
+    currentOwner: updateCurrentOwner,
+    description: updateDescription
+  };
+
+  var updates = {};
+  updates['/testUploadArtifactData/' + updateArtifactID] = postData;
+
+  return firebase.database().ref().update(updates);
+}
+
+
+/**
+ * get the artifact data
+ * @param artifact ID
+ * @param the component to be set the state
+ */
+getArtifactData = (artifactID, the) => {
+  let artifactName = "?";
+  this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
+    artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
+    the.setState({ ...the.state, artifactName: artifactName })
+  })
+}
+
+
+/**
+ * Get a list of Artifact name data
+ * @param the component to be set the state
+ */
+getListArtifactName = (the) => {
+  var testArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/');
+  tempRef.on('child_added', function (data) {
+    testArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, artifactList: testArtifactName })
+}
+
+
+/**
+ * Get a sorted list of Artifact name data by their name
+ * @param the component to be set the state
+ */
+getSortedListArtifactName = (the) => {
+  var testSortedArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
+  tempRef.on('child_added', function (data) {
+    testSortedArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
+}
+
+
+/**
+ * Get top 5 Artifact name data order by ArtifactName
+ * @param the component to be set the state
+ */
+getTopFiveArtifactName = (the) => {
+  var topFiveArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
+  tempRef.on('child_added', function (data) {
+    topFiveArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, topFive: topFiveArtifactName })
+}
+
+/**
+ * Set Document cookie for user's current session which expires upon closing
+ * of the session.
+ *
+ *           'https://www.w3schools.com/js/js_cookies.asp'
+ *
+ * @param cname the name of the cookie
+ * @param cvalue the value of the cookie
+ */
+setCookie = (cname, cvalue) => {
+  document.cookie = cname + "=" + cvalue + ";" + ";path=/";
+}
+
+/**
+ * Get Document cookie value for given cookie name.
+ *
+ *           'https://www.w3schools.com/js/js_cookies.asp'
+ *
+ * @param cname the name of the cookie
+ * @return String value for cookie name
+ */
+getCookie = (cname) => {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
   }
+  return "";
+}
 
-  /**
-   * Sign up a user using their provided email and password
-   * @param email the email address of the user to register by
-   * @param password the password for the user to register by
-   * @param username the username for the new user
-   */
-  doCreateUserWithEmailAndPassword = (email, password, username) => {
-    // Create the new user in Firebase
-    return this.auth.createUserWithEmailAndPassword(email, password);
-  }
-
-
-
-  /**
-   * Sign in the a registered user account
-   * @param email the email address of the registered user
-   * @param password the password for the registered user's account
-   */
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
-
-  doSignInWithEmailAndPassword = (email, password) => {
-    return this.auth.signInWithEmailAndPassword(email, password);
-  }
-
-  doSignOut = () => this.auth.signOut();
-
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+/**
+ * Sign up a user using their provided email and password
+ * @param email the email address of the user to register by
+ * @param password the password for the user to register by
+ * @param username the username for the new user
+ */
+doCreateUserWithEmailAndPassword = (email, password, username) => {
+  // Create the new user in Firebase
+  return this.auth.createUserWithEmailAndPassword(email, password);
+}
 
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+
+/**
+ * Sign in the a registered user account
+ * @param email the email address of the registered user
+ * @param password the password for the registered user's account
+ */
+doCreateUserWithEmailAndPassword = (email, password) =>
+  this.auth.createUserWithEmailAndPassword(email, password);
+
+doSignInWithEmailAndPassword = (email, password) => {
+  return this.auth.signInWithEmailAndPassword(email, password);
+}
+
+doSignOut = () => this.auth.signOut();
+
+doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+
+
+doPasswordUpdate = password =>
+  this.auth.currentUser.updatePassword(password);
 }
 
 export default Firebase;

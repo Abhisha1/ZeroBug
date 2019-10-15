@@ -19,6 +19,7 @@ class AdminModal extends Component {
         this.state = { showModal: false, searchedUsers: [], familyMember: '', loading: false };
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.changeAdmin = this.changeAdmin.bind(this);
     }
 
     /**

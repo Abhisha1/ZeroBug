@@ -45,6 +45,7 @@ class FamilyDetails extends Component {
         super(props);
         this.state = { showModal: false, family: null, loading: true, isAdmin: false }
         this.handleModal = this.handleModal.bind(this);
+        this.handleAdmins = this.handleAdmins.bind(this);
     }
 
     /**

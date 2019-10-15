@@ -176,7 +176,7 @@ class CreateFamily extends Component {
           </Modal.Header>
           <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
           <Modal.Footer>
-            <Button variant="outlined" onClick={() => window.location.assign(HOME)}>Close</Button>
+            <Button variant="outlined" id="confirmationClose" onClick={() => window.location.assign(HOME)}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>

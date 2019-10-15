@@ -24,13 +24,13 @@
       font-family: Montserrat;
       font-weight: 600 !important;
   }
-  #add-user-button, #create-family-button:hover{
+  #add-user-button, #create-family-button:hover, #confirmationClose{
     border-color: #ffe960;
     background-color: white;
     font-family: Montserrat;
     margin: 1vw 0 1vw 0;
   }
-  #add-user-button:hover, #create-family-button{
+  #add-user-button:hover, #create-family-button, #confirmationClose:hover{
     border-color: #ffe960;
     background-color: #ffe960;
     color:black;
