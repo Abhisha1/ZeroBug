@@ -39,3 +39,8 @@
     display: flex;
     justify-content: center;
 }
+#profileButton{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+}

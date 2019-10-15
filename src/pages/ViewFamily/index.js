@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
@@ -25,6 +26,7 @@ class ViewFamily extends Component {
             <div id="viewFamilyPage">
                 <ViewFamilyDetails name={familyName} />
             </div>)
+
     }
 }
 /**
@@ -124,13 +126,16 @@ class FamilyDetails extends Component {
                         </Paper>
                     </div>
                 }
+
             </div>
         );
     }
 }
+
 const ViewFamilyDetails = withFirebase(FamilyDetails);
 export { ViewFamilyDetails }
 
 // Ensures only an authorised user can view families (that they belong in)
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
+

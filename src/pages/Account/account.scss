@@ -7,11 +7,11 @@
     margin-bottom: 32px;
 }
 
-#profile-name{
+#profileName{
     text-align: center;
     margin: 0 auto;
     font-size: 3vw;
-    font-family: 'Montserrat', sans-serif;
+    font-family: Montserrat;
     font-weight: 500;
 }
 
@@ -19,12 +19,18 @@
     width: 100%;
 }
 
+#profileChange{
+    margin-top: 66px;
+    padding-left: 66px;
+    padding-right: 66px;
+}
+
 #topWraper{
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 1100px;
-    padding-top: 128px;
+    height: 1400px;
+    padding-top: 66px;
     max-width: 100% !important;
 }
 
@@ -32,10 +38,16 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 680px;
+    height: 880px;
     padding-top: 128px;
     flex: 1;
-    background-color: greenyellow;
+    align-items: center;
+}
+
+#familyPaper{
+    margin-left: 66px;
+    margin-right: 66px;
+    margin-bottom: 66px;
 }
 
 #familiesWrapper{
@@ -45,29 +57,48 @@
     height: 680px;
     padding-top: 128px;
     flex: 1;
-    background-color: pink;
 }
 
 #artifactContainer{
     width: 100%;
-    height: 360px;
-    background-color: yellow;
-    overflow: scroll;
+    height: auto;
     display: -webkit-flex; /* Safari */
     display: flex;
-    flex: 6;
+    flex: 8;
+    overflow: visible;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
 }
 
-#artifactItems{
-    width: auto;
-    height: 360px;
-    background-color: yellow;
-    display: -webkit-flex; /* Safari */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.slick-prev{
+    left: -180px;
+    z-index: 12;
 }
+
+.nextButton{
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 0, 0.393);
+    font-size: 2vw;
+    border-radius: 50px;
+    border: 2px solid yellow;
+    color: white;
+    font-weight: 800;
+    
+}
+
+#artifactItems{
+    width: 87%;
+    height: auto;
+}
+
+.oneArtifactItem{
+    width: 100%;
+    height: 100%;
+    background-color: yellow;
+}
+
 
 #familiesContainer{
     width: 100%;
@@ -96,14 +127,36 @@
     flex-direction: row;
     justify-content: flex-start;
     height: 100%;
+    width: 100%;
     flex-wrap: wrap;
+    padding: 66px;
 }
 
+#profileContainer{
+    padding-left: 66px;
+    padding-right: 66px;
+}
+
+#paperStyle{
+    padding: 66px;
+}
+
+
+#userInformation{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
 div.artifactOwned{
-    width: 600px;
-    height: 300px;
-    background-color:  black;
-    margin-left: 50px;
+    height: 100%;
+    margin-right: 50px;
+    padding: 32px;
     
 }
 
@@ -122,17 +175,15 @@ div.familyOwned{
 }
 
 button.aButton{
-    margin-top: 45px;
+    margin-top: 20px;
     background-color: white;
-    padding-left: 32px;
-    padding-right: 32px;
-    font-size: 2vw;
     font-family: Montserrat;
-    border: 2px solid #73AD21;
+    border: 2px solid rgba(250, 243, 30, 0.845);
 }
 
 button.aButton:focus{
-    color: red;
+    color: white;
+    background-color: rgba(250, 243, 30, 0.845);
 }
 
 input.testInput{
@@ -164,7 +215,7 @@ input.testInput{
         border-radius: 50%;
     }
     .aButton{
-        border-radius: 40px;
+        //border-radius: 90px;
         height: 80px;
     }
 }
@@ -174,10 +225,10 @@ input.testInput{
         background-color: cyan;
         height: 128px;
         width: 128px;
-        border-radius: 50%
+        border-radius: 50%;
     }
     .aButton{
-        border-radius: 30px;
+        //border-radius: 30px;
         height: 60px;
     }
 }
@@ -219,4 +270,8 @@ input.testInput{
 
 #changePasswordButton{
     max-width: 512px;
+}
+
+#passwordField{
+    margin-left: 32px;
 }
