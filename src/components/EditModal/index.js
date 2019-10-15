@@ -64,7 +64,9 @@ class EditModal extends Component {
         return (<div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
             <button variant="primary" id="modalAdd" onClick={() => firebase.addToFamily(user, 'families', this.props.family)}>Add</button>
         </div>);
+        
     }
+
 
 
     /**

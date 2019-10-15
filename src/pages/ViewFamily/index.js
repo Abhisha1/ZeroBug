@@ -47,14 +47,27 @@ class FamilyDetails extends Component {
     /**
      * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
      */
-    handleModal() {
-        if (this.state.showModal === false) {
-            this.setState({ showModal: true });
+    handleModal(dataFromModal) {
+        let usersToAdd = this.state.family["users"];
+        // adds the retrieved users to the array of users to add to a family
+        // whilst ensuring the user doesn't already exist in the added members
+        let duplicate = false;
+        console.log(dataFromModal)
+        for (let i = 0; i < this.state.family["users"].length; i++) {
+            if (this.state.family["users"][i].email === dataFromModal.email) {
+                duplicate = true;
+            }
         }
-        else {
-            this.setState({ showModal: false })
+        if (!duplicate) {
+            usersToAdd.push(dataFromModal);
         }
-        this.setState({ familyMember: '' });
+        this.setState({
+            family: {
+                name: this.state.family.name,
+                users: usersToAdd,
+                admin: this.state.family.admin
+            }
+        });
     }
     /**
      * Fetches the specified family's data from the database
@@ -96,7 +109,7 @@ class FamilyDetails extends Component {
                     <div>
                         <h1 id="familyName">{this.props.name}</h1>
                         <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
-                        
+
                         <Paper id="paperCard">
                             <h1 id="familyMembers">Members</h1>
                             {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
