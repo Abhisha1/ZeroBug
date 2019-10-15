@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import "./account.scss";
+import UploadFile from "../../components/ImageUpload";
+import { FirebaseContext } from "../../components/Firebase";
 import RenderFamilies from "./renderFamilies";
-import { withAuthorization } from "../../components/Session";
-import Paper from '@material-ui/core/Paper';
-import Profile from "./profile";
-
 
 class AccountPage extends Component {
 
@@ -15,17 +13,64 @@ class AccountPage extends Component {
 	render() {
 		return (
 			<div id="profileContainer">
-					<div>
-						<Profile />
-					</div>				
-				<Paper id="familyPaper">
-					<div>
-						<RenderFamilies />
+
+
+					<div id="topWraper">
+						<h1 id="account-heading">Your Profile</h1>
+						<div id="topContainer">
+							<UploadFile dbLocation="profileImages/" isCreate={false} name="Jessica Test"/>
+							<div id="profileInformationContainer">
+								<h2 id="profile-name">Name</h2>
+								<button className="aButton" id="changePasswordButton">Change Password</button>
+							</div>
+						</div>
 					</div>
-				</Paper>
-			</div>	
+
+
+
+				<div id="artifactWrapper">
+					<h1 id="account-heading">Artifacts Owned</h1>
+					<div id="artifactContainer">
+						<div id="artifactItems">
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+							<div className="artifactOwned">
+								yooooooo
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div>
+					<RenderFamilies />
+				</div>
+
+
+
+
+
+			</div>
+
+
+
 		);
 	}
 }
-const condition = authUser => !!authUser;
-export default withAuthorization(condition)(AccountPage);
+
+export default AccountPage;
