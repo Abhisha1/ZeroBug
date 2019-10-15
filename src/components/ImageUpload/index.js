@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import "./imageUpload.scss";
+import PlaceHolderImage from '../../assets/group-profile-users.png';
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -54,9 +55,25 @@ class ImageUpload extends Component {
      * Checks if the avatar image is ready to be uploaded to the server, for pages that create a new family or artefact
      */
     readyToUpload() {
-        if (this.state.image && !this.state.isUploaded) {
-            this.handleUpload();
+        if (!this.state.isUploaded) {
+            if (this.state.image) {
+                this.handleUpload();
+            }
+            else {
+                // Sets a placeholder image for when an image isn't uploaded by users
+                let self = this;
+                var oReq = new XMLHttpRequest();
+                oReq.open('get', PlaceHolderImage, true);
+                oReq.responseType = 'blob';
+                oReq.onload = function () {
+                    var blob = oReq.response;
+                    console.log(blob)
+                    self.props.firebase.uploadProfileImage(blob, self, self.props.dbLocation, self.props.name);
+                };
+                oReq.send();
+            }
         }
+
     }
 
     /**
@@ -76,8 +93,12 @@ class ImageUpload extends Component {
                     console.log(error);
                 })
         }
+
     }
 
+    /**
+     * Renders the image upload icon and button onto webpage
+     */
     render() {
         return (
             <div id="uploadBox">
@@ -91,7 +112,7 @@ class ImageUpload extends Component {
                     type="file"
                     onChange={this.handleChange}
                 />
-                 {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
+                {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
                 When the page is creating a new object, it ensures the uploading is done only when the creation page says
                 it is ready to upload.
                 If the page is not creating a new object and changing the avatar of an existing user/artefact/family, it will
@@ -103,11 +124,11 @@ class ImageUpload extends Component {
                             (<Button variant="outlined" component="span" id="uploadStyledButton">
                                 Upload
                             </Button>)
-                    : (
-                    <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
-                            Upload
+                            : (
+                                <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
+                                    Upload
                     </Button>
-                    )}
+                            )}
                     </label>
                 </div>
 

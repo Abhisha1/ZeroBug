@@ -43,22 +43,27 @@ class EditModal extends Component {
         this.setState({ [name]: value });
     }
     /**
-     * Checks if a user belongs in the family of interest
+     * Checks if a user belongs in the family of interest, and renders an add option if they dont and remove if they do
      * @param user The user we are checking whether they exist or not
-     * @return A boolean value indicating whether the member exists or not
+     * @return All users (besides admin) and whether you can add or remove them
      */
-    existingFamilyMember(user) {
-        console.log(user.name);
+    addOrRemoveMembers(user, firebase) {
         for (let key in this.props.family["users"]) {
             // console.log(existingUser.name+"   and name we looking for  "+user.name);
-            let existingUser = this.props.family["users"][key].name;
-            if (existingUser === user.name) {
-                console.log("Match");
-                return true;
+            let existingUser = this.props.family["users"][key].email;
+            if (user.email === this.props.family.admin.email) {
+                return;
+            }
+            else if (existingUser === user.email) {
+                return (
+                    <div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
+                        <button variant="primary" id="modalRemove" onClick={() => firebase.removeFromFamily(user, 'families', this.props.family)}>Remove</button>
+                    </div>)
             }
         }
-        console.log("noep");
-        return false;
+        return (<div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
+            <button variant="primary" id="modalAdd" onClick={() => firebase.addToFamily(user, 'families', this.props.family)}>Add</button>
+        </div>);
     }
 
 
@@ -97,12 +102,7 @@ class EditModal extends Component {
                                     {/* Renders the search result in modal */}
                                     <div id="searchResults">
                                         {this.state.searchedUsers.map(user => (
-                                            <div id="searchResult" key={user.name}><p id="modalText" key={user.name}>{user.name}</p>
-                                                {this.existingFamilyMember(user) ?
-                                                    <button variant="primary" id="modalRemove" onClick={() => firebase.removeFromFamily(user, this.props.family)}>Remove</button>
-                                                    :
-                                                    <button variant="primary" id="modalAdd" onClick={() => firebase.addToFamily(user, this.props.family)}>Add</button>}
-                                            </div>))}
+                                            this.addOrRemoveMembers(user, firebase)))}
                                     </div>
                                 </div>
                             }

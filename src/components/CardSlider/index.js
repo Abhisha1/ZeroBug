@@ -20,7 +20,7 @@ class CustomSlider extends Component {
     // initialises configuration for formatting of slider
     const settings = {
       infinite: false,
-      slidesToShow: 3,
+      slidesToShow: 4,
       slidesToScroll: 1,
       dots: true
     };

@@ -52,6 +52,22 @@ class Firebase {
     });
   }
 
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  uploadPlaceholderImage = (imageString, location, dbGroupName) => {
+    this.storage().ref().child(location + dbGroupName).putString(imageString)
+      .then(snapshot => {
+        console.log(snapshot);
+        this.storage().ref().child(location + dbGroupName).updateMetadata({ contentType: 'image/png' })
+      })
+
+
+  }
 
   /**
    * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
@@ -102,7 +118,7 @@ class Firebase {
 
       th.setState({ ...th.state, imageURL: url, isUploaded: true });
       // If the image being uploaded to is an artefact, we store it in the realtime database
-      if (dbGroupName === "/artefactImages"){
+      if (dbGroupName === "/artefactImages") {
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
 
@@ -119,16 +135,20 @@ class Firebase {
    * @param name The name of the file in the server
    */
   findImage = (location, name) => {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       this.storage().ref().child('/' + location + name).getDownloadURL()
-      .then(url => {
-        resolve(url);
-      })
-      .catch(error => {
-        reject(error);
-      })
+        .then(url => {
+          resolve(url);
+        })
+        .catch(error => {
+          reject(error);
+        })
     })
   }
+
+
+
+
 
 
   // get a list of Artifact name data
@@ -259,8 +279,8 @@ class Firebase {
         if (response.data.msg === "Success") {
           the.setState({ ...the.state, searchedUsers: response.data.users, loading: false });
         }
-        if(response.data.msg === "No matches"){
-          the.setState({ ...the.state, noMatches: true, loading:false})
+        if (response.data.msg === "No matches") {
+          the.setState({ ...the.state, noMatches: true, loading: false })
         }
       })
       .catch(error => {
@@ -326,16 +346,17 @@ class Firebase {
     )
   }
   /**
-   * Adds a user to the specified family
+   * Adds a user to the specified collection (artefact or family)
    * @param user The user to be added
-   * @param family The family 
+   * @param collectionName Specifies if family or artefact
+   * @param collection Actual data object (the family or the artefact) 
    * @return A success message or error
    */
-  addToFamily = (user, family) => {
-    let newFamily = family["users"];
-    newFamily.push(user);
-    let familyName = family["name"];
-    this.database().ref('/families/' + familyName).update({ users: newFamily })
+  addToFamily = (user, collectionName, collection) => {
+    let newUsers = collection["users"];
+    newUsers.push(user);
+    let name = collection["name"];
+    this.database().ref('/'+collectionName+'/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
       })
@@ -344,31 +365,65 @@ class Firebase {
       })
   }
   /**
-   * Removes a user to the specified family
+   * Removes a user to the specified collection (family or artefact)
    * @param user The user to be removed
-   * @param family The family 
+   * @param collectionName Specifies if family or artefact
+   * @param collection Actual data object (the family or the artefact)
    * @return A success message or error
    */
-  removeFromFamily = (user, family) => {
-    let newFamily = family["users"];
+  removeFromFamily = (user, collectionName, collection) => {
+    let newUsers = collection["users"];
     let removeIndex = -1;
-    for (let i = 0; i < family["users"].length; i++) {
-      if (family["users"][i].name === user.name) {
+    for (let i = 0; i < collection["users"].length; i++) {
+      if (collection["users"][i].email === user.email) {
         removeIndex = i
       }
     }
-    newFamily.splice(removeIndex, 1);
-    let familyName = family["name"];
+    newUsers.splice(removeIndex, 1);
+    let name = collection["name"];
     if (removeIndex === -1) {
       return new Error("could not find user in family");
     }
-    this.database().ref('/families/' + familyName).update({ users: newFamily })
+    this.database().ref('/'+collectionName+'/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
       })
       .catch(error => {
         return error;
       })
+  }
+
+  /**
+    * Change the admin of a collection (artefact or family)
+    * @param newAdmin The new admin of the specified collection
+    * @param collectionName Specifies if family or artefact
+    * @param collection The database object (the actual family or artefact)
+    */
+  updateAdmin = (newAdmin, collectionName, collection) => {
+    let name = collection["name"];
+    // Checks if new admin is already in group and if so, simply updates new Admin as admin
+    for (let i = 0; i < collection["users"].length; i++) {
+      if (collection["users"][i].email === newAdmin.email) {
+        this.database().ref('/'+collectionName+'/' + name).update({ admin: newAdmin })
+          .then(() => {
+            return MESSAGES.SUCCESS_MESSAGE;
+          })
+          .catch(error => {
+            return error;
+          })
+      }
+    }
+    // New admin doesn't exist in group so we add to the family members then make admin
+    this.addToFamily(newAdmin, collectionName, collection)
+    .then(() => {
+      this.database().ref('/'+collectionName+'/' + name).update({ admin: newAdmin })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
+    })
   }
 
   /**

@@ -44,7 +44,9 @@ class FamilyDetails extends Component {
         this.handleModal = this.handleModal.bind(this);
     }
 
-
+    /**
+     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
+     */
     handleModal() {
         if (this.state.showModal === false) {
             this.setState({ showModal: true });
@@ -65,7 +67,8 @@ class FamilyDetails extends Component {
                         let authUser = {
                             uid: user.uid,
                             name: user.displayName,
-                            email: user.email
+                            email: user.email,
+                            photoURL: user.photoURL
                         }
                         console.log(value)
                         if (user.uid === value.admin.uid) {
@@ -88,14 +91,14 @@ class FamilyDetails extends Component {
      */
     render() {
         return (
-            <div>
+            <div id="viewFamilyPage">
                 {this.state.loading ? <div id="loader">{loading}</div> :
                     <div>
+                        <h1 id="familyName">{this.props.name}</h1>
                         <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
-                        <h1>Family name</h1>
-                        <p>{this.props.name}</p>
+                        
                         <Paper id="paperCard">
-                            <h1>Members</h1>
+                            <h1 id="familyMembers">Members</h1>
                             {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
                             }
                             <CustomSlider cards={this.state.family["users"]}></CustomSlider>
@@ -108,5 +111,7 @@ class FamilyDetails extends Component {
 }
 const ViewFamilyDetails = withFirebase(FamilyDetails);
 export { ViewFamilyDetails }
+
+// Ensures only an authorised user can view families (that they belong in)
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
