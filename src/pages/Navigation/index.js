@@ -34,6 +34,7 @@ const NavigationAuth = () => (
     <Nav.Link href={ROUTES.ACCOUNT}><IoMdPerson size={30} alt="Account"></IoMdPerson></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
     <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_ARTEFACT}>CreateArtefact</Nav.Link>
     <SignOutButton />
   </Nav>
 );

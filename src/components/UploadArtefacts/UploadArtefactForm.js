@@ -1,6 +1,9 @@
 import React from 'react';
 
+import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import TextField from '@material-ui/core/TextField';
+import yellow from '@material-ui/core/colors/yellow';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Firebase API
@@ -8,12 +11,18 @@ import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
+// The Primary colour for buttons and glyphs
+const primary = yellow[500];
+
 // The Initial state of al values for an upload Artefact form
 const INIT_STATE = {
   artefactName: '',
   currentOwner: null,
   description: '',
   year: null,
+  authFamilies:[],
+  authUsers: [],
+  location: '',
 };
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +64,7 @@ function UploadArtefactForm(props) {
     values.description === '';
 
   return (
+
     <form onSubmit={onSubmit} noValidate className={classes.form}>
       <TextField
         margin="normal"
@@ -64,19 +74,19 @@ function UploadArtefactForm(props) {
         fullWidth
         className={classes.textField}
         id="artefactName"
-        lable="Artefact Name"
+        label="Artefact Name"
         autoFocus
         onChange={handleChange("artefactName")}
       />
       <TextField
         margin="normal"
-        name=""
+        name="artefactLocation"
         variant="outlined"
         required
         fullWidth
         className={classes.textField}
         id="artefactName"
-        lable="Artefact Name"
+        label="Location"
         autoFocus
         onChange={handleChange("artefactName")}
       />
@@ -86,7 +96,6 @@ function UploadArtefactForm(props) {
           multiline
           fullWidth
           rows="4"
-          defaultValue="A little bit about this artefact!"
           className={classes.textField}
           margin="normal"
           variant="outlined"
@@ -103,7 +112,7 @@ function UploadArtefactForm(props) {
       >
         Submit
       </Button>
-    <form />
+    </form>
   );
 }
 
