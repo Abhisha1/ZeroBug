@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import Cards from "./../../components/Card";
 import Paper from '@material-ui/core/Paper';
@@ -6,6 +7,10 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import "./container.scss"
+
+import {Link} from 'react-router-dom';
+import { withAuthorization } from "./../../components/Session";
+import RenderFamilies from "./renderFamilies";
 
 const styles = makeStyles(theme => ({
    paper: {
@@ -17,12 +22,25 @@ const styles = makeStyles(theme => ({
 }));
 
 
+// const HomePage = () => (
+//   <div>
+//     <h1>HOME! TEST!</h1>
+//     <Link
+//     to={{ pathname: '/family/Monkees', state: { name: 'Monkees'} }}
+//     >TEST VIEW FAM</Link>
+//   </div>
+// );
+
+
 class HomePage extends Component {
 
 
     render(){
         return(
             <div>
+              <div>
+                <RenderFamilies/>
+              </div>
                 <Divider />
                 <Typography variant="h2" align="center">
                     Artifacts
@@ -40,4 +58,8 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage;
+
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(HomePage);
+

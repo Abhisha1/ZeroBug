@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
 import { withFirebase } from '../../components/Firebase'
-import CustomModal from "../../components/Modal";
+import CustomModal from "../../components/AddUserModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
 import "./createFamily.scss";
 import "../../components/Button/button.scss";
+import { withAuthorization } from "../../components/Session";
+
 /**
  * The page which allows users to create a family (easily share artefacts with multiple people at once!)
  */
@@ -72,7 +74,7 @@ class CreateFamily extends Component {
    */
   handleSubmit() {
     return event => {
-      
+
       this.props.firebase.createFamily(this.state.familyMembers, this.state.familyName, this.state.authUser)
         .then(() => {
           this.setState({ message: "You created a new family", confirmationTitle: 'Success', readyToSubmit: true });
@@ -116,14 +118,14 @@ class CreateFamily extends Component {
     return (
       <div id="create-family-page">
         <h1 id="create-family-heading">Create a new family</h1>
-        
+
         {/* An avatar for the family */}
         <UploadFile dbLocation="familyImages/" isCreate={true} name={this.state.familyName} readyToSubmit={this.state.readyToSubmit} />
-        
+
         {/* The form for creating a family */}
         <Form onSubmit={this.handleSubmit()} id="new-family-form">
           <Form.Label> Family Name </Form.Label>
-          
+
           {/* Displays popover is family exists */}
           {this.state.isExistingFamily ?
             <OverlayTrigger placement="right" overlay={popover}>
@@ -145,13 +147,13 @@ class CreateFamily extends Component {
         <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
-        <Modal show={this.state.showOutcomeModal} onHide={() => this.props.history.push(HOME)}>
+        <Modal show={this.state.showOutcomeModal} onHide={() => window.location.assign(HOME)}>
           <Modal.Header closeButton>
             <Modal.Title> {this.state.confirmationTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
           <Modal.Footer>
-            <button variant="primary" onClick={() => this.props.history.push(HOME)}>Close</button>
+            <button variant="primary" onClick={() => window.location.assign(HOME)}>Close</button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -161,8 +163,9 @@ class CreateFamily extends Component {
 }
 
 const CreateFamilyForm = withFirebase(CreateFamily);
-const CreateFamilyPage = (props) => (
-  <CreateFamilyForm history={props.history}></CreateFamilyForm>
+const CreateFamilyPage = () => (
+  <CreateFamilyForm></CreateFamilyForm>
 );
 
-export default CreateFamilyPage;
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(CreateFamilyPage);

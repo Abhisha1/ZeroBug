@@ -62,7 +62,7 @@ class Firebase {
    */
   uploadProfileImage = (image, th, location, dbGroupName) => {
 
-    //console.log(dbGroupName);
+
     this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
 
@@ -73,14 +73,21 @@ class Firebase {
   }
 
 
-  //store the file path of the storage to the database
-  putProfileImageFilePathToDB = (filepath, location, username) => {
+
+  /**
+   * Stores the url and name of the group the image belongs to in the database
+   * @param filepath the filepath of the image in server
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  putProfileImageFilePathToDB = (filepath, location, dbGroupName) => {
 
     var newPostRef = this.database().ref('/' + location).push();
 
     newPostRef.set({
       fileURL: filepath,
-      username: username,
+      username: dbGroupName,
+
 
 
     })
@@ -103,7 +110,17 @@ class Firebase {
 
       th.setState({ ...th.state, imageURL: url, isUploaded: true });
 
-      this.putProfileImageFilePathToDB(url, location, dbGroupName);
+
+      // If the image being uploaded to is an artefact, we store it in the realtime database
+      if (dbGroupName === "/artefactImages"){
+        this.putProfileImageFilePathToDB(url, location, dbGroupName);
+      }
+      
+      //update the photoURL
+      if (location == "profileImages/"){
+        this.updateUserImage(url);
+      }
+
 
 
     }).catch(error => {
@@ -111,6 +128,22 @@ class Firebase {
     });
   }
 
+  /**
+   * set the user photoURL
+   * @para the new user photoURL
+   */
+  updateUserImage = (newURL) => {
+    this.auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        user.updateProfile({
+          displayName: user.displayName,
+          photoURL: newURL
+        })
+    //console.log(user.photoURL);
+      }
+  })
+}
   /********************************************************************** */
   /**
    * get the profile image before rendering the account page
@@ -118,12 +151,22 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName ) => {
 
+  getImageURL = (th, location, dbGroupName, user) => {
+ 
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
-
-
+  
       th.setState({ ...th.state, imageURL: url});
+      
+      //update the user profile URL
+      user.updateProfile({
+        displayName: user.displayName,
+        photoURL: url
+      })
+      
+      //console.log(user.photoURL);
+      
+
     }).catch(error => {
       console.log("Show data FAILED");
     });
@@ -144,10 +187,11 @@ class Firebase {
 
       this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url)=>{
 
+        
         familyImages.push(url);
         th.setState({...th.state, familyImageURL: familyImages});
       })
-    }
+    }    
   }
 
 
@@ -167,25 +211,75 @@ class Firebase {
    * @para the component to be set the state
    * @para users' names
    */
-  getListFamilyName = (the, username) => {
+
+  getYourFamilyNames = (the, username) => {
+
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
+
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
 
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
           if (data.val()[key].users[user].displayName == username) {
 
-            testFamilyName.push(data.val()[key].name);
+            count ++;
+
+            let tempMem = {
+              name: data.val()[key].name,
+            }
+
+            this.getFamilyImageURL(data.val()[key].name,  
+            (avatar) => {
+              tempMem.avatar = avatar; 
+              now ++; 
+              if (now == count){
+                the.setState({dataReady: true})
+              }
+            });
+            testFamilyName.push(tempMem);
 
           }
         }
       }
 
-      the.setState({ ...the.state, familyList: testFamilyName })
-
+      the.setState({...the.state, cardData: testFamilyName});
     });
+    tempRef.on("value", (data) => {
+
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
+
+      for (let key in data.val()) {
+        if(data.val()[key].admin.name == username ){
+          count ++;
+
+          let tempMem = {
+            name: data.val()[key].name,
+          }
+
+          this.getFamilyImageURL(data.val()[key].name,  
+          (avatar) => {
+            tempMem.avatar = avatar; 
+            now ++; 
+            if (now == count){
+              the.setState({dataReady: true})
+            }
+          });
+          testFamilyName.push(tempMem);
+
+        }
+        }
+        the.setState({...the.state, cardData: testFamilyName});
+    })
+
   }
 
   //for account pages
@@ -199,20 +293,47 @@ class Firebase {
     let tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
         if(data.val()[key].admin.name == username ){
-          testFamilyName.push(data.val()[key].name);
+          count ++;
+
+          let tempMem = {
+            name: data.val()[key].name,
+          }
+
+          this.getFamilyImageURL(data.val()[key].name,  
+          (avatar) => {
+            tempMem.avatar = avatar; 
+            now ++; 
+            if (now == count){
+              the.setState({dataReady: true})
+            }
+          });
+          testFamilyName.push(tempMem);
 
         }
         }
-        the.setState({ ...the.state, familyList: testFamilyName });
-        this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
-        the.setState({dataReady: true})
+        the.setState({...the.state, cardData: testFamilyName});
     })
-
   }
 
 
+  /**
+   * get the family image
+   * @para family name
+   * @para get the family image
+   */
+  getFamilyImageURL = (familyName, callback) => {
+      this.storage().ref().child("familyImages/" + familyName).getDownloadURL().then((url)=>{
+        callback(url);
+      }
+      )    
+  }
 
 
 
@@ -290,6 +411,23 @@ class Firebase {
     }).catch(function (error) {
       // ...
     });
+  }
+
+  /**
+   * Finds an image from the server and returns a promise with its url
+   * @param location The folder the image is in on server
+   * @param name The name of the file in the server
+   */
+  findImage = (location, name) => {
+    return new Promise((resolve,reject) => {
+      this.storage().ref().child('/' + location + name).getDownloadURL()
+      .then(url => {
+        resolve(url);
+      })
+      .catch(error => {
+        reject(error);
+      })
+    })
   }
 
   /**
@@ -378,7 +516,7 @@ class Firebase {
   /**
    * Adds a user to the specified family
    * @param user The user to be added
-   * @param family The family
+   * @param family The family 
    * @return A success message or error
    */
   addToFamily = (user, family) => {
@@ -396,7 +534,7 @@ class Firebase {
   /**
    * Removes a user to the specified family
    * @param user The user to be removed
-   * @param family The family
+   * @param family The family 
    * @return A success message or error
    */
   removeFromFamily = (user, family) => {

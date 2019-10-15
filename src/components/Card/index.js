@@ -24,7 +24,7 @@ class Cards extends Component{
     render(){
         return (
             <div>
-            <Box boxShadow={3} height="350px" width="300px">
+            <Box boxShadow={3} height="100%" width="100%">
               <Card class= "card">
                 <CardActionArea>
                   <CardMedia

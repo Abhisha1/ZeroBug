@@ -18,26 +18,10 @@ class CustomSlider extends Component {
   render() {
     // initialises configuration for formatting of slider
     const settings = {
-      dots: true,
-      speed: 400,
-      slidesToShow: this.props.cards.length < 4 ? this.props.cards.length : 3,
+      infinite: false,
+      slidesToShow: 3,
       slidesToScroll: 1,
-      responsive: [
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: this.props.cards.length < 3 ? this.props.cards.length : 2,
-            slidesToScroll: 2
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-          }
-        }
-      ]
+      dots: true
     };
 
 

@@ -88,7 +88,7 @@ class SignInFormBase extends Component {
         {/* makes submit button submittable only when email and password has a value */}
         <button variant="primary" disabled={isInvalid} type="submit" value="Sign In">Sign In
         </button>
-        <Modal show={this.state.showModal}>
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title> Error</Modal.Title>
           </Modal.Header>
