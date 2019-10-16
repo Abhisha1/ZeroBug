@@ -541,7 +541,7 @@ class Firebase {
     let newUsers = collection["users"];
     let removeIndex = -1;
     for (let key in collection["users"]) {
-      if (collection["users"][key].email === user.email) {
+      if (collection["users"][key].uid === user.uid) {
         removeIndex = key;
       }
     }
@@ -570,7 +570,7 @@ class Firebase {
     // Checks if new admin is already in group and if so, simply updates new Admin as admin
     let exists = false
     for (let key in collection["users"]) {
-      if (collection["users"][key].email === newAdmin.email) {
+      if (collection["users"][key].uid === newAdmin.uid) {
         exists = true;
         this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
           .then(() => {

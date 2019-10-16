@@ -58,7 +58,7 @@ class FamilyDetails extends Component {
         let duplicate = false;
         console.log(dataFromModal)
         for (let key in this.state.family["users"]) {
-            if (this.state.family["users"][key].email === dataFromModal.email) {
+            if (this.state.family["users"][key].uid === dataFromModal.uid) {
                 duplicate = true;
                 // When we have removed a user (that already exists in our list), we delete from our rendered members
                 if(action === "remove"){
@@ -104,7 +104,7 @@ class FamilyDetails extends Component {
                         let authUser = {
                             uid: user.uid,
                             name: user.displayName,
-                            email: user.email,
+                            uid: user.uid,
                             photoURL: user.photoURL
                         }
                         console.log(value)

@@ -92,7 +92,7 @@ class CustomModal extends Component {
                         <div id="searchResults">
                             {
                                 this.state.searchedUsers.map(item => (
-                                <div id="searchResult" key={item.email}><p id="modalText">{item.displayName}</p><Button variant="outlined" id="modalAdd" onClick={() => this.props.action(item)}>Add</Button></div>))}
+                                <div id="searchResult" key={item.uid}><p id="modalText">{item.displayName}</p><Button variant="outlined" id="modalAdd" onClick={() => this.props.action(item)}>Add</Button></div>))}
                             {this.state.noMatches && <p>No Matches</p>}
                         </div>
                         {/* Displays a loader for when the API is still fetching the results */}

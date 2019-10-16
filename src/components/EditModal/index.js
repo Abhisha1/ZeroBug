@@ -75,18 +75,18 @@ class EditModal extends Component {
     addOrRemoveMembers(user, firebase) {
         for (let key in this.props.family["users"]) {
             // console.log(existingUser.name+"   and name we looking for  "+user.name);
-            let existingUser = this.props.family["users"][key].email;
-            if (user.email === this.props.family.admin.email) {
+            let existingUser = this.props.family["users"][key].uid;
+            if (user.uid === this.props.family.admin.uid) {
                 return;
             }
-            else if (existingUser === user.email) {
+            else if (existingUser === user.uid) {
                 return (
-                    <div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
+                    <div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
                         <Button variant="outlined" id="modalRemove" onClick={() => this.remove(user, firebase)}>Remove</Button>
                     </div>)
             }
         }
-        return (<div id="searchResult" key={user.email}><p id="modalText" key={user.email}>{user.displayName}</p>
+        return (<div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
             <Button variant="outlined" id="modalAdd" onClick={() => this.add(user, firebase)}>Add</Button>
         </div>);
 

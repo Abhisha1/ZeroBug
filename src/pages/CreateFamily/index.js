@@ -43,9 +43,7 @@ class CreateFamily extends Component {
         let authUser = {
           uid: user.uid,
           displayName: user.displayName,
-          email: user.email,
           photoURL: user.photoURL,
-          email: user.email
         }
         let newMembers = this.state.familyMembers;
         newMembers.push(authUser);
@@ -106,7 +104,7 @@ class CreateFamily extends Component {
     // whilst ensuring the user doesn't already exist in the added members
     let duplicate = false;
     for (let i=0; i < this.state.familyMembers.length; i++){
-      if(this.state.familyMembers[i].email === dataFromModal.email){
+      if(this.state.familyMembers[i].uid === dataFromModal.uid){
         duplicate = true;
       }
     }
@@ -165,9 +163,6 @@ class CreateFamily extends Component {
             <Button id="create-family-button" variant="outlined" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</Button>
           </div>
         </Form>
-
-        {/* Renders the members that have been added to the family so far */}
-        <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
         <Modal show={this.state.showOutcomeModal} onHide={() => window.location.assign(HOME)}>

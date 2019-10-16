@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { MdPeople } from "react-icons/md";
 import Slider from "react-slick";
-import Cards from "../Card";
 import Avatar from "@material-ui/core/Avatar";
 // import 'slick-carousel/slick/slick-theme.css';
 // import 'slick-carousel/slick/slick.css';
@@ -18,14 +16,32 @@ class CustomSlider extends Component {
    */
   render() {
     // initialises configuration for formatting of slider
-    const settings = {
+    const  settings = {
+      dots: true,
+      speed: 300,
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      centerPadding: "60px",
       infinite: false,
-      slidesToShow: 4,
-      slidesToScroll: 1,
-      dots: true
+      arrows: true,
+      swipe: true,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
     };
-
-
 
     return (
       <div id="customSlider">
