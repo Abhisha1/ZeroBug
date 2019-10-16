@@ -67,9 +67,9 @@ function UploadArtefactForm(props) {
     let updatedAuthUsers = values.authUsers;
     if (values.authUsers.indexOf(dataFromModal) === -1) {
       updatedAuthUsers.push({
-        name: dataFromModal.displayName,
+        displayName: dataFromModal.displayName,
         uid: dataFromModal.uid,
-        profileImage: dataFromModal.photoURL,
+        photoURL: dataFromModal.photoURL,
       });
     }
     setValues({ ...values, ["authUsers"]: updatedAuthUsers});
@@ -165,10 +165,8 @@ function UploadArtefactForm(props) {
         <Grid item>
           <CustomModal action={handleModal} />
         </Grid>
-        <Grid item>
-          <CustomSlider cards={values.authUsers}></CustomSlider>
-        </Grid>
       </Grid>
+      <CustomSlider cards={values.authUsers}></CustomSlider>
       <Button
         type="submit"
         fullWidth
