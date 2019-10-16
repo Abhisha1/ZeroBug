@@ -23,6 +23,7 @@ class CustomSlider extends Component {
       slidesToScroll: 3,
       centerPadding: "60px",
       infinite: false,
+      arrows: true,
       swipe: true,
       responsive: [
         {
