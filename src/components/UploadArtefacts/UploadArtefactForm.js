@@ -28,7 +28,7 @@ const INIT_STATE = {
   authUsers: [],
   location: '',
   date: new Date(),
-  imageAdded: false,
+  imageAdded: true,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -73,7 +73,6 @@ function UploadArtefactForm(props) {
       });
     }
     setValues({ ...values, ["authUsers"]: updatedAuthUsers});
-    console.log(values.authUsers);
   }
 
 
@@ -98,6 +97,7 @@ function UploadArtefactForm(props) {
       })
       setValues(INIT_STATE);
       setSelectedDate(new Date());
+      console.log("Test here");
       event.preventDefault()
     }
   };

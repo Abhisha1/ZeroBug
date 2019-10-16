@@ -276,6 +276,7 @@ class Firebase {
    * Create a new artefact
    */
   createArtefact = (name, date, location, description, authFamilies, authUsers) => {
+    console.log("Test here");
     return (
       this.database().ref('artefacts/' + name).set({
         date: date,
