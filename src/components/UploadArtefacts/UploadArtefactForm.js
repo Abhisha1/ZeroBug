@@ -1,6 +1,10 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import Grid from '@material-ui/core/Grid';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import TextField from '@material-ui/core/TextField';
 import yellow from '@material-ui/core/colors/yellow';
@@ -23,6 +27,7 @@ const INIT_STATE = {
   authFamilies:[],
   authUsers: [],
   location: '',
+  date: new Date(),
 };
 
 const useStyles = makeStyles(theme => ({
@@ -46,10 +51,14 @@ const useStyles = makeStyles(theme => ({
 function UploadArtefactForm(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState(INIT_STATE);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   // Updates the values of the state on change
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
+  };
+  const handleDateChange = date => {
+    setSelectedDate(date);
   };
 
   // Handles submission of a new created artefact to Firebase
@@ -60,47 +69,70 @@ function UploadArtefactForm(props) {
   // Defines when to enable the ability to upload the artefact
   const isInvalid =
     values.artefactName === '' ||
-    values.year === null ||
-    values.description === '';
+    values.location === '';
 
   return (
-
     <form onSubmit={onSubmit} noValidate className={classes.form}>
-      <TextField
-        margin="normal"
-        name="artefactName"
-        variant="outlined"
-        required
-        fullWidth
-        className={classes.textField}
-        id="artefactName"
-        label="Artefact Name"
-        autoFocus
-        onChange={handleChange("artefactName")}
-      />
-      <TextField
-        margin="normal"
-        name="artefactLocation"
-        variant="outlined"
-        required
-        fullWidth
-        className={classes.textField}
-        id="artefactName"
-        label="Location"
-        autoFocus
-        onChange={handleChange("artefactName")}
-      />
-      <TextField
-          id="outlined-multiline-static"
-          label="Artefact Description"
-          multiline
-          fullWidth
-          rows="4"
-          className={classes.textField}
-          margin="normal"
-          variant="outlined"
-          onChange={handleChange("description")}
-      />
+      <Grid container direction='row' justify='space-between' alignItems='center' spacing={3}>
+        <Grid item xs={6} >
+          <TextField
+            margin="normal"
+            name="artefactName"
+            variant="outlined"
+            required
+            fullWidth
+            className={classes.textField}
+            id="artefactName"
+            label="Artefact Name"
+            autoFocus
+            onChange={handleChange("artefactName")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            margin="normal"
+            name="artefactLocation"
+            variant="outlined"
+            required
+            fullWidth
+            className={classes.textField}
+            id="artefactName"
+            label="Place of Origin"
+            autoFocus
+            onChange={handleChange("location")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+              id="outlined-multiline-static"
+              label="Artefact Description"
+              multiline
+              fullWidth
+              rows="4"
+              className={classes.textField}
+              margin="normal"
+              variant="outlined"
+              onChange={handleChange("description")}
+          />
+        </Grid>
+        <Grid item xs={4} >
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="dialog"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-of-artefact"
+              label="Date of Artefact"
+              value={selectedDate}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </Grid>
+      </Grid>
       <Button
         type="submit"
         fullWidth
@@ -113,6 +145,7 @@ function UploadArtefactForm(props) {
         Submit
       </Button>
     </form>
+
   );
 }
 
