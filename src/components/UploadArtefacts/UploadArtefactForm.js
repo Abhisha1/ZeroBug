@@ -78,28 +78,18 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    return event => {
-      this.props.firebase.createArtefact(
-        values.artefactName,
-        selectedDate,
-        values.location,
-        values.description,
-        values.authFamilies,
-        values.authUsers
-      )
-      .then(() => {
-        setValues(INIT_STATE);
-        setSelectedDate(new Date());
-        props.history.push(ROUTES.HOME);
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.description, values.authFamilies, values.authUsers)
+    .then(() => {
       setValues(INIT_STATE);
       setSelectedDate(new Date());
-      console.log("Test here");
-      event.preventDefault()
-    }
+      props.history.push(ROUTES.HOME);
+    })
+    .catch(error => {
+      console.error(error)
+    })
+
+    event.preventDefault()
+
   };
 
   // Defines when to enable the ability to upload the artefact

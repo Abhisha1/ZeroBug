@@ -276,7 +276,7 @@ class Firebase {
    * Create a new artefact
    */
   createArtefact = (name, date, location, description, authFamilies, authUsers) => {
-    console.log("Test here");
+    let currentUser = this.auth.currentUser;
     return (
       this.database().ref('artefacts/' + name).set({
         date: date,
@@ -285,9 +285,9 @@ class Firebase {
         authFamilies: authFamilies,
         authUsers: authUsers,
         owner: {
-          email: this.auth.currentUser().email,
-          name: this.auth.currentUser().displayName,
-          uid: this.auth.currentUser().uid,
+          email: currentUser.email,
+          name: currentUser.displayName,
+          uid: currentUser.uid,
         }
       }).then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
