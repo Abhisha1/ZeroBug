@@ -6,6 +6,7 @@ import * as ROUTES from '../../constants/routes';
 import { IoMdPeople, IoMdPerson, IoMdHome } from "react-icons/io"
 import './navigation.scss';
 import logo from "../../assets/templogo.png";
+import Avatar from '@material-ui/core/Avatar';
 
 /**
  * The Navigation bar that is used on website that renders differently depending on whether
@@ -19,7 +20,7 @@ const Navigation = () => (
       <AuthUserContext.Consumer>
         {/* Renders the approaprriate links depending on whether user is signed in/authorised or not */}
         {authUser =>
-          authUser ? <NavigationAuth /> : <NavigationNonAuth />
+          authUser ? <NavigationAuth user={authUser}/> : <NavigationNonAuth />
         }
       </AuthUserContext.Consumer>
     </Navbar.Collapse>
@@ -28,10 +29,10 @@ const Navigation = () => (
 /**
  * The Navigation bar links when the user is authorised/ signed into their acount
  */
-const NavigationAuth = () => (
+const NavigationAuth = ( user ) => (
   <Nav className="ml-auto">
     <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
-    <Nav.Link href={ROUTES.ACCOUNT}><IoMdPerson size={30} alt="Account"></IoMdPerson></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.photoURL} /></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
     <Nav.Link href={ROUTES.ADMIN}>Admin</Nav.Link>
     <Nav.Link href={ROUTES.CREATE_ARTEFACT}>CreateArtefact</Nav.Link>
