@@ -119,9 +119,10 @@ function UploadArtefactForm(props) {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               disableToolbar
-              variant="dialog"
+              variant="inline"
               format="dd/MM/yyyy"
               margin="normal"
+              disableFuture
               id="date-of-artefact"
               label="Date of Artefact"
               value={selectedDate}
