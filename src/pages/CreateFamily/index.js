@@ -166,9 +166,6 @@ class CreateFamily extends Component {
           </div>
         </Form>
 
-        {/* Renders the members that have been added to the family so far */}
-        <CustomSlider cards={this.state.familyMembers}></CustomSlider>
-
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
         <Modal show={this.state.showOutcomeModal} onHide={() => window.location.assign(HOME)}>
           <Modal.Header closeButton>

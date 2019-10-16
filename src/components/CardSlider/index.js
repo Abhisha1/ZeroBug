@@ -16,14 +16,31 @@ class CustomSlider extends Component {
    */
   render() {
     // initialises configuration for formatting of slider
-    const settings = {
+    const  settings = {
+      dots: true,
+      speed: 300,
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      centerPadding: "60px",
       infinite: false,
-      slidesToShow: 4,
-      slidesToScroll: 1,
-      dots: true
+      swipe: true,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
     };
-
-
 
     return (
       <div id="customSlider">
