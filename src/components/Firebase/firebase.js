@@ -277,9 +277,11 @@ class Firebase {
    */
   createArtefact = (name, date, location, description, authFamilies, authUsers) => {
     let currentUser = this.auth.currentUser;
+    let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    console.log(fbDate);
     return (
       this.database().ref('artefacts/' + name).set({
-        date: date,
+        date: fbDate,
         location: location,
         description: description,
         authFamilies: authFamilies,
