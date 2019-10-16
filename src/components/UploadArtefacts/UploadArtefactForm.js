@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import CustomModal from "../../components/Modal";
+import CustomSlider from '../../components/CardSlider';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
@@ -21,13 +23,12 @@ const primary = yellow[500];
 // The Initial state of al values for an upload Artefact form
 const INIT_STATE = {
   artefactName: '',
-  currentOwner: null,
   description: '',
-  year: null,
   authFamilies:[],
   authUsers: [],
   location: '',
   date: new Date(),
+  imageAdded: false,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -61,15 +62,51 @@ function UploadArtefactForm(props) {
     setSelectedDate(date);
   };
 
+  // add a user to the list of authUsers
+  const handleModal = dataFromModal => {
+    let updatedAuthUsers = values.authUsers;
+    if (values.authUsers.indexOf(dataFromModal) === -1) {
+      updatedAuthUsers.push({
+        name: dataFromModal.displayName,
+        uid: dataFromModal.uid,
+        profileImage: dataFromModal.photoURL,
+      });
+    }
+    setValues({ ...values, ["authUsers"]: updatedAuthUsers});
+    console.log(values.authUsers);
+  }
+
+
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    event.preventDefault();
+    return event => {
+      this.props.firebase.createArtefact(
+        values.artefactName,
+        selectedDate,
+        values.location,
+        values.description,
+        values.authFamilies,
+        values.authUsers
+      )
+      .then(() => {
+        setValues(INIT_STATE);
+        setSelectedDate(new Date());
+        props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        console.error(error)
+      })
+      setValues(INIT_STATE);
+      setSelectedDate(new Date());
+      event.preventDefault()
+    }
   };
 
   // Defines when to enable the ability to upload the artefact
   const isInvalid =
     values.artefactName === '' ||
-    values.location === '';
+    values.location === '' ||
+    values.imageAdded === false;
 
   return (
     <form onSubmit={onSubmit} noValidate className={classes.form}>
@@ -132,6 +169,14 @@ function UploadArtefactForm(props) {
               }}
             />
           </MuiPickersUtilsProvider>
+        </Grid>
+      </Grid>
+      <Grid container justify="center">
+        <Grid item>
+          <CustomModal action={handleModal} />
+        </Grid>
+        <Grid item>
+          <CustomSlider cards={values.authUsers}></CustomSlider>
         </Grid>
       </Grid>
       <Button

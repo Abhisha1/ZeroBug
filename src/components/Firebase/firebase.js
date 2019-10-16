@@ -122,9 +122,7 @@ class Firebase {
     var aaa = this.storage().ref().child('images/' + image.name).put(image).then((snapshot) => {
       this.getURL(th, 'images/' + image.name);
     }
-
     );
-    //console.log(aaa);
   }
 
   //delete the file
@@ -134,7 +132,6 @@ class Firebase {
     desertRef.delete().then(function () {
       console.log("delete the file");
     }).catch(function (error) {
-      // ...
     });
   }
 
@@ -276,29 +273,29 @@ class Firebase {
   }
 
   /**
-   * Write the artifact information to the database
-   * @param artifact ID
-   * @param artifact name
-   * @param artifact origin
-   * @param artifact current owner
-   * @param artifact description
+   * Create a new artefact
    */
-  testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
-    this.database().ref('testUploadArtifactData/' + artifactID).set({
-      artifactName: artifactName,
-      origin: artifactOrigin,
-      currentOwner: artifactCurrentOwner,
-      description: artifactDescription
-    }, (error) => {
-      if (error) {
-        // The write failed...
-        console.log("Written data FAILED");
-      } else {
-        // Data saved successfully!
-        console.log("Successfully append the data!");
-      }
-    });
+  createArtefact = (name, date, location, description, authFamilies, authUsers) => {
+    return (
+      this.database().ref('artefacts/' + name).set({
+        date: date,
+        location: location,
+        description: description,
+        authFamilies: authFamilies,
+        authUsers: authUsers,
+        owner: {
+          email: this.auth.currentUser().email,
+          name: this.auth.currentUser().displayName,
+          uid: this.auth.currentUser().uid,
+        }
+      }).then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      }).catch(error => {
+        return error;
+      })
+    )
   }
+
 
   /**
    * write to the database with generated random key
@@ -396,41 +393,6 @@ class Firebase {
     the.setState({ ...the.state, topFive: topFiveArtifactName })
   }
 
-  /**
-   * Set Document cookie for user's current session which expires upon closing
-   * of the session.
-   *
-   *           'https://www.w3schools.com/js/js_cookies.asp'
-   *
-   * @param cname the name of the cookie
-   * @param cvalue the value of the cookie
-   */
-  setCookie = (cname, cvalue) => {
-    document.cookie = cname + "=" + cvalue + ";" + ";path=/";
-  }
-
-  /**
-   * Get Document cookie value for given cookie name.
-   *
-   *           'https://www.w3schools.com/js/js_cookies.asp'
-   *
-   * @param cname the name of the cookie
-   * @return String value for cookie name
-   */
-  getCookie = (cname) => {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-  }
 
   /**
    * Sign up a user using their provided email and password
@@ -450,9 +412,6 @@ class Firebase {
    * @param email the email address of the registered user
    * @param password the password for the registered user's account
    */
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
-
   doSignInWithEmailAndPassword = (email, password) => {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
@@ -460,7 +419,6 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
-
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
