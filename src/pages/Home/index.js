@@ -7,7 +7,7 @@ const HomePage = () => (
   <div>
     <h1>HOME! TEST!</h1>
     <Link
-    to={{ pathname: '/family/Zingers', state: { name: 'Zingers'} }}
+    to={{ pathname: '/family/Rabbit', state: { name: 'Rabbit'} }}
     >TEST VIEW FAM</Link>
   </div>
 );
