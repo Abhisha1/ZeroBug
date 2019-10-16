@@ -234,6 +234,7 @@ class Firebase {
    * @para users' names
    */
   getYourFamilyNames = (the, username) => {
+
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
@@ -246,6 +247,7 @@ class Firebase {
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
+
           if (data.val()[key].users[user].displayName == username) {
 
             count ++;
@@ -253,6 +255,7 @@ class Firebase {
             let tempMem = {
               name: data.val()[key].name,
             }
+            
 
             this.getFamilyImageURL(data.val()[key].name,  
             (avatar) => {
@@ -271,36 +274,6 @@ class Firebase {
       the.setState({...the.state, cardData: testFamilyName});
       
     });
-    tempRef.on("value", (data) => {
-
-      // for the number of the families the user managed
-      let count = 0;
-      // for the current image get from the storage
-      let now = 0;
-
-      for (let key in data.val()) {
-        if(data.val()[key].admin.name == username ){
-          count ++;
-
-          let tempMem = {
-            name: data.val()[key].name,
-          }
-
-          this.getFamilyImageURL(data.val()[key].name,  
-          (avatar) => {
-            tempMem.avatar = avatar; 
-            now ++; 
-            if (now == count){
-              the.setState({dataReady: true})
-            }
-          });
-          testFamilyName.push(tempMem);
-
-        }
-        }
-        the.setState({...the.state, cardData: testFamilyName});
-    })
-
   }
 
   //for account pages
@@ -311,12 +284,9 @@ class Firebase {
    */
   getYourManagedFamilyName = (the, username) => {
 
-    console.log("yoyoyoyoyo");
-
     let testFamilyName = [];
     let tempRef = this.database().ref('/families/');
 
-    console.log(tempRef);
     tempRef.on("value", (data) => {
 
       // for the number of the families the user managed
@@ -326,14 +296,9 @@ class Firebase {
       let now = 0;
 
       for (let key in data.val()) {
-        console.log(key);
-        console.log(data.val()[key].admin.displayName);
 
         if(data.val()[key].admin.displayName == username ){
           count ++;
-
-
-          console.log(count);
 
           let tempMem = {
             name: data.val()[key].name,
@@ -348,11 +313,6 @@ class Firebase {
             }
           });
           testFamilyName.push(tempMem);
-          
-          
-          
-          
-          console.log(testFamilyName);
 
         }
         }
