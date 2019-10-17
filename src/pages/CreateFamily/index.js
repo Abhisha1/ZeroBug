@@ -101,6 +101,16 @@ class CreateFamily extends Component {
       familyMembers: usersToAdd
     });
   }
+
+
+  searchForUsers(firebase, familyMemberName, modalState) {
+    firebase.searchUsers(familyMemberName, modalState)
+  }
+
+
+
+
+
   render() {
     // An error popover that is displayed when a family already exists under this name
     const popover = (
@@ -137,7 +147,7 @@ class CreateFamily extends Component {
           {/* Handles the functionality to add users to a family using a custom modal */}
           <div id="family-buttons">
             <Form.Group controlId="validationFormikUsername">
-              <CustomModal action={this.handleModal}></CustomModal>
+              <CustomModal action={this.handleModal} title="Users" search={this.searchForUsers}></CustomModal>
             </Form.Group>
             <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
           </div>

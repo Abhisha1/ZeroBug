@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
-import CustomModal from "../../components/Modal";
+import CustomModal from "../../components/AddUserModal";
 import CustomSlider from '../../components/CardSlider';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -63,18 +63,30 @@ function UploadArtefactForm(props) {
   };
 
   // add a user to the list of authUsers
-  const handleModal = dataFromModal => {
+  const handleUsers = usersFromModal => {
     let updatedAuthUsers = values.authUsers;
-    if (values.authUsers.indexOf(dataFromModal) === -1) {
+    if (values.authUsers.indexOf(usersFromModal) === -1) {
       updatedAuthUsers.push({
-        displayName: dataFromModal.displayName,
-        uid: dataFromModal.uid,
-        photoURL: dataFromModal.photoURL,
+        displayName: usersFromModal.displayName,
+        uid: usersFromModal.uid,
+        photoURL: usersFromModal.photoURL,
       });
     }
     setValues({ ...values, ["authUsers"]: updatedAuthUsers});
   }
 
+  // add a family to the list of authFamilies
+  const handleFamilies = familiesFromModal => {
+    let updatedAuthFamilies = values.authFamilies;
+    if (values.authFamilies.indexOf(familiesFromModal) === -1) {
+      updatedAuthFamilies.push({
+        displayName: familiesFromModal.displayName,
+        uid: familiesFromModal.uid,
+        photoURL: familiesFromModal.photoURL,
+      });
+    }
+    setValues({ ...values, ["authFamilies"]: updatedAuthFamilies});
+  }
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
@@ -91,6 +103,15 @@ function UploadArtefactForm(props) {
     event.preventDefault()
 
   };
+
+
+  const searchFamilies = (firebase, familyName, modalState) => {
+    firebase.searchFamilies(familyName, modalState);
+  }
+
+  const searchForUsers = (firebase, familyMemberName, modalState) => {
+    firebase.searchUsers(familyMemberName, modalState)
+  }
 
   // Defines when to enable the ability to upload the artefact
   const isInvalid =
@@ -163,10 +184,12 @@ function UploadArtefactForm(props) {
       </Grid>
       <Grid container justify="center">
         <Grid item>
-          <CustomModal action={handleModal} />
+        <CustomModal action={handleUsers} title="Users" search={searchForUsers}></CustomModal>
+          <CustomModal action={handleFamilies} title="Families" search={searchFamilies}></CustomModal>
         </Grid>
       </Grid>
       <CustomSlider cards={values.authUsers}></CustomSlider>
+      <CustomSlider cards={values.authFamilies}></CustomSlider>
       <Button
         type="submit"
         fullWidth

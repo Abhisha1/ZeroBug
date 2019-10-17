@@ -362,7 +362,7 @@ class Firebase {
       .then(response => {
         console.log(response);
         if (response.data.msg === "Success") {
-          the.setState({ ...the.state, searchedUsers: response.data.users, loading: false });
+          the.setState({ ...the.state, searchedResults: response.data.users, loading: false });
         }
         if (response.data.msg === "No matches") {
           the.setState({ ...the.state, noMatches: true, loading: false })
@@ -371,6 +371,35 @@ class Firebase {
       .catch(error => {
         return new Error(error.data.msg);
       })
+  }
+
+  /**
+   * Finds the families that match the searched family
+   * @param family the input string for a familie
+   * @param the the parent class
+   * @return a success message when successful, or an error
+   */
+  searchFamilies = (family, the) => {
+    console.log("about to serahc");
+    this.database().ref('/families/').on("value", function (snapshot) {
+      console.log(snapshot.val().length);
+      let matches = []
+      if (snapshot.val()) {
+        for (let key in snapshot.val()) {
+          console.log(key.includes(family));
+          if (key.includes(family)) {
+            matches.push(snapshot.val()[key]);
+          }
+        }
+        console.log(matches)
+        the.setState({ ...the.state, searchedResults: matches, loading: false });
+      }
+      else{
+        the.setState({ ...the.state, noMatches: true, loading: false })
+      }
+    }, function (error) {
+      return new Error("Could not query database");
+    })
   }
 
   /**
@@ -513,168 +542,168 @@ class Firebase {
           return error;
         })
     }
-}
+  }
 
-/**
- * Create a new artefact
- * @param name The name of the artefact to store
- * @param date The Javascript Date object which stores date of artefact
- * @param location The location from which the artefact belong
- * @param description An optional description of the artefact
- * @param authFamilies A JSON list of the autherised families for the artefact
- * @param authUsers A JSON list of the autherised users for the artefact
- */
-createArtefact = (name, date, location, description, authFamilies, authUsers) => {
-  let currentUser = this.auth.currentUser;
-  let fbDate = firebase.firestore.Timestamp.fromDate(date);
-  return (
-    this.database().ref('artefacts/' + name).set({
-      date: fbDate,
-      location: location,
-      description: description,
-      authFamilies: authFamilies,
-      authUsers: authUsers,
-      owner: {
-        email: currentUser.email,
-        name: currentUser.displayName,
-        uid: currentUser.uid,
-      }
-    }).then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    }).catch(error => {
-      return error;
+  /**
+   * Create a new artefact
+   * @param name The name of the artefact to store
+   * @param date The Javascript Date object which stores date of artefact
+   * @param location The location from which the artefact belong
+   * @param description An optional description of the artefact
+   * @param authFamilies A JSON list of the autherised families for the artefact
+   * @param authUsers A JSON list of the autherised users for the artefact
+   */
+  createArtefact = (name, date, location, description, authFamilies, authUsers) => {
+    let currentUser = this.auth.currentUser;
+    let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    return (
+      this.database().ref('artefacts/' + name).set({
+        date: fbDate,
+        location: location,
+        description: description,
+        authFamilies: authFamilies,
+        authUsers: authUsers,
+        owner: {
+          email: currentUser.email,
+          name: currentUser.displayName,
+          uid: currentUser.uid,
+        }
+      }).then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      }).catch(error => {
+        return error;
+      })
+    )
+  }
+
+  /**
+   * write to the database with generated random key
+   */
+  testUpdateArtifactData2 = () => {
+    // Create a new post reference with an auto-generated id
+    var newPostRef = this.database().ref('/testUploadArtifactData/').push();
+
+    newPostRef.set({
+      artifactName: "test3",
+      origin: "test3",
+      currentOwner: "test3",
+      description: "test3"
+    });
+  }
+
+
+  /**
+   * update or delete the artifact data
+   * @param updated artifact ID
+   * @param updated artifact name
+   * @param updated artifact origin
+   * @param updated artifact current owner
+   * @param updated artifact description
+   */
+  testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
+
+    // A post entry
+    var postData = {
+      artifactName: updateArtifactName,
+      origin: updateArtifactOrigin,
+      currentOwner: updateCurrentOwner,
+      description: updateDescription
+    };
+
+    var updates = {};
+    updates['/testUploadArtifactData/' + updateArtifactID] = postData;
+
+    return firebase.database().ref().update(updates);
+  }
+
+
+  /**
+   * get the artifact data
+   * @param artifact ID
+   * @param the component to be set the state
+   */
+  getArtifactData = (artifactID, the) => {
+    let artifactName = "?";
+    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
+      artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
+      the.setState({ ...the.state, artifactName: artifactName })
     })
-  )
-}
-
-/**
- * write to the database with generated random key
- */
-testUpdateArtifactData2 = () => {
-  // Create a new post reference with an auto-generated id
-  var newPostRef = this.database().ref('/testUploadArtifactData/').push();
-
-  newPostRef.set({
-    artifactName: "test3",
-    origin: "test3",
-    currentOwner: "test3",
-    description: "test3"
-  });
-}
+  }
 
 
-/**
- * update or delete the artifact data
- * @param updated artifact ID
- * @param updated artifact name
- * @param updated artifact origin
- * @param updated artifact current owner
- * @param updated artifact description
- */
-testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
-
-  // A post entry
-  var postData = {
-    artifactName: updateArtifactName,
-    origin: updateArtifactOrigin,
-    currentOwner: updateCurrentOwner,
-    description: updateDescription
-  };
-
-  var updates = {};
-  updates['/testUploadArtifactData/' + updateArtifactID] = postData;
-
-  return firebase.database().ref().update(updates);
-}
+  /**
+   * Get a list of Artifact name data
+   * @param the component to be set the state
+   */
+  getListArtifactName = (the) => {
+    var testArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/');
+    tempRef.on('child_added', function (data) {
+      testArtifactName.push(data.val().artifactName);
+    });
+    the.setState({ ...the.state, artifactList: testArtifactName })
+  }
 
 
-/**
- * get the artifact data
- * @param artifact ID
- * @param the component to be set the state
- */
-getArtifactData = (artifactID, the) => {
-  let artifactName = "?";
-  this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
-    artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
-    the.setState({ ...the.state, artifactName: artifactName })
-  })
-}
+  /**
+   * Get a sorted list of Artifact name data by their name
+   * @param the component to be set the state
+   */
+  getSortedListArtifactName = (the) => {
+    var testSortedArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
+    tempRef.on('child_added', function (data) {
+      testSortedArtifactName.push(data.val().artifactName);
+    });
+    the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
+  }
 
 
-/**
- * Get a list of Artifact name data
- * @param the component to be set the state
- */
-getListArtifactName = (the) => {
-  var testArtifactName = [];
-  var tempRef = this.database().ref('/testUploadArtifactData/');
-  tempRef.on('child_added', function (data) {
-    testArtifactName.push(data.val().artifactName);
-  });
-  the.setState({ ...the.state, artifactList: testArtifactName })
-}
+  /**
+   * Get top 5 Artifact name data order by ArtifactName
+   * @param the component to be set the state
+   */
+  getTopFiveArtifactName = (the) => {
+    var topFiveArtifactName = [];
+    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
+    tempRef.on('child_added', function (data) {
+      topFiveArtifactName.push(data.val().artifactName);
+    });
+    the.setState({ ...the.state, topFive: topFiveArtifactName })
+  }
 
-
-/**
- * Get a sorted list of Artifact name data by their name
- * @param the component to be set the state
- */
-getSortedListArtifactName = (the) => {
-  var testSortedArtifactName = [];
-  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
-  tempRef.on('child_added', function (data) {
-    testSortedArtifactName.push(data.val().artifactName);
-  });
-  the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
-}
-
-
-/**
- * Get top 5 Artifact name data order by ArtifactName
- * @param the component to be set the state
- */
-getTopFiveArtifactName = (the) => {
-  var topFiveArtifactName = [];
-  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
-  tempRef.on('child_added', function (data) {
-    topFiveArtifactName.push(data.val().artifactName);
-  });
-  the.setState({ ...the.state, topFive: topFiveArtifactName })
-}
-
-/**
- * Sign up a user using their provided email and password
- * @param email the email address of the user to register by
- * @param password the password for the user to register by
- * @param username the username for the new user
- */
-doCreateUserWithEmailAndPassword = (email, password, username) => {
-  // Create the new user in Firebase
-  return this.auth.createUserWithEmailAndPassword(email, password);
-}
+  /**
+   * Sign up a user using their provided email and password
+   * @param email the email address of the user to register by
+   * @param password the password for the user to register by
+   * @param username the username for the new user
+   */
+  doCreateUserWithEmailAndPassword = (email, password, username) => {
+    // Create the new user in Firebase
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
 
 
 
-/**
- * Sign in the a registered user account
- * @param email the email address of the registered user
- * @param password the password for the registered user's account
- */
-doCreateUserWithEmailAndPassword = (email, password) =>
-  this.auth.createUserWithEmailAndPassword(email, password);
+  /**
+   * Sign in the a registered user account
+   * @param email the email address of the registered user
+   * @param password the password for the registered user's account
+   */
+  doCreateUserWithEmailAndPassword = (email, password) =>
+    this.auth.createUserWithEmailAndPassword(email, password);
 
-doSignInWithEmailAndPassword = (email, password) => {
-  return this.auth.signInWithEmailAndPassword(email, password);
-}
+  doSignInWithEmailAndPassword = (email, password) => {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
 
-doSignOut = () => this.auth.signOut();
+  doSignOut = () => this.auth.signOut();
 
-doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
 
-doPasswordUpdate = password =>
-  this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password =>
+    this.auth.currentUser.updatePassword(password);
 }
 
 export default Firebase;

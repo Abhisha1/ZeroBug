@@ -1,46 +1,71 @@
 import React, { Component } from "react";
-import { MdPeople } from "react-icons/md";
 import Slider from "react-slick";
-import Cards from "../Card";
 import 'slick-carousel/slick/slick-theme.css';
+import GroupIcon from '@material-ui/icons/Group';
 import 'slick-carousel/slick/slick.css';
-import './customslider.scss';
+import { Avatar } from "@material-ui/core";
+import "./customslider.scss";
 
 /**
- * The CustomSlider class which renders list of users
+ * The CustomSlider class which renders list of families
  * horizontally 
  */
 class CustomSlider extends Component {
+  settings = {
+    dots: true,
+    speed: 300,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    centerPadding: "60px",
+    infinite: false,
+    arrows: true,
+    swipe: true,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+
 
   /**
    * Renders the slider onto the webpage
    */
   render() {
-    // initialises configuration for formatting of slider
-    const settings = {
-      infinite: false,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      dots: true
-    };
 
+    let slickSlider = <Slider id="customSlider" {...this.settings} ref={c => { this.slickSlider = c }}>
 
+      {/* Passes through families data to render in slider */}
+      {this.props.cards.map(item => (
+        <div key={item} id="sliderCard">
+          {item.photoURL ? <Avatar id="memberAvatar"
+            src={item.photoURL}
+          /> : <GroupIcon></GroupIcon>}
+          {item.name ? <h4 id="memberName">
+            {item.name}
+          </h4> : <h4 id="memberName">
+              {item.displayName}
+            </h4>}
+        </div>
+      ))}
+    </Slider>
 
     return (
-      <div id="slider">
-        <Slider {...settings}>
-
-          {/* Passes through users data to render in slider */}
-          {this.props.cards.map(item => (
-            <div key={item} id="sliderCard">
-              <img alt="memberAvatar" id="memberAvatar" src={item.photoURL} />
-              <h5 id="memberName">{item.displayName}</h5>
-            </div>
-          ))}
-
-        </Slider>
-      </div>
+      slickSlider
     )
   }
 }
+
 export default CustomSlider;
