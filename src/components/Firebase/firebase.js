@@ -379,23 +379,36 @@ class Firebase {
    * @param the the parent class
    * @return a success message when successful, or an error
    */
-  searchFamilies = (family, the) => {
-    this.database().ref('/families/').on("value", function (snapshot) {
-      let matches = []
-      if (snapshot.val()) {
-        for (let key in snapshot.val()) {
-          if (key.includes(family)) {
-            matches.push(snapshot.val()[key]);
-          }
-        }
+  searchFamilies = async (family, the) => {
+    let self = this;
+    let snapshot = await this.database().ref('/families/').once("value")
+    let matches = [];
+    if (snapshot.val()) {
+      let arr = Object.values(snapshot.val())
+      // returns the image of the family
+      return Promise.all(arr.map(family => {
+        return self.findImage("familyImages/", family.name)
+          .then(url => {
+            let newFamily = {
+              displayName: family.name,
+              photoURL: url
+            }
+            console.log(newFamily)
+            matches.push(newFamily);
+          })
+          .catch(err => {
+            let newFamily = {
+              displayName: family.name
+            }
+            matches.push(newFamily);
+          })
+      })).then(() => {
         the.setState({ ...the.state, searchedResults: matches, loading: false });
-      }
-      else{
-        the.setState({ ...the.state, noMatches: true, loading: false })
-      }
-    }, function (error) {
-      return new Error("Could not query database");
-    })
+      })
+    }
+    else {
+      the.setState({ ...the.state, noMatches: true, loading: false })
+    }
   }
 
   /**

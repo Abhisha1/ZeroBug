@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
-import CustomModal from "../../components/AddUserModal";
+import CustomModal from "../AddModal";
 import CustomSlider from '../../components/CardSlider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import 'date-fns';
@@ -83,8 +83,8 @@ function UploadArtefactForm(props) {
     let updatedAuthFamilies = values.authFamilies;
     if (values.authFamilies.indexOf(familiesFromModal) === -1) {
       updatedAuthFamilies.push({
-        displayName: familiesFromModal.name,
-        admin: familiesFromModal.admin
+        displayName: familiesFromModal.displayName,
+        photoURL: familiesFromModal.photoURL
       });
     }
     setValues({ ...values, ["authFamilies"]: updatedAuthFamilies});

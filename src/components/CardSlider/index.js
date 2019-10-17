@@ -53,12 +53,9 @@ class CustomSlider extends Component {
           {item.photoURL ? <Avatar id="memberAvatar"
             src={item.photoURL}
           /> : <GroupIcon id="memberAvatar"></GroupIcon>}
-          {console.log(item.memberName)}
-          {item.name ? <h4 id="memberName">
-            {item.name}
-          </h4> : <h4 id="memberName">
+          <h4 id="memberName">
               {item.displayName}
-            </h4>}
+            </h4>
         </div>
       ))}
     </Slider>

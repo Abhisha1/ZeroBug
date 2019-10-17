@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
-import { withFirebase } from '../../components/Firebase'
-import CustomModal from "../../components/AddUserModal";
+import { withFirebase } from '../../components/Firebase';
+import CustomModal from "../../components/AddModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
