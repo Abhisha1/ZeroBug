@@ -31,7 +31,9 @@ const INIT_STATE = {
   authUsers: [],
   location: '',
   date: new Date(),
-  imageAdded: true,
+  imagesURL: [],
+  imageAdded: false,
+  image: null,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -64,6 +66,14 @@ function UploadArtefactForm(props) {
   const handleDateChange = date => {
     setSelectedDate(date);
   };
+
+  // Update a file to upload for the artefact
+  const handleFileChange = e => {
+    if (e.target.files[0]) {
+      const file = e.target.files[0];
+      setValues({ ...values, ["image"]: file})
+    }
+  }
 
   // add a user to the list of authUsers
   const handleUsers = usersFromModal => {
@@ -104,6 +114,21 @@ function UploadArtefactForm(props) {
 
     event.preventDefault()
 
+  };
+
+  // Handles submission of a new image for the artefact
+  const onImageSubmit = event => {
+    console.log("onImageSubmit")
+    props.firebase.uploadArtefactFile(values.image, values.artefactName, values, setValues)
+    .then(() => {
+      setValues({ ...values, ["imageAdded"]: true});
+      setValues({ ...values, ["image"]: null});
+    })
+    .catch(error => {
+      console.log("IMAGE UPLOAD FAILED")
+    })
+
+    event.preventDefault()
   };
 
   /**
@@ -242,7 +267,24 @@ function UploadArtefactForm(props) {
           </form>
         </Grid>
         <Grid item xs={6}>
-          test
+          <input
+            id="imageUpload"
+            multiple
+            type="file"
+            name="Upload"
+            onChange={handleFileChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            type="submit"
+            onSubmit={onImageSubmit}
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            >
+              UPLOAD
+          </Button>
         </Grid>
       </Grid>
       <Grid container direction="column">

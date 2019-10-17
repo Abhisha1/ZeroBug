@@ -2,9 +2,6 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
-import cookie from 'js-cookie';
-
-
 
 
 const config = {
@@ -525,48 +522,19 @@ class Firebase {
     )
   }
 
-  uploadArtefactFile = (artefactName, filename) => {
-    
-  }
-
-  /**
-   * write to the database with generated random key
-   */
-  testUpdateArtifactData2 = () => {
-    // Create a new post reference with an auto-generated id
-    var newPostRef = this.database().ref('/testUploadArtifactData/').push();
-
-    newPostRef.set({
-      artifactName: "test3",
-      origin: "test3",
-      currentOwner: "test3",
-      description: "test3"
+  uploadArtefactFile = (image, artefactName, values, setValues) => {
+    let currentList = values.imagesURL;
+    this.storage().ref().child("artefacts/" + artefactName).put(image).then((snapshot) => {
+      this.storage().ref().child("artefacts/" + artefactName).getDownloadURL().then((url) => {
+        currentList.push(url);
+        setValues({ ... values, ["imagesURL"]: currentList});
+      }).catch(error => {
+        console.log("Written data FAILED");
+      })
+      console.log('success uploading');
+    }).catch(error => {
+      console.log("Written data FAILED");
     });
-  }
-
-
-  /**
-   * update or delete the artifact data
-   * @param updated artifact ID
-   * @param updated artifact name
-   * @param updated artifact origin
-   * @param updated artifact current owner
-   * @param updated artifact description
-   */
-  testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
-
-    // A post entry
-    var postData = {
-      artifactName: updateArtifactName,
-      origin: updateArtifactOrigin,
-      currentOwner: updateCurrentOwner,
-      description: updateDescription
-    };
-
-    var updates = {};
-    updates['/testUploadArtifactData/' + updateArtifactID] = postData;
-
-    return firebase.database().ref().update(updates);
   }
 
 
@@ -611,19 +579,6 @@ class Firebase {
     the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
   }
 
-
-  /**
-   * Get top 5 Artifact name data order by ArtifactName
-   * @param the component to be set the state
-   */
-  getTopFiveArtifactName = (the) => {
-    var topFiveArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
-    tempRef.on('child_added', function (data) {
-      topFiveArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, topFive: topFiveArtifactName })
-  }
 
   /**
    * Sign up a user using their provided email and password
