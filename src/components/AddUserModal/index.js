@@ -72,8 +72,8 @@ class CustomModal extends Component {
                         {/* Search bar */}
                         <InputGroup className="mb-3">
                             <FormControl
-                                placeholder="User"
-                                aria-label="Users"
+                                placeholder={this.props.title}
+                                aria-label={this.props.title}
                                 name="name"
                                 value={this.state.name}
                                 onChange={this.handleChange}
