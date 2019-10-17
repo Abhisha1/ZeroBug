@@ -3,11 +3,13 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CustomModal from "../../components/AddUserModal";
 import CustomSlider from '../../components/CardSlider';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Grid from '@material-ui/core/Grid';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import yellow from '@material-ui/core/colors/yellow';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,12 +20,13 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 // The Primary colour for buttons and glyphs
-const primary = yellow[500];
+const primary = yellow[900];
 
 // The Initial state of al values for an upload Artefact form
 const INIT_STATE = {
   artefactName: '',
   description: '',
+  artefactBrief: '',
   authFamilies:[],
   authUsers: [],
   location: '',
@@ -89,7 +92,7 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.description, values.authFamilies, values.authUsers)
+    props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.artefactBrief, values.description, values.authFamilies, values.authUsers)
     .then(() => {
       setValues(INIT_STATE);
       setSelectedDate(new Date());
@@ -127,93 +130,130 @@ function UploadArtefactForm(props) {
   const isInvalid =
     values.artefactName === '' ||
     values.location === '' ||
-    values.imageAdded === false;
+    values.imageAdded === false ||
+    values.artefactBrief === '';
 
   return (
-    <form onSubmit={onSubmit} noValidate className={classes.form}>
-      <Grid container direction='row' justify='space-between' alignItems='center' spacing={3}>
-        <Grid item xs={6} >
-          <TextField
-            margin="normal"
-            name="artefactName"
-            variant="outlined"
-            required
-            fullWidth
-            className={classes.textField}
-            id="artefactName"
-            label="Artefact Name"
-            autoFocus
-            onChange={handleChange("artefactName")}
-          />
-        </Grid>
+    <div>
+      <Grid container wrap="nowrap" justify="center">
+        <CssBaseline />
         <Grid item xs={6}>
-          <TextField
-            margin="normal"
-            name="artefactLocation"
-            variant="outlined"
-            required
-            fullWidth
-            className={classes.textField}
-            id="artefactName"
-            label="Place of Origin"
-            autoFocus
-            onChange={handleChange("location")}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-              id="outlined-multiline-static"
-              label="Artefact Description"
-              multiline
+          <form onSubmit={onSubmit} noValidate className={classes.form}>
+            <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
+              <Grid item xs={6} >
+                <TextField
+                  margin="normal"
+                  name="artefactName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  className={classes.textField}
+                  id="artefactName"
+                  label="Artefact Name"
+                  autoFocus
+                  onChange={handleChange("artefactName")}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  margin="normal"
+                  name="artefactLocation"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  className={classes.textField}
+                  id="artefactName"
+                  label="Place of Origin"
+                  autoFocus
+                  onChange={handleChange("location")}
+                />
+              </Grid>
+            </Grid>
+            <Grid container direction="row" justify="center" alignItems="center">
+              <Grid item>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    disableFuture
+                    id="date-of-artefact"
+                    label="Date of Artefact"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <TextField
+                  margin="normal"
+                  name="artefactBrief"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  className={classes.textField}
+                  id="artefactBrief"
+                  label="A bit about this artefact"
+                  autoFocus
+                  onChange={handleChange("artefactBrief")}
+                />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12} direction="row" alignItems="center" justify="center">
+                <TextField
+                    id="outlined-multiline-static"
+                    label="The story behind this artefact"
+                    multiline
+                    fullWidth
+                    rows="4"
+                    className={classes.textField}
+                    margin="normal"
+                    variant="outlined"
+                    onChange={handleChange("description")}
+                />
+              </Grid>
+            </Grid>
+            <Grid container justify="center" spacing={3}>
+              <Grid item>
+                <CustomModal action={handleUsers} title="Users" search={searchForUsers} />
+              </Grid>
+              <Grid item>
+                <CustomModal action={handleFamilies} title="Families" search={searchFamilies} />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
               fullWidth
-              rows="4"
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              onChange={handleChange("description")}
-          />
+              onSubmit={onSubmit}
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={isInvalid}
+            >
+              Submit
+            </Button>
+          </form>
         </Grid>
-        <Grid item xs={4} >
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
-              format="dd/MM/yyyy"
-              margin="normal"
-              disableFuture
-              id="date-of-artefact"
-              label="Date of Artefact"
-              value={selectedDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </MuiPickersUtilsProvider>
+        <Grid item xs={6}>
+          test
         </Grid>
       </Grid>
-      <Grid container justify="center">
+      <Grid container direction="column">
         <Grid item>
-        <CustomModal action={handleUsers} title="Users" search={searchForUsers}></CustomModal>
-          <CustomModal action={handleFamilies} title="Families" search={searchFamilies}></CustomModal>
+          <CustomSlider cards={values.authUsers} />
+        </Grid>
+        <Grid item>
+          <CustomSlider cards={values.authFamilies} />
         </Grid>
       </Grid>
-      <CustomSlider cards={values.authUsers}></CustomSlider>
-      
-      <CustomSlider cards={values.authFamilies}></CustomSlider>
-      <Button
-        type="submit"
-        fullWidth
-        onSubmit={onSubmit}
-        variant="contained"
-        color="primary"
-        className={classes.submit}
-        disabled={isInvalid}
-      >
-        Submit
-      </Button>
-    </form>
-
+    </div>
   );
 }
 
