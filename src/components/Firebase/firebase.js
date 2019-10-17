@@ -514,6 +514,20 @@ class Firebase {
         })
     }
 }
+/**
+   * Retrieves the a particular artefacts' data
+   * @param name The artefact name
+   * @return The associated family's data or an error
+   */
+  viewArtefact = (name) => {
+    return new Promise((resolve, reject) => {
+      const onData = snap => {
+        resolve(snap.val());
+      }
+      const onError = error => reject(error);
+      this.database().ref('/artefacts/' + name).on("value", onData, onError)
+    });
+  }
 
 /**
  * Write the artifact information to the database

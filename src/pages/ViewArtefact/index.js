@@ -6,10 +6,10 @@ import LoadingAnimation from '../../components/LoadingAnimation';
 import Paper from '@material-ui/core/Paper';
 import UploadFile from "../../components/ImageUpload";
 import { withAuthorization } from "../../components/Session";
-import "./viewfamily.scss";
+import "./viewartefact.scss";
 import "~react-image-gallery/styles/scss/image-gallery.scss";
 /**
- * Page which views a particular family, as chosen by users actions from
+ * Page which views a particular artefact, as chosen by users actions from
  * previous webpage
  */
 class ViewArtefact extends Component {
@@ -17,14 +17,14 @@ class ViewArtefact extends Component {
         super(props);
     }
     /**
-     * Renders the family details on screen, using the name of the family from
+     * Renders the artefact details on screen, using the name of the artefact from
      * url or the previous webpage
      */
     render() {
-        let familyName = this.props.match.params.name || this.props.location.state.name;
+        let artefactName = this.props.match.params.name || this.props.location.state.name;
         return (
-            <div id="viewFamilyPage">
-                <ViewArtefactDetails name={familyName} />
+            <div>
+                <ViewArtefactDetails name={artefactName} />
             </div>)
     }
 }
@@ -35,13 +35,13 @@ const loading = <LoadingAnimation></LoadingAnimation>
 
 
 /**
- * The family details as per receieved from the database, with ability
+ * The artefact details as per receieved from the database, with ability
  * to edit and change details
  */
-class FamilyDetails extends Component {
+class ArtefactDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, family: null, loading: true, isAdmin: false }
+        this.state = { showModal: false, artefact: null, loading: true, isAdmin: false }
         this.handleModal = this.handleModal.bind(this);
     }
 
@@ -55,28 +55,28 @@ class FamilyDetails extends Component {
         else {
             this.setState({ showModal: false })
         }
-        this.setState({ familyMember: '' });
+        // this.setState({ artefactMember: '' });
     }
     /**
-     * Fetches the specified family's data from the database
+     * Fetches the specified artefacts data from the database
      */
     async componentWillMount() {
-        this.props.firebase.viewFamily(this.props.name)
+        this.props.firebase.ViewArtefact(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
                     if (user) {
                         let authUser = {
                             uid: user.uid,
                             name: user.displayName,
-                            email: user.email
+                            phtoURL: user.photoURL
                         }
                         console.log(value)
                         if (user.uid === value.admin.uid) {
-                            this.setState({ family: value, loading: false, isAdmin: true });
+                            this.setState({ artefact: value, loading: false, isAdmin: true });
                         }
-                        this.setState({ family: value, loading: false });
+                        this.setState({ artefact: value, loading: false });
                     } else {
-                        this.setState({ family: value, loading: false });
+                        this.setState({ artefact: value, loading: false });
                         // User not logged in or has just logged out.
                     }
                 });
@@ -86,7 +86,7 @@ class FamilyDetails extends Component {
             });
     }
     /**
-     * Renders the family details or a loading screen depending on
+     * Renders the artefact details or a loading screen depending on
      * status of database call
      */
     render() {
@@ -97,24 +97,24 @@ class FamilyDetails extends Component {
                         <ImageGallery items={this.state.artefact} />
                         <h1 id="artefactName">{this.props.name}</h1>
                         <Paper id="paperCard">
-                            <h1>Family Members</h1>
-                            {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
+                            <h1>Artefact Members</h1>
+                            {this.state.isAdmin && (<EditModal action={this.handleModal} artefact={this.state.artefact}></EditModal>)
                             }
-                            <CustomSlider cards={this.state.family["users"]}></CustomSlider>
+                            <CustomSlider cards={this.state.artefact["authUsers"]}></CustomSlider>
                         </Paper>
-                        <Paper id="paperCard">
+                        {/* <Paper id="paperCard">
                             <h1>Other Users</h1>
-                            {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
+                            {this.state.isAdmin && (<EditModal action={this.handleModal} artefact={this.state.artefact}></EditModal>)
                             }
-                            <CustomSlider cards={this.state.users["users"]}></CustomSlider>
-                        </Paper>
+                            <CustomSlider cards={this.state.artefact["authUsers"]}></CustomSlider>
+                        </Paper> */}
                     </div>
                 }
             </div>
         );
     }
 }
-const ViewArtefactDetails = withFirebase(FamilyDetails);
+const ViewArtefactDetails = withFirebase(ArtefactDetails);
 export { ViewArtefactDetails }
 
 // Ensures only an authorised user can view families (that they belong in)
