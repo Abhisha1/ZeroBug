@@ -36,38 +36,7 @@ class Firebase {
   }
 
   /********************************************************************** */
-  /**
-   * Uploads the artefact to the server storage, using a specified location folder under the image's name
-   * @param image the image to be uploaded
-   * @param the the state of the parent class invoking the upload
-   * @param location the folder under which the image file should be stored on server
-   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
-   */
-  uploadArtefact = (image, th, location, dbGroupName) => {
-    this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
-      this.getProfileImageURL(th, location, location + image.name, dbGroupName);
-      console.log('success uploading');
-    }).catch(error => {
-      console.log("Written data FAILED");
-    });
-  }
 
-  /**
-   * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
-   * @param image the image to be uploaded
-   * @param the the state of the parent class invoking the upload
-   * @param location the folder under which the image file should be stored on server
-   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
-   */
-  uploadPlaceholderImage = (imageString, location, dbGroupName) => {
-    this.storage().ref().child(location + dbGroupName).putString(imageString)
-      .then(snapshot => {
-        console.log(snapshot);
-        this.storage().ref().child(location + dbGroupName).updateMetadata({ contentType: 'image/png' })
-      })
-
-
-  }
 
   /**
    * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
@@ -170,6 +139,7 @@ class Firebase {
         })
     })
   }
+
   getFamiliesImageURL = (th, location, familyNamesList) => {
     let familyImages = [];
 
@@ -184,20 +154,6 @@ class Firebase {
 
   }
 
-
-
-
-
-
-  // get a list of Artifact name data
-  getListArtifactName = (the) => {
-    let testArtifactName = [];
-    let tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', (data) => {
-      testArtifactName.push(data.val().artifactName);
-      the.setState({ ...the.state, artifactList: testArtifactName })
-    });
-  }
 
   // for home page
   /**
@@ -251,12 +207,6 @@ class Firebase {
   }
 
 
-
-
-
-
-
-
   //upload the files
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image, th) => {
@@ -267,17 +217,6 @@ class Firebase {
 
     );
     //console.log(aaa);
-  }
-
-  //delete the file
-  testDeleteFile = (the, filepath) => {
-    var desertRef = this.storage().ref().child(filepath);
-
-    desertRef.delete().then(function () {
-      console.log("delete the file");
-    }).catch(function (error) {
-      // ...
-    });
   }
 
   //get a list of storage files Names
@@ -308,8 +247,6 @@ class Firebase {
     newPostRef.set({
       fileURL: filepath,
     });
-
-
   }
 
   //get the image file path that store in the firebase storage
@@ -448,6 +385,7 @@ class Firebase {
       this.database().ref('/families/' + name).on("value", onData, onError)
     });
   }
+
   /**
    * Creates a new family and uploads to database
    * @param users The family members
@@ -468,6 +406,7 @@ class Firebase {
       })
     )
   }
+
   /**
    * Adds a user to the specified collection (artefact or family)
    * @param user The user to be added
@@ -584,6 +523,10 @@ class Firebase {
         return error;
       })
     )
+  }
+
+  uploadArtefactFile = (artefactName, filename) => {
+    
   }
 
   /**
