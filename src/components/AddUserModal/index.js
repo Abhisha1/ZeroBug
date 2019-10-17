@@ -45,6 +45,10 @@ class CustomModal extends Component {
         this.setState({ [name]: value , searchedResults: []});
     }
 
+    /**
+     * Calls the parent classes search function to either search families or users
+     * @param firebase Connects to firebase functions
+     */
     searchData(firebase){
         this.setState({loading:true, noMatches: false});
         this.props.search(firebase, this.state.name, this)
@@ -59,7 +63,6 @@ class CustomModal extends Component {
     render() {
         return (
             <div>
-                {console.log(this.props.title)}
                 <Button variant="outline-secondary" onClick={this.handleModal} id="add-user-button">Add {this.props.title}</Button>
                 <Modal show={this.state.showModal} onHide={this.handleModal}>
                     <Modal.Header closeButton>

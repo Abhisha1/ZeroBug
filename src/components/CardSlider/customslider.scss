@@ -1,11 +1,13 @@
 #sliderCard{
     border: none;
+    margin: 0 auto;
     display: flex !important;
     justify-content: center;
     flex-direction: column;
 }
 #memberAvatar{
     align-self: center;
+    justify-self: center;
 }
 #memberName{
     text-align: center;

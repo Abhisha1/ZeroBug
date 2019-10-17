@@ -380,18 +380,14 @@ class Firebase {
    * @return a success message when successful, or an error
    */
   searchFamilies = (family, the) => {
-    console.log("about to serahc");
     this.database().ref('/families/').on("value", function (snapshot) {
-      console.log(snapshot.val().length);
       let matches = []
       if (snapshot.val()) {
         for (let key in snapshot.val()) {
-          console.log(key.includes(family));
           if (key.includes(family)) {
             matches.push(snapshot.val()[key]);
           }
         }
-        console.log(matches)
         the.setState({ ...the.state, searchedResults: matches, loading: false });
       }
       else{

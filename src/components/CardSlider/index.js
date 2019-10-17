@@ -46,13 +46,14 @@ class CustomSlider extends Component {
   render() {
 
     let slickSlider = <Slider id="customSlider" {...this.settings} ref={c => { this.slickSlider = c }}>
-
+      
       {/* Passes through families data to render in slider */}
       {this.props.cards.map(item => (
         <div key={item} id="sliderCard">
           {item.photoURL ? <Avatar id="memberAvatar"
             src={item.photoURL}
-          /> : <GroupIcon></GroupIcon>}
+          /> : <GroupIcon id="memberAvatar"></GroupIcon>}
+          {console.log(item.memberName)}
           {item.name ? <h4 id="memberName">
             {item.name}
           </h4> : <h4 id="memberName">

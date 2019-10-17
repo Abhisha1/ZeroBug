@@ -80,9 +80,8 @@ function UploadArtefactForm(props) {
     let updatedAuthFamilies = values.authFamilies;
     if (values.authFamilies.indexOf(familiesFromModal) === -1) {
       updatedAuthFamilies.push({
-        displayName: familiesFromModal.displayName,
-        uid: familiesFromModal.uid,
-        photoURL: familiesFromModal.photoURL,
+        displayName: familiesFromModal.name,
+        admin: familiesFromModal.admin
       });
     }
     setValues({ ...values, ["authFamilies"]: updatedAuthFamilies});
@@ -104,11 +103,22 @@ function UploadArtefactForm(props) {
 
   };
 
-
+  /**
+   * Function passed to child prop to search families corresponding to user input
+   * @param firebase Connects to firebase server and functions
+   * @param familyName User entered family name
+   * @param modalState The modals current state
+   */
   const searchFamilies = (firebase, familyName, modalState) => {
     firebase.searchFamilies(familyName, modalState);
   }
 
+  /**
+   * Function passed to child prop to search users corresponding to user input
+   * @param firebase Connects to firebase server and functions
+   * @param familyMemberName User entered user's name
+   * @param modalState The modals current state
+   */
   const searchForUsers = (firebase, familyMemberName, modalState) => {
     firebase.searchUsers(familyMemberName, modalState)
   }
@@ -189,6 +199,7 @@ function UploadArtefactForm(props) {
         </Grid>
       </Grid>
       <CustomSlider cards={values.authUsers}></CustomSlider>
+      
       <CustomSlider cards={values.authFamilies}></CustomSlider>
       <Button
         type="submit"
