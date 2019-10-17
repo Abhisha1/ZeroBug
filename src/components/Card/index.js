@@ -26,31 +26,28 @@ class Cards extends Component{
             <div>
             <Box boxShadow={3} height="100%" width="100%">
               <Card class= "card">
-                <CardActionArea>
-                  <CardMedia
-                    style={{height: 0, paddingTop: '56.25%'}}
-                    image="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
-                    title="Contemplative Reptile"
-                  />
-                  </CardActionArea>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      *Artifact Name*
-                    </Typography>
-                    <Divider/>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                      *Desciption*
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                      *Date*
-                    </Typography>
-                  </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Explore!
-                  </Button>
-                </CardActions>
-              </Card>
+                    <CardActionArea href={this.props.link}>
+                      <CardMedia
+                        style={{height: 0, paddingTop: '56.25%'}}
+                        image="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
+                        title="Contemplative Reptile"
+                      />
+                      </CardActionArea>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {this.props.artifactName}
+                        </Typography>
+                        <Divider/>
+                        <Typography variant="body 1" component="p">
+                          {this.props.description}
+                        </Typography>
+                        <div style={{position: "absolute", bottom: 0, left: 0, margin:20}}>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              {this.props.date}
+                            </Typography>
+                        </div>
+                      </CardContent>
+                  </Card>
               </Box>
             </div>
         );
