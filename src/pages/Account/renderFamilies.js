@@ -26,7 +26,6 @@ class RenderFamilies extends Component{
     }
 
     render(){
-
         return(
             <div>
                 <div id="familiesWrapper">
