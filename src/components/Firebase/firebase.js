@@ -562,13 +562,21 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, description, authFamilies, authUsers) => {
+  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    console.log(name);
+    console.log(date);
+    console.log(location);
+    console.log(artefactBrief);
+    console.log(description);
+    console.log(authFamilies);
+    console.log(authUsers);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
         location: location,
+        artefactBrief: artefactBrief,
         description: description,
         authFamilies: authFamilies,
         authUsers: authUsers,
