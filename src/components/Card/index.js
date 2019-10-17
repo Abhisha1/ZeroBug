@@ -22,6 +22,7 @@ class Cards extends Component{
         super(props);
     }
     render(){
+        const date = new Date().toDateString();
         return (
             <div>
             <Box boxShadow={3} height="100%" width="100%">
@@ -42,8 +43,8 @@ class Cards extends Component{
                           {this.props.description}
                         </Typography>
                         <div style={{position: "absolute", bottom: 0, left: 0, margin:20}}>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              {this.props.date}
+                            <Typography colour="secondary">
+                                {date}
                             </Typography>
                         </div>
                       </CardContent>
