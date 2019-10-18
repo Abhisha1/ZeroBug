@@ -33,7 +33,7 @@ const INIT_STATE = {
   date: new Date(),
   imagesURL: [],
   imageAdded: false,
-  image: null,
+  images: [],
 };
 
 const useStyles = makeStyles(theme => ({
@@ -70,8 +70,8 @@ function UploadArtefactForm(props) {
   // Update a file to upload for the artefact
   const handleFileChange = e => {
     if (e.target.files[0]) {
-      const file = e.target.files[0];
-      setValues({ ...values, ["image"]: file, ["imageAdded"]: true });
+      const filesList = e.target.files;
+      setValues({ ...values, ["images"]: filesList, ["imageAdded"]: true });
     }
   }
 
@@ -90,8 +90,12 @@ function UploadArtefactForm(props) {
 
   // add a family to the list of authFamilies
   const handleFamilies = familiesFromModal => {
+    console.log(familiesFromModal);
     let updatedAuthFamilies = values.authFamilies;
     if (values.authFamilies.indexOf(familiesFromModal) === -1) {
+      familiesFromModal.users.map(user => {
+        handleUsers(user)
+      });
       updatedAuthFamilies.push({
         displayName: familiesFromModal.displayName,
         photoURL: familiesFromModal.photoURL
@@ -102,9 +106,9 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new image for the artefact
   const onImageSubmit = event => {
-    props.firebase.uploadArtefactFile(values.image, values.artefactName, values, setValues)
+    props.firebase.uploadArtefactFiles(values.images, values.artefactName, values, setValues)
       .then(() => {
-        setValues({ ...values, ["image"]: null });
+        setValues({ ...values, ["images"]: [] });
       })
       .catch(error => {
         console.log("IMAGE UPLOAD FAILED")
@@ -116,7 +120,15 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.artefactBrief, values.description, values.authFamilies, values.authUsers)
+    props.firebase.createArtefact(values.artefactName,
+      selectedDate,
+      values.location,
+      values.artefactBrief,
+      values.description,
+      values.authFamilies,
+      values.authUsers,
+      values.imagesURL
+      )
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
@@ -278,6 +290,7 @@ function UploadArtefactForm(props) {
             multiple
             type="file"
             name="Upload"
+            multiple
             onChange={handleFileChange}
           />
           <label htmlFor="imageUpload">

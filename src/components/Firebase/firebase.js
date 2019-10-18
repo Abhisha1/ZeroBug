@@ -324,7 +324,8 @@ class Firebase {
           .then(url => {
             let newFamily = {
               displayName: family.name,
-              photoURL: url
+              photoURL: url,
+              users: family.users
             }
             console.log(newFamily)
             matches.push(newFamily);
@@ -497,13 +498,14 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers) => {
+  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, imagesURL) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
         location: location,
+        imagesURL: imagesURL,
         artefactBrief: artefactBrief,
         description: description,
         authFamilies: authFamilies,
@@ -522,23 +524,28 @@ class Firebase {
     )
   }
 
-  uploadArtefactFile = (image, artefactName, values, setValues) => {
-    let currentList = values.imagesURL;
-    let artefactCount = values.imagesURL.length + 1;
-    console.log(artefactCount);
-    this.storage().ref().child("artefacts/" + artefactName + "/" + artefactCount).put(image).then((snapshot) => {
-      console.log("Success");
-      this.storage().ref().child("artefacts/" + artefactName + "/" + artefactCount).getDownloadURL().then((url) => {
-        currentList.push(url);
-        setValues({ ...values, ["imagesURL"]: currentList});
-        return MESSAGES.SUCCESS_MESSAGE
+  uploadArtefactFiles = (images, artefactName, values, setValues) => {
+    let i;
+    for (i=0; i<images.length; i++){
+      let image = images[i];
+      let currentList = values.imagesURL;
+      console.log(i);
+      this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
+        console.log("artefacts/" + artefactName + "/" + i);
+        this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
+          currentList.push(url);
+          setValues({ ...values, ["imagesURL"]: currentList});
+        }).catch(error => {
+          console.log("Fetching URL FAILED");
+          return error;
+        })
+        console.log('success uploading');
       }).catch(error => {
         console.log("Written data FAILED");
-      })
-      console.log('success uploading');
-    }).catch(error => {
-      console.log("Written data FAILED");
-    });
+        return error;
+      });
+    }
+    return MESSAGES.SUCCESS_MESSAGE;
   }
 
 
