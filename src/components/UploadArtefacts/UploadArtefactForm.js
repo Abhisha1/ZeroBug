@@ -33,7 +33,7 @@ const INIT_STATE = {
   date: new Date(),
   imagesURL: [],
   imageAdded: false,
-  image: null,
+  images: [],
 };
 
 const useStyles = makeStyles(theme => ({
@@ -70,8 +70,8 @@ function UploadArtefactForm(props) {
   // Update a file to upload for the artefact
   const handleFileChange = e => {
     if (e.target.files[0]) {
-      const file = e.target.files[0];
-      setValues({ ...values, ["image"]: file, ["imageAdded"]: true });
+      const filesList = e.target.files;
+      setValues({ ...values, ["images"]: filesList, ["imageAdded"]: true });
     }
   }
 
@@ -90,6 +90,7 @@ function UploadArtefactForm(props) {
 
   // add a family to the list of authFamilies
   const handleFamilies = familiesFromModal => {
+    console.log(familiesFromModal);
     let updatedAuthFamilies = values.authFamilies;
     let duplicate = false
     // Checks if family exists already
@@ -109,31 +110,38 @@ function UploadArtefactForm(props) {
   }
 
   // Handles submission of a new image for the artefact
-  const onImageSubmit = event => {
-    console.log("onImageSubmit")
-    props.firebase.uploadArtefactFile(values.image, values.artefactName, values, setValues)
+  const onImageSubmit = () => {
+    props.firebase.uploadArtefactFiles(values.images, values.artefactName, values, setValues)
       .then(() => {
-        setValues({ ...values, ["image"]: null });
+        setValues({ ...values, ["images"]: [] });
+        return "Success";
       })
       .catch(error => {
         console.log("IMAGE UPLOAD FAILED")
+        return error;
       })
 
-    event.preventDefault()
   };
 
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    console.log("on sumbit entered");
-    props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.artefactBrief, values.description, values.authFamilies, values.authUsers)
+    props.firebase.createArtefact(values.artefactName,
+      selectedDate,
+      values.location,
+      values.artefactBrief,
+      values.description,
+      values.authFamilies,
+      values.authUsers,
+      values.imagesURL
+      )
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
         onImageSubmit()
-          .then(() => {
-            props.history.push(ROUTES.HOME);
-          })
+        .then(() => {
+          props.history.push(ROUTES.HOME);
+        })
 
       })
       .catch(error => {
@@ -244,8 +252,8 @@ function UploadArtefactForm(props) {
                 />
               </Grid>
             </Grid>
-            <Grid container>
-              <Grid item xs={12} direction="row" alignItems="center" justify="center">
+            <Grid container direction="row" alignItems="center" justify="center">
+              <Grid item xs={12}>
                 <TextField
                   id="outlined-multiline-static"
                   label="The story behind this artefact"
@@ -267,6 +275,19 @@ function UploadArtefactForm(props) {
                 <CustomModal action={handleFamilies} title="Families" search={searchFamilies} />
               </Grid>
             </Grid>
+            <Grid container justify="center">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={isInvalid}
+                onClick={onSubmit}
+              >
+                Submit
+              </Button>
+            </Grid>
           </form>
         </Grid>
         <Grid item xs={6}>
@@ -275,6 +296,8 @@ function UploadArtefactForm(props) {
             multiple
             type="file"
             name="Upload"
+            multiple
+            accept="image/*"
             onChange={handleFileChange}
           />
           <label htmlFor="imageUpload">

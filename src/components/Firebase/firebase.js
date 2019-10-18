@@ -294,7 +294,6 @@ class Firebase {
       name: user
     })
       .then(response => {
-        console.log(response);
         if (response.data.msg === "Success") {
           the.setState({ ...the.state, searchedResults: response.data.users, loading: false });
         }
@@ -325,7 +324,8 @@ class Firebase {
           .then(url => {
             let newFamily = {
               displayName: family.name,
-              photoURL: url
+              photoURL: url,
+              users: family.users
             }
             console.log(newFamily)
             matches.push(newFamily);
@@ -498,24 +498,25 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers) => {
+  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, imagesURL) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
         location: location,
+        imagesURL: imagesURL,
         artefactBrief: artefactBrief,
         description: description,
         authFamilies: authFamilies,
         authUsers: authUsers,
+        artefactName: name,
         owner: {
           email: currentUser.email,
           name: currentUser.displayName,
           uid: currentUser.uid,
         }
       }).then(() => {
-        console.log("success");
         return MESSAGES.SUCCESS_MESSAGE;
       }).catch(error => {
         return error;
@@ -523,19 +524,58 @@ class Firebase {
     )
   }
 
-  uploadArtefactFile = (image, artefactName, values, setValues) => {
-    let currentList = values.imagesURL;
-    this.storage().ref().child("artefacts/" + artefactName).put(image).then((snapshot) => {
-      this.storage().ref().child("artefacts/" + artefactName).getDownloadURL().then((url) => {
-        currentList.push(url);
-        setValues({ ... values, ["imagesURL"]: currentList});
+  uploadArtefactFiles = (images, artefactName, values, setValues) => {
+    let imagesArr = Array.from(images);
+    console.log(imagesArr);
+    return Promise.all(imagesArr.forEach(image => {
+      console.log("IMAGE UPLOADING");
+      console.log(image.name);
+      let currentList = values.images.URL;
+      return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
+        .then((snapshot) => {
+          console.log("IMAGE URL GETING");
+          console.log(image.name);
+          return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
+            .then((url) => {
+              currentList.push(url);
+              setValues({ ...values, ["imagesURL"]: currentList});
+            }).catch(error => {
+              console.log("Fetching URL FAILED");
+              return error
+            })
+        })
+        .catch(error => {
+          console.log("Upload IMAGE FAILED");
+          console.error(error);
+          return error
+        })
+    })).then(() => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    })
+
+    //***********************************************************************//
+    /*
+    let i;
+    for (i=0; i<images.length; i++){
+      let image = images[i];
+      let currentList = values.imagesURL;
+      this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
+        console.log("artefacts/" + artefactName + "/" + i);
+        this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
+          currentList.push(url);
+          setValues({ ...values, ["imagesURL"]: currentList});
+        }).catch(error => {
+          console.log("Fetching URL FAILED");
+          return error;
+        })
+        console.log('success uploading');
       }).catch(error => {
         console.log("Written data FAILED");
-      })
-      console.log('success uploading');
-    }).catch(error => {
-      console.log("Written data FAILED");
-    });
+        return error;
+      });
+    }
+    return MESSAGES.SUCCESS_MESSAGE;
+    */
   }
 
 
