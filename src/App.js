@@ -17,6 +17,7 @@ import PasswordForgetPage from './pages/PasswordForget';
 import HomePage from './pages/Home';
 import AdminPage from './pages/Admin';
 import ViewFamily from './pages/ViewFamily';
+import ViewArtefact from './pages/ViewArtefact';
 
 import * as ROUTES from './constants/routes';
 import { withAuthentication } from './components/Session';
@@ -37,6 +38,7 @@ const App = () => (
       <Route path={ROUTES.CREATE_FAMILY} component={CreateFamilyPage} />
       <Route path={ROUTES.ARTIFACT} component={Artifact} />
       <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} />
+      <Route path={ROUTES.VIEW_ARTEFACT} component={ViewArtefact} />
       {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
       <Route path={ROUTES.HOME} component={HomePage} />
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
