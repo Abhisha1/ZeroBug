@@ -32,7 +32,7 @@ const Navigation = () => (
 const NavigationAuth = ( user ) => (
   <Nav className="ml-auto">
     <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
-    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.photoURL} /></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.photoURL}>U</Avatar></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
     <SignOutButton />
   </Nav>

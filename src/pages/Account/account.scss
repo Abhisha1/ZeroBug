@@ -29,7 +29,7 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 1400px;
+    height: 1020px;
     padding-top: 66px;
     max-width: 100% !important;
 }
@@ -209,10 +209,8 @@ input.testInput{
 
 @media only screen and (max-width: 6000px) {
     #avatarBox{
-        background-color: cyan;
         height: 256px;
         width: 256px;
-        border-radius: 50%;
     }
     .aButton{
         //border-radius: 90px;
@@ -222,10 +220,8 @@ input.testInput{
 
 @media only screen and (max-width: 1000px) {
     #avatarBox{
-        background-color: cyan;
         height: 128px;
         width: 128px;
-        border-radius: 50%;
     }
     .aButton{
         //border-radius: 30px;
@@ -235,10 +231,8 @@ input.testInput{
 
 @media only screen and (max-width: 500px) {
     #avatarBox{
-        background-color: cyan;
         height: 64px;
         width: 64px;
-        border-radius: 50%
     }
     #changeAvatarButton{
         border-radius: 20px;
