@@ -102,7 +102,6 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new image for the artefact
   const onImageSubmit = event => {
-    console.log("onImageSubmit")
     props.firebase.uploadArtefactFile(values.image, values.artefactName, values, setValues)
       .then(() => {
         setValues({ ...values, ["image"]: null });
@@ -117,7 +116,6 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    console.log("on sumbit entered");
     props.firebase.createArtefact(values.artefactName, selectedDate, values.location, values.artefactBrief, values.description, values.authFamilies, values.authUsers)
       .then(() => {
         setValues(INIT_STATE);
@@ -126,7 +124,7 @@ function UploadArtefactForm(props) {
         .then(() => {
           props.history.push(ROUTES.HOME);
         })
-        
+
       })
       .catch(error => {
         console.error(error)
@@ -236,8 +234,8 @@ function UploadArtefactForm(props) {
                 />
               </Grid>
             </Grid>
-            <Grid container>
-              <Grid item xs={12} direction="row" alignItems="center" justify="center">
+            <Grid container direction="row" alignItems="center" justify="center">
+              <Grid item xs={12}>
                 <TextField
                   id="outlined-multiline-static"
                   label="The story behind this artefact"
@@ -259,6 +257,19 @@ function UploadArtefactForm(props) {
                 <CustomModal action={handleFamilies} title="Families" search={searchFamilies} />
               </Grid>
             </Grid>
+            <Grid container justify="center">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={isInvalid}
+                onClick={onSubmit}
+              >
+                Submit
+              </Button>
+            </Grid>
           </form>
         </Grid>
         <Grid item xs={6}>
@@ -271,24 +282,12 @@ function UploadArtefactForm(props) {
           />
           <label htmlFor="imageUpload">
           <Button
-            variant="contained" component="span"
+            variant="contained"
+            component="span"
           >
             UPLOAD
           </Button>
           </label>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              disabled={isInvalid}
-              onClick={onSubmit}
-            >
-              Submit
-            </Button>
-        </Grid>
-        <Grid item xs={6}>
         </Grid>
       </Grid>
       <Grid container direction="column">

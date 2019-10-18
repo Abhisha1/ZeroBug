@@ -294,7 +294,6 @@ class Firebase {
       name: user
     })
       .then(response => {
-        console.log(response);
         if (response.data.msg === "Success") {
           the.setState({ ...the.state, searchedResults: response.data.users, loading: false });
         }
@@ -509,13 +508,13 @@ class Firebase {
         description: description,
         authFamilies: authFamilies,
         authUsers: authUsers,
+        artefactName: name,
         owner: {
           email: currentUser.email,
           name: currentUser.displayName,
           uid: currentUser.uid,
         }
       }).then(() => {
-        console.log("success");
         return MESSAGES.SUCCESS_MESSAGE;
       }).catch(error => {
         return error;
@@ -525,10 +524,14 @@ class Firebase {
 
   uploadArtefactFile = (image, artefactName, values, setValues) => {
     let currentList = values.imagesURL;
-    this.storage().ref().child("artefacts/" + artefactName).put(image).then((snapshot) => {
-      this.storage().ref().child("artefacts/" + artefactName).getDownloadURL().then((url) => {
+    let artefactCount = values.imagesURL.length + 1;
+    console.log(artefactCount);
+    this.storage().ref().child("artefacts/" + artefactName + "/" + artefactCount).put(image).then((snapshot) => {
+      console.log("Success");
+      this.storage().ref().child("artefacts/" + artefactName + "/" + artefactCount).getDownloadURL().then((url) => {
         currentList.push(url);
-        setValues({ ... values, ["imagesURL"]: currentList});
+        setValues({ ...values, ["imagesURL"]: currentList});
+        return MESSAGES.SUCCESS_MESSAGE
       }).catch(error => {
         console.log("Written data FAILED");
       })
