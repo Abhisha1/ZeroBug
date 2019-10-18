@@ -515,6 +515,7 @@ class Firebase {
           uid: currentUser.uid,
         }
       }).then(() => {
+        console.log("success");
         return MESSAGES.SUCCESS_MESSAGE;
       }).catch(error => {
         return error;
