@@ -91,13 +91,21 @@ function UploadArtefactForm(props) {
   // add a family to the list of authFamilies
   const handleFamilies = familiesFromModal => {
     let updatedAuthFamilies = values.authFamilies;
-    if (values.authFamilies.indexOf(familiesFromModal) === -1) {
+    let duplicate = false
+    // Checks if family exists already
+    values.authFamilies.map(family => {
+      if (family.displayName === familiesFromModal.displayName) {
+        duplicate = true;
+      }
+    })
+    //Adds family if it doesnt exist already
+    if (!duplicate){
       updatedAuthFamilies.push({
         displayName: familiesFromModal.displayName,
         photoURL: familiesFromModal.photoURL
       });
+      setValues({ ...values, ["authFamilies"]: updatedAuthFamilies });
     }
-    setValues({ ...values, ["authFamilies"]: updatedAuthFamilies });
   }
 
   // Handles submission of a new image for the artefact
@@ -123,10 +131,10 @@ function UploadArtefactForm(props) {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
         onImageSubmit()
-        .then(() => {
-          props.history.push(ROUTES.HOME);
-        })
-        
+          .then(() => {
+            props.history.push(ROUTES.HOME);
+          })
+
       })
       .catch(error => {
         console.error(error)
@@ -270,32 +278,32 @@ function UploadArtefactForm(props) {
             onChange={handleFileChange}
           />
           <label htmlFor="imageUpload">
-          <Button
-            variant="contained" component="span"
-          >
-            UPLOAD
+            <Button
+              variant="contained" component="span"
+            >
+              UPLOAD
           </Button>
           </label>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              disabled={isInvalid}
-              onClick={onSubmit}
-            >
-              Submit
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            disabled={isInvalid}
+            onClick={onSubmit}
+          >
+            Submit
             </Button>
         </Grid>
         <Grid item xs={6}>
         </Grid>
       </Grid>
       <Grid container direction="column">
-        <Grid item>
+        <Grid item style={{ width: "100%" }}>
           <CustomSlider cards={values.authUsers} />
         </Grid>
-        <Grid item>
+        <Grid item style={{ width: "100%" }}>
           <CustomSlider cards={values.authFamilies} />
         </Grid>
       </Grid>
