@@ -3,13 +3,13 @@ import { withFirebase } from '../../components/Firebase';
 import { withRouter } from 'react-router-dom';
 import FamilySlider from "./cardSlider";
 
-class RenderFamilies extends Component{
+
+class RenderArtefacts extends Component{
     constructor(props){
         super(props);
         this.state = {
-            familyList: null,
+            artefactList: null,
             username: null,
-            familyImageURL: [],
             dataReady: false,
             cardData: null,
         }
@@ -20,7 +20,7 @@ class RenderFamilies extends Component{
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
                 this.setState({username: user.displayName});
-                this.props.firebase.getYourFamilyNames(this, this.state.username);
+                this.props.firebase.getArtefactData(this, this.state.username);
             }
         })
     }
@@ -28,17 +28,10 @@ class RenderFamilies extends Component{
     render(){
         return(
             <div>
-                <div id="familiesWrapper">
-					<h1 id="account-heading">Your Families</h1>
-                    <FamilySlider cards=
-                        {this.state.dataReady?
-                            this.state.cardData:[]
-                        }
-					/>
-				</div>
+                hello
             </div>
-        )
+        );
     }
 }
-const renderThings = withRouter(withFirebase(RenderFamilies));
-export default renderThings;
+const renderThings = withRouter(withFirebase(RenderArtefacts));
+export default RenderArtefacts;

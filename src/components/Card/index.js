@@ -31,9 +31,9 @@ class Cards extends Component{
                       <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
                         image="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
-                        title="Contemplative Reptile"
+                        title={this.props.artifactName}
                       />
-                      </CardActionArea>
+
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                             {this.props.artifactName}
@@ -42,12 +42,14 @@ class Cards extends Component{
                         <Typography variant="body 1" component="p">
                           {this.props.description}
                         </Typography>
-                        <div style={{position: "absolute", bottom: 0, left: 0, margin:20}}>
-                            <Typography color="textSecondary">
-                                {date.toDateString()}
-                            </Typography>
-                        </div>
+
                       </CardContent>
+                      </CardActionArea>
+                      <div style={{position: "absolute", bottom: 0, left: 0, margin:20}}>
+                          <Typography color="textSecondary">
+                              {date.toDateString()}
+                          </Typography>
+                      </div>
                   </Card>
               </Box>
             </div>

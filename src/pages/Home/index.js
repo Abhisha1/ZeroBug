@@ -10,13 +10,30 @@ import "./container.scss"
 import {Link} from 'react-router-dom';
 import { withAuthorization } from "./../../components/Session";
 import RenderFamilies from "./renderFamilies";
+import RenderArtefacts from './renderArtefacts';
 
 
 class HomePage extends Component {
-
+    constructor(props){
+        super(props);
+        this.state = {
+            artefactList: null,
+            username: null,
+            dataReady: false,
+            cardData: null,
+        }
+    }
+    componentDidMount =() => {
+        this.props.firebase.auth.onAuthStateChanged((user)=>{
+            if(user){
+                this.setState({username: user.displayName});
+                this.props.firebase.getArtefactData(this, this.state.username);
+            }
+        })
+    }
 
     render(){
-
+        console.log(this.state.artefactList);
         return(
 
             <div>
@@ -33,12 +50,12 @@ class HomePage extends Component {
                     </Typography>
                 </div>
                 <div class="container">
-                    <Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
-                    <Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
-                    <Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
-                    <Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
-                    <Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
+                    //<Cards artifactName="artifactName" description="description" date="01/01/2000" link="/"/>
+                    {for(let item in this.state.artefactList)
+                        <Cards artifactName={item.name} description={item.name.artefactBrief} date="01/01/2000" link="/"/>
+                    
                 </div>
+
             </div>
 
         );

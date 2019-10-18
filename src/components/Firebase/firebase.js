@@ -115,7 +115,7 @@ class Firebase {
       if (dbGroupName === "/artefactImages"){
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
-      
+
       //update the photoURL
       if (location == "profileImages/"){
         this.updateUserImage(url);
@@ -153,19 +153,19 @@ class Firebase {
    */
 
   getImageURL = (th, location, dbGroupName, user) => {
- 
+
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
-  
+
       th.setState({ ...th.state, imageURL: url});
-      
+
       //update the user profile URL
       user.updateProfile({
         displayName: user.displayName,
         photoURL: url
       })
-      
+
       //console.log(user.photoURL);
-      
+
 
     }).catch(error => {
       console.log("Show data FAILED");
@@ -187,11 +187,11 @@ class Firebase {
 
       this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url)=>{
 
-        
+
         familyImages.push(url);
         th.setState({...th.state, familyImageURL: familyImages});
       })
-    }    
+    }
   }
 
 
@@ -234,10 +234,10 @@ class Firebase {
               name: data.val()[key].name,
             }
 
-            this.getFamilyImageURL(data.val()[key].name,  
+            this.getFamilyImageURL(data.val()[key].name,
             (avatar) => {
-              tempMem.avatar = avatar; 
-              now ++; 
+              tempMem.avatar = avatar;
+              now ++;
               if (now == count){
                 the.setState({dataReady: true})
               }
@@ -265,10 +265,10 @@ class Firebase {
             name: data.val()[key].name,
           }
 
-          this.getFamilyImageURL(data.val()[key].name,  
+          this.getFamilyImageURL(data.val()[key].name,
           (avatar) => {
-            tempMem.avatar = avatar; 
-            now ++; 
+            tempMem.avatar = avatar;
+            now ++;
             if (now == count){
               the.setState({dataReady: true})
             }
@@ -306,10 +306,10 @@ class Firebase {
             name: data.val()[key].name,
           }
 
-          this.getFamilyImageURL(data.val()[key].name,  
+          this.getFamilyImageURL(data.val()[key].name,
           (avatar) => {
-            tempMem.avatar = avatar; 
-            now ++; 
+            tempMem.avatar = avatar;
+            now ++;
             if (now == count){
               the.setState({dataReady: true})
             }
@@ -332,10 +332,32 @@ class Firebase {
       this.storage().ref().child("familyImages/" + familyName).getDownloadURL().then((url)=>{
         callback(url);
       }
-      )    
+      )
   }
 
+  getArtefactData = (the, username) => {
+      let artefactList = [];
+      let tempRef = this.database().ref('/artefacts/');
+      tempRef.on("value", (data) =>{
 
+      let count = 0;
+
+      for (let key in data.val()) {
+          for(let user in data.val()[key].authUsers){
+              if(data.val()[key].authUsers[user].displayName == username){
+                  count ++;
+
+                  let tempMem = {
+                      name: data.val()[key],
+                  }
+                  artefactList.push(tempMem);
+              }
+          }
+      }
+      the.setState({...the.state, artefactList: artefactList});
+      the.setState({dataReady: true})
+  });
+}
 
 
 
@@ -516,7 +538,7 @@ class Firebase {
   /**
    * Adds a user to the specified family
    * @param user The user to be added
-   * @param family The family 
+   * @param family The family
    * @return A success message or error
    */
   addToFamily = (user, family) => {
@@ -534,7 +556,7 @@ class Firebase {
   /**
    * Removes a user to the specified family
    * @param user The user to be removed
-   * @param family The family 
+   * @param family The family
    * @return A success message or error
    */
   removeFromFamily = (user, family) => {
@@ -624,33 +646,6 @@ class Firebase {
     return firebase.database().ref().update(updates);
   }
 
-
-  /**
-   * get the artifact data
-   * @param artifact ID
-   * @param the component to be set the state
-   */
-  getArtifactData = (artifactID, the) => {
-    let artifactName = "?";
-    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
-      artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
-      the.setState({ ...the.state, artifactName: artifactName })
-    })
-  }
-
-
-  /**
-   * Get a list of Artifact name data
-   * @param the component to be set the state
-   */
-  getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', function (data) {
-      testArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, artifactList: testArtifactName })
-  }
 
 
   /**
