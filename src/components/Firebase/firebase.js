@@ -525,11 +525,40 @@ class Firebase {
   }
 
   uploadArtefactFiles = (images, artefactName, values, setValues) => {
+    let imagesArr = Array.from(images);
+    console.log(imagesArr);
+    return Promise.all(imagesArr.forEach(image => {
+      console.log("IMAGE UPLOADING");
+      console.log(image.name);
+      let currentList = values.images.URL;
+      return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
+        .then((snapshot) => {
+          console.log("IMAGE URL GETING");
+          console.log(image.name);
+          return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
+            .then((url) => {
+              currentList.push(url);
+              setValues({ ...values, ["imagesURL"]: currentList});
+            }).catch(error => {
+              console.log("Fetching URL FAILED");
+              return error
+            })
+        })
+        .catch(error => {
+          console.log("Upload IMAGE FAILED");
+          console.error(error);
+          return error
+        })
+    })).then(() => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    })
+
+    //***********************************************************************//
+    /*
     let i;
     for (i=0; i<images.length; i++){
       let image = images[i];
       let currentList = values.imagesURL;
-      console.log(i);
       this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
         console.log("artefacts/" + artefactName + "/" + i);
         this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
@@ -546,6 +575,7 @@ class Firebase {
       });
     }
     return MESSAGES.SUCCESS_MESSAGE;
+    */
   }
 
 

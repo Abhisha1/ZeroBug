@@ -105,16 +105,17 @@ function UploadArtefactForm(props) {
   }
 
   // Handles submission of a new image for the artefact
-  const onImageSubmit = event => {
+  const onImageSubmit = () => {
     props.firebase.uploadArtefactFiles(values.images, values.artefactName, values, setValues)
       .then(() => {
         setValues({ ...values, ["images"]: [] });
+        return "Success";
       })
       .catch(error => {
         console.log("IMAGE UPLOAD FAILED")
+        return error;
       })
 
-    event.preventDefault()
   };
 
 
@@ -291,6 +292,7 @@ function UploadArtefactForm(props) {
             type="file"
             name="Upload"
             multiple
+            accept="image/*"
             onChange={handleFileChange}
           />
           <label htmlFor="imageUpload">
