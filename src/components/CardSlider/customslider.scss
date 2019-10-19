@@ -9,14 +9,12 @@
 }
 #memberName{
     text-align: center;
+    font-size: 3vw;
 }
 
-#slider{
+#customSlider{
     align-self: center;
 }
-
-.slick-prev:before,
-.slick-next:before {
-  color: #ffe960;
-  size: 100;
+.slick-prev:before, .slick-next:before{
+  color: #2c2c2b !important;
 }
