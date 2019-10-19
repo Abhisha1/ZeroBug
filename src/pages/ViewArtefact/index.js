@@ -74,7 +74,7 @@ class ArtefactDetails extends Component {
                             phtoURL: user.photoURL
                         }
                         console.log(value)
-                        if (user.uid === value.owner.uid) {
+                        if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true });
                         }
                         this.setState({ artefact: value, loading: false });
@@ -124,7 +124,7 @@ class ArtefactDetails extends Component {
                             <h1>Artefact Members</h1>
                             {this.state.isAdmin && (<EditModal action={this.handleModal} artefact={this.state.artefact}></EditModal>)
                             }
-                            <CustomSlider cards={this.state.artefact["authUsers"]}></CustomSlider>
+                            <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>
                         </Paper>
                         {/* <Paper id="paperCard">
                             <h1>Other Users</h1>
