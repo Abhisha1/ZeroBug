@@ -23,7 +23,7 @@ class RenderArtifact extends Component{
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
                 this.setState({uid: user.uid});
-                this.props.firebase.getArtefactData(this, this.state.uid);
+                this.props.firebase.getYourManageArtefactData(this, this.state.uid);
             }
         })
     }

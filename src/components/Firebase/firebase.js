@@ -759,7 +759,7 @@ getCookie = (cname) => {
    * @para the componenet set to be state
    * @para the username of the user to check artefacts for
    */
-  getArtefactData = (the, uid) => {
+  getYourManageArtefactData = (the, uid) => {
     let artefactList = [];
     let tempRef = this.database().ref('/artefacts/');
     tempRef.on("value", (data) =>{
