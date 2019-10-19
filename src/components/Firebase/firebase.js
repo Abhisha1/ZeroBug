@@ -814,8 +814,14 @@ getCookie = (cname) => {
 
     // parse through all the artefacts
     for (let key in data.val()) {
+
         //parse through all the authorised users for each artefact
         for(let user in data.val()[key].users){
+
+          console.log(data.val()[key])
+          console.log("aaaa");
+
+            console.log(data.val()[key].users[user].uid );
             if(data.val()[key].users[user].uid === uid){
                 count ++;
 
@@ -823,6 +829,7 @@ getCookie = (cname) => {
                     name: data.val()[key],
                 }
                 artefactList.push(tempMem);
+                console.log(artefactList);
             }
         }
     }
@@ -831,6 +838,33 @@ getCookie = (cname) => {
     the.setState({dataReady: true})
 });
 }
+
+
+getSearchArtifact = (input, the) => {
+  let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+    
+    // parse through all the artefacts
+    for (let key in data.val()) {
+      if(key==input){
+        let tempMem = {
+          name: data.val()[key],
+        }
+        artefactList.push(tempMem);
+
+      }
+
+        console.log(key);
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+
+}
+
 
 
 

@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
 import RenderFamilies from "./renderFamilies";
 import "./container.scss"
+import Button from '@material-ui/core/Button';
 
 
 
@@ -16,6 +17,7 @@ class HomePage extends Component {
             uid: null,
             dataReady: false,
             cardData: [],
+            searchArtifact: null,
         }
     }
     componentDidMount =() => {
@@ -28,16 +30,28 @@ class HomePage extends Component {
 
     }
 
+    handleChange = e => {
+        this.setState({...this.state, searchArtifact: e.target.value});   
+        console.log(this.searchArtifact);  
+    }
+
+    handleSearch = () => {
+        this.props.firebase.getSearchArtifact(this.state.searchArtifact, this);
+    }
+
     render(){
+
+        let cardData = []
+
         console.log(this.state.uid);
         if(this.state.dataReady){
             this.state.artefactList.map(item=> (
                 <div key={item}>
-                    {this.state.cardData.push(<Cards artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
+                    {cardData.push(<Cards artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
                 </div>
             ));
         }
-        console.log(this.state.dataReady, this.state.artefactList, this.state.cardData);
+
         return(
 
 
@@ -46,12 +60,19 @@ class HomePage extends Component {
                 <RenderFamilies/>
               </div>
                 <Divider />
-                <h1 id="account-heading">Artefacts</h1>
+                <h1 id="account-heading">Your Artefacts</h1>
                 <div class="textboxContainer">
-                    <TextField className="textbox" type="search" margin-right="20px" placeholder="Search for Artefact"/>
+                    <TextField 
+                    className="textbox" 
+                    type="search" 
+                    margin-right="20px" 
+                    placeholder="Search for Artefact"
+                    onChange={this.handleChange}></TextField>
+
+                    <Button variant="outlined" className="searchButton" onClick={this.handleSearch}>Search</Button> 
                 </div>
                 <div class="container">
-                    {this.state.cardData}
+                    {cardData}
                 </div>
             </div>
 
