@@ -75,7 +75,7 @@ class ImageUpload extends Component {
                     oReq.send();
                 }
             }
-            else{
+            else if (!this.props.isCreate){
                 if (this.state.image && !this.state.isUploaded){
                     this.handleUpload();
                 }

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Modal } from "react-bootstrap";
-import { InputGroup, FormControl } from "react-bootstrap";
-import Button from "@material-ui/core/Button";
+import { InputGroup, FormControl, Modal } from "react-bootstrap";
+import { Fab, Button, CircularProgress, Grid } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import { FirebaseContext } from "../../components/Firebase";
-import CircularProgress from '@material-ui/core/CircularProgress';
 import './editmodal.scss';
 
 /**
@@ -45,26 +44,36 @@ class EditModal extends Component {
     }
 
     /**
-     * Removes a user and refreshes the page
-     * @param user The user to be deleted
+     * Removes a user or family and refreshes the page
+     * @param item The user or family to be deleted
      * @param firebase The functions to connect to firebase server
      */
-    remove(user, firebase) {
-        firebase.removeFromFamily(user, 'families', this.props.family);
-        this.props.action(user, "remove");
-        this.addOrRemoveMembers(user, firebase);
+    remove(item, firebase) {
+        if(this.props.itemIsUser){
+            firebase.removeUserFromCollection(item, this.props.title, this.props.collection);
+        }
+        else{
+            firebase.removeFamilyAccess(item, this.props.title, this.props.collection)
+        }
+        this.props.action(item, "remove");
+        this.addOrRemoveMembers(item, firebase);
     }
 
 
     /**
-     * Adds a user and refreshes the page
-     * @param user The user to be added
+     * Adds an item (user or family) and refreshes the page
+     * @param item The user or family to be added
      * @param firebase The functions to connect to firebase server
      */
-    add(user, firebase) {
-        firebase.addToFamily(user, 'families', this.props.family);
-        this.props.action(user, "add");
-        this.addOrRemoveMembers(user, firebase);
+    add(item, firebase) {
+        if(this.props.itemIsUser){
+            firebase.addUserToCollection(item, this.props.title, this.props.collection);
+        }
+        else {
+            firebase.grantFamilyAccess(item, this.props.title, this.props.collection)
+        }
+        this.props.action(item, "add");
+        this.addOrRemoveMembers(item, firebase);
     }
 
     /**
@@ -73,10 +82,10 @@ class EditModal extends Component {
      * @return All users (besides admin) and whether you can add or remove them
      */
     addOrRemoveMembers(user, firebase) {
-        for (let key in this.props.family["users"]) {
+        for (let key in this.props.collection["users"]) {
             // console.log(existingUser.name+"   and name we looking for  "+user.name);
-            let existingUser = this.props.family["users"][key].uid;
-            if (user.uid === this.props.family.admin.uid) {
+            let existingUser = this.props.collection["users"][key].uid;
+            if (user.uid === this.props.collection.admin.uid) {
                 return;
             }
             else if (existingUser === user.uid) {
@@ -108,9 +117,11 @@ class EditModal extends Component {
     render() {
         return (
             <div>
-
-                <Button variant="outlined" onClick={this.handleModal} id="edit-button">Edit Users</Button>
-
+                <Grid container justify="flex-end">
+                    <Fab color="secondary" onClick={this.handleModal}>
+                        <EditIcon />
+                    </Fab>
+                </Grid>
                 <Modal show={this.state.showModal} onHide={this.handleModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Current Members</Modal.Title>
