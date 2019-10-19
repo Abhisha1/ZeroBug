@@ -498,9 +498,10 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, imagesURL) => {
+  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, images) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    let imagesURL = this.uploadArtefactFiles(images, name);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
@@ -509,9 +510,9 @@ class Firebase {
         artefactBrief: artefactBrief,
         description: description,
         authFamilies: authFamilies,
-        authUsers: authUsers,
+        users: authUsers,
         artefactName: name,
-        owner: {
+        admin: {
           email: currentUser.email,
           name: currentUser.displayName,
           uid: currentUser.uid,
@@ -524,34 +525,27 @@ class Firebase {
     )
   }
 
-  uploadArtefactFiles = (images, artefactName, values, setValues) => {
+  uploadArtefactFiles = (images, artefactName) => {
+    // Convert to filesList to an array
     let imagesArr = Array.from(images);
+    console.log("imagesArr:");
     console.log(imagesArr);
-    return Promise.all(imagesArr.forEach(image => {
-      console.log("IMAGE UPLOADING");
-      console.log(image.name);
-      let currentList = values.images.URL;
-      return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
-        .then((snapshot) => {
-          console.log("IMAGE URL GETING");
-          console.log(image.name);
-          return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
-            .then((url) => {
-              currentList.push(url);
-              setValues({ ...values, ["imagesURL"]: currentList});
-            }).catch(error => {
-              console.log("Fetching URL FAILED");
-              return error
-            })
+    // Iterate through all images and upload and save their URLs, response saved
+    let imagesURL = imagesArr.map((image) => {
+      // Upload the next image
+      this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          console.log("URL:");
+          console.log(url);
         })
-        .catch(error => {
-          console.log("Upload IMAGE FAILED");
-          console.error(error);
-          return error
-        })
-    })).then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
     })
+    console.log("imagesURL:");
+    console.log(imagesURL);
+    return imagesURL;
+
+
+
 
     //***********************************************************************//
     /*

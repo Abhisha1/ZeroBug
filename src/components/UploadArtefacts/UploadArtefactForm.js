@@ -18,6 +18,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import * as MESSAGES from '../../constants/messages';
+
 
 // The Primary colour for buttons and glyphs
 const primary = yellow[900];
@@ -31,7 +33,6 @@ const INIT_STATE = {
   authUsers: [],
   location: '',
   date: new Date(),
-  imagesURL: [],
   imageAdded: false,
   images: [],
 };
@@ -103,29 +104,18 @@ function UploadArtefactForm(props) {
     if (!duplicate){
       updatedAuthFamilies.push({
         displayName: familiesFromModal.displayName,
-        photoURL: familiesFromModal.photoURL
+        photoURL: familiesFromModal.photoURL,
+        users: familiesFromModal.users
       });
       setValues({ ...values, ["authFamilies"]: updatedAuthFamilies });
     }
   }
 
-  // Handles submission of a new image for the artefact
-  const onImageSubmit = () => {
-    props.firebase.uploadArtefactFiles(values.images, values.artefactName, values, setValues)
-      .then(() => {
-        setValues({ ...values, ["images"]: [] });
-        return "Success";
-      })
-      .catch(error => {
-        console.log("IMAGE UPLOAD FAILED")
-        return error;
-      })
-
-  };
-
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
+    console.log("onSubmit images:");
+    console.log(values.images);
     props.firebase.createArtefact(values.artefactName,
       selectedDate,
       values.location,
@@ -133,20 +123,12 @@ function UploadArtefactForm(props) {
       values.description,
       values.authFamilies,
       values.authUsers,
-      values.imagesURL
+      values.images
       )
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
-        onImageSubmit()
-        .then(() => {
-          props.history.push(ROUTES.HOME);
         })
-
-      })
-      .catch(error => {
-        console.error(error)
-      })
 
     event.preventDefault()
 
@@ -307,26 +289,15 @@ function UploadArtefactForm(props) {
               UPLOAD
           </Button>
           </label>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={isInvalid}
-            onClick={onSubmit}
-          >
-            Submit
-            </Button>
         </Grid>
         <Grid item xs={6}>
         </Grid>
       </Grid>
       <Grid container direction="column">
-        <Grid item style={{ width: "100%" }}>
+        <Grid item style={{ width: "95%" }}>
           <CustomSlider cards={values.authUsers} />
         </Grid>
-        <Grid item style={{ width: "100%" }}>
+        <Grid item style={{ width: "95%" }}>
           <CustomSlider cards={values.authFamilies} />
         </Grid>
       </Grid>
