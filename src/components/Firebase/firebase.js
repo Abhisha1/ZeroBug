@@ -258,7 +258,7 @@ class Firebase {
       let now = 0;
 
       for (let key in data.val()) {
-        if(data.val()[key].admin.name == username ){
+        if(data.val()[key].admin.displayName == username ){
           count ++;
 
           let tempMem = {
@@ -335,16 +335,24 @@ class Firebase {
       )
   }
 
-  getArtefactData = (the, username) => {
+
+  /**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
+   */
+  getArtefactData = (the, uid) => {
       let artefactList = [];
       let tempRef = this.database().ref('/artefacts/');
       tempRef.on("value", (data) =>{
 
       let count = 0;
 
+      // parse through all the artefacts
       for (let key in data.val()) {
-          for(let user in data.val()[key].authUsers){
-              if(data.val()[key].authUsers[user].displayName == username){
+          //parse through all the authorised users for each artefact
+          for(let user in data.val()[key].users){
+              if(data.val()[key].users[user].uid === uid){
                   count ++;
 
                   let tempMem = {
@@ -354,6 +362,7 @@ class Firebase {
               }
           }
       }
+      //finally, return the list through the state
       the.setState({...the.state, artefactList: artefactList});
       the.setState({dataReady: true})
   });
@@ -721,7 +730,6 @@ class Firebase {
     // Create the new user in Firebase
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
-
 
 
   /**

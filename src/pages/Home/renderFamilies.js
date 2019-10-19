@@ -29,7 +29,7 @@ class RenderFamilies extends Component{
         return(
             <div>
                 <div id="familiesWrapper">
-					<h1 id="account-heading">Your Families</h1>
+					<h1 id="account-heading">Families</h1>
                     <FamilySlider cards=
                         {this.state.dataReady?
                             this.state.cardData:[]

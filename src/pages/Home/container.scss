@@ -8,4 +8,9 @@
 .textboxContainer{
     display: flex;
     justify-content: center;
+    flex-wrap: space-around;
+}
+.textbox{
+    width: 300px;
+    margin: 40px;
 }
