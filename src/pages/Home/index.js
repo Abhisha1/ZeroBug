@@ -34,7 +34,9 @@ class HomePage extends Component {
         if(this.state.dataReady){
             this.state.artefactList.map(item=> (
                 <div key={item}>
-                    {this.state.cardData.push(<Cards artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
+                    {this.state.cardData.push(<Cards artefactName={item.name.artefactName}
+                         description={item.name.artefactBrief} date={item.name.date}
+                         image={item.name.imagesURL[0]}/>)}
                 </div>
             ));
             if(this.state.plusCardAdded===false){

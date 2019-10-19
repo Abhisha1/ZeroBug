@@ -32,7 +32,7 @@ class Cards extends Component{
                     <CardActionArea href={this.props.link}>
                       <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
-                        image="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
+                        image={this.props.image}
                         title={this.props.artefactName}
                       />
                      </CardActionArea>
