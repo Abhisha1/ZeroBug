@@ -114,8 +114,6 @@ function UploadArtefactForm(props) {
 
   // Handles submission of a new created artefact to Firebase
   const onSubmit = event => {
-    console.log("onSubmit images:");
-    console.log(values.images);
     props.firebase.createArtefact(values.artefactName,
       selectedDate,
       values.location,
@@ -128,7 +126,10 @@ function UploadArtefactForm(props) {
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
-        })
+      }).catch(error => {
+
+      })
+
 
     event.preventDefault()
 

@@ -166,7 +166,7 @@ class Firebase {
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
-          if (data.val()[key].users[user].displayName == username) {
+          if (data.val()[key].users[user].displayName === username) {
 
             testFamilyName.push(data.val()[key].name);
 
@@ -191,7 +191,7 @@ class Firebase {
     tempRef.on("value", (data) => {
 
       for (let key in data.val()) {
-        if (data.val()[key].admin.name == username) {
+        if (data.val()[key].admin.name === username) {
           testFamilyName.push(data.val()[key].name);
 
         }
@@ -525,25 +525,30 @@ class Firebase {
     )
   }
 
-  uploadArtefactFiles = (images, artefactName) => {
+  uploadArtefactFiles = async (images, artefactName) => {
     // Convert to filesList to an array
     let imagesArr = Array.from(images);
-    console.log("imagesArr:");
-    console.log(imagesArr);
     // Iterate through all images and upload and save their URLs, response saved
-    let imagesURL = imagesArr.map((image) => {
+    let imagesURL = Promise.all(imagesArr.map((image) => {
+      console.log("Attempting Upload");
       // Upload the next image
-      this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-          console.log("URL:");
-          console.log(url);
+      return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
+      .then((snapshot) => {
+        console.log("REACH UPLOAD");
+        return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
+        .then((url) => {
+          console.log("REACH URL");
+          return url;
         })
-    })
-    console.log("imagesURL:");
+      })
+      .catch(error => {
+        console.log("UPLOAD FAILED");
+        console.log(error);
+      })
+    }))
+    .then(values => {return values;})
     console.log(imagesURL);
     return imagesURL;
-
 
 
 
