@@ -498,10 +498,10 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, images) => {
+  createArtefact = async (name, date, location, artefactBrief, description, authFamilies, authUsers, images) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
-    let imagesURL = this.uploadArtefactFiles(images, name);
+    let imagesURL = await this.uploadArtefactFiles(images, name);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
@@ -530,25 +530,22 @@ class Firebase {
     let imagesArr = Array.from(images);
     // Iterate through all images and upload and save their URLs, response saved
     let imagesURL = Promise.all(imagesArr.map((image) => {
-      console.log("Attempting Upload");
       // Upload the next image
       return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
       .then((snapshot) => {
-        console.log("REACH UPLOAD");
         return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
         .then((url) => {
-          console.log("REACH URL");
           return url;
         })
       })
       .catch(error => {
-        console.log("UPLOAD FAILED");
+        console.log("UPLOAD FAILED!!!!");
         console.log(error);
       })
     }))
     .then(values => {return values;})
     console.log(imagesURL);
-    return imagesURL;
+    return await imagesURL;
 
 
 

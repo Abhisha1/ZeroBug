@@ -126,8 +126,10 @@ function UploadArtefactForm(props) {
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
+        props.history.push(ROUTES.HOME);
       }).catch(error => {
-
+        console.log("UPLOAD FAILED");
+        console.error(error);
       })
 
 
