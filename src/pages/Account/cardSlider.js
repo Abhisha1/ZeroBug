@@ -6,6 +6,7 @@ import Card from '@material-ui/core/Card';
 import { CardMedia } from "@material-ui/core";
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import {Link} from 'react-router-dom';
 
 /**
  * The CustomSlider class which renders list of families
@@ -61,6 +62,9 @@ class CustomSlider extends Component {
                             <Typography variant="h4" component="p">
                                 {item.name}
                             </Typography>
+                            <Link
+                            to={{ pathname: '/family/'+item.name , state: { name: item.name} }}
+                            >View Family Information</Link>
                         </CardContent>
                     </Card>
                 </div>

@@ -19,7 +19,7 @@ const Navigation = () => (
     <Navbar.Collapse id="responsive-navbar-nav">
       <AuthUserContext.Consumer>
         {/* Renders the approaprriate links depending on whether user is signed in/authorised or not */}
-        {authUser =>
+        {authUser => 
           authUser ? <NavigationAuth user={authUser}/> : <NavigationNonAuth />
         }
       </AuthUserContext.Consumer>
@@ -29,14 +29,14 @@ const Navigation = () => (
 /**
  * The Navigation bar links when the user is authorised/ signed into their acount
  */
-const NavigationAuth = ( user ) => (
-  <Nav className="ml-auto">
+const NavigationAuth = ( user ) => {
+  return <Nav className="ml-auto">
     <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
-    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.photoURL} /></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.user.photoURL}>U</Avatar></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
     <SignOutButton />
   </Nav>
-);
+};
 /**
  * The Navigation bar links when the user is NOT authorised/signed into their acount
  */

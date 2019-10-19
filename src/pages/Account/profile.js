@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import yellow from '@material-ui/core/colors/yellow';
 import Paper from '@material-ui/core/Paper';
+import Avatar from '@material-ui/core/Avatar';
+
 
 
 const primary = yellow[500];
@@ -20,6 +22,7 @@ class Profile extends Component{
             password: null,
         }
     }
+    
 
     // get the user name and the profile image if he/she has
     componentDidMount =() => {
@@ -57,10 +60,9 @@ class Profile extends Component{
                 <div id="topWraper">
                     <div id="profileContainer">
                         <Paper id="paperStyle">
-                            <h1 id="account-heading">Your Profile</h1>
-                            <div id="userInformation">
-                                <img id="avatarBox" src={this.state.imageURL}></img>
-                                <h3 id="profileName">{this.state.username}</h3>
+                            <h1 id="account-heading">{this.state.username}</h1>
+                            <div id="userInformation">                             
+                                <Avatar alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></Avatar>
                             </div>
                         </Paper>
                     </div>

@@ -126,13 +126,33 @@ class Firebase {
       if (dbGroupName === "/artefactImages") {
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
-
+      
+      //update the photoURL
+      if (location == "profileImages/"){
+        this.updateUserImage(url);
+      }
 
     }).catch(error => {
       console.log("Written data FAILED");
     });
   }
 
+  /**
+   * set the user photoURL
+   * @para the new user photoURL
+   */
+  updateUserImage = (newURL) => {
+    this.auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        user.updateProfile({
+          displayName: user.displayName,
+          photoURL: newURL
+        })
+    //console.log(user.photoURL);
+      }
+  })
+}
   /********************************************************************** */
   /**
    * get the profile image before rendering the account page
@@ -140,18 +160,26 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName) => {
 
+  getImageURL = (th, location, dbGroupName, user) => {
+ 
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
-
-
-      th.setState({ ...th.state, imageURL: url });
+  
+      th.setState({ ...th.state, imageURL: url});
+      
+      //update the user profile URL
+      user.updateProfile({
+        displayName: user.displayName,
+        photoURL: url
+      })
+      
+      //console.log(user.photoURL);
+      
     }).catch(error => {
       console.log("Show data FAILED");
     });
 
   }
-
 
   /**
    * get the list fo families images
@@ -205,24 +233,46 @@ class Firebase {
    * @para the component to be set the state
    * @para users' names
    */
-  getListFamilyName = (the, username) => {
+  getYourFamilyNames = (the, username) => {
+
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
+
           if (data.val()[key].users[user].displayName == username) {
 
-            testFamilyName.push(data.val()[key].name);
+            count ++;
+
+            let tempMem = {
+              name: data.val()[key].name,
+            }
+            
+
+            this.getFamilyImageURL(data.val()[key].name,  
+            (avatar) => {
+              tempMem.avatar = avatar; 
+              now ++; 
+              if (now == count){
+                the.setState({dataReady: true})
+              }
+            });
+            testFamilyName.push(tempMem);
 
           }
         }
       }
 
-      the.setState({ ...the.state, familyList: testFamilyName })
-
+      the.setState({...the.state, cardData: testFamilyName});
+      
     });
   }
 
@@ -233,25 +283,56 @@ class Firebase {
    * @para the user name
    */
   getYourManagedFamilyName = (the, username) => {
+
     let testFamilyName = [];
     let tempRef = this.database().ref('/families/');
+
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
-        if (data.val()[key].admin.name == username) {
-          testFamilyName.push(data.val()[key].name);
+
+        console.log(data.val()[key].admin.displayName);
+
+        if(data.val()[key].admin.displayName == username ){
+          count ++;
+
+          let tempMem = {
+            name: data.val()[key].name,
+          }
+
+          this.getFamilyImageURL(data.val()[key].name,  
+          (avatar) => {
+            tempMem.avatar = avatar; 
+            now ++; 
+            if (now == count){
+              the.setState({dataReady: true})
+            }
+          });
+          testFamilyName.push(tempMem);
 
         }
-      }
-      the.setState({ ...the.state, familyList: testFamilyName });
-      this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
-      the.setState({ dataReady: true })
+        }
+        the.setState({...the.state, cardData: testFamilyName});
     })
-
   }
 
-
-
+  /**
+   * get the family image
+   * @para family name
+   * @para get the family image
+   */
+  getFamilyImageURL = (familyName, callback) => {
+      this.storage().ref().child("familyImages/" + familyName).getDownloadURL().then((url)=>{
+        callback(url);
+      }
+      )    
+  }
 
 
 
@@ -671,6 +752,56 @@ getCookie = (cname) => {
   }
   return "";
 }
+
+
+/**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
+   */
+  getYourManageArtefactData = (the, uid) => {
+    let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+    let count = 0;
+
+    // parse through all the artefacts
+    for (let key in data.val()) {
+        console.log(data.val()[key].admin.uid);
+        //parse through all the authorised users for each artefact
+        if(data.val()[key].admin.uid === uid){
+          count ++;
+
+          let tempMem = {
+              name: data.val()[key],
+          }
+          artefactList.push(tempMem);
+
+
+        }
+
+
+
+        // for(let user in data.val()[key].admin){
+        //     if(data.val()[key].users[user].uid === uid){
+        //         count ++;
+
+        //         let tempMem = {
+        //             name: data.val()[key],
+        //         }
+        //         artefactList.push(tempMem);
+        //     }
+        // }
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+}
+
+
+
 
 /**
  * Sign up a user using their provided email and password
