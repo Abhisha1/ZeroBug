@@ -4,11 +4,12 @@ import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
 import AdminModal from "../../components/AdminChangeModal"
 import LoadingAnimation from '../../components/LoadingAnimation';
-import { Paper } from '@material-ui/core';
+import { Paper, GridList, GridListTile } from '@material-ui/core';
 import UploadFile from "../../components/ImageUpload";
 import { withAuthorization } from "../../components/Session";
 import { Timestamp } from '@google-cloud/firestore';
 import { Link } from 'react-router-dom';
+import "./viewartefact.scss";
 
 // import "./viewartefact.scss";
 // import "~react-image-gallery/styles/scss/image-gallery.scss";
@@ -16,6 +17,10 @@ import { Link } from 'react-router-dom';
  * Page which views a particular artefact, as chosen by users actions from
  * previous webpage
  */
+
+
+
+
 class ViewArtefact extends Component {
     constructor(props) {
         super(props);
@@ -149,7 +154,7 @@ class ArtefactDetails extends Component {
     render() {
 
         return (
-            <div>
+            <div id="viewArtefactPage">
                 {this.state.loading ? <div id="loader">{loading}</div> :
                     (!this.state.hasAccess ?
                         (<Paper>
@@ -160,31 +165,50 @@ class ArtefactDetails extends Component {
                             <div>
                                 {/* <ImageGallery items={this.state.artefact} /> */}
                                 <h1 id="artefactName">{this.props.name}</h1>
-                                {this.state.isAdmin && <AdminModal action={this.handleModal} collection={this.state.artefact}></AdminModal>}
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'space-around',
+                                    overflow: 'hidden',
+                                    alignSelf: 'center',
+                                    marginBottom: '2vw'
+                                    }}>
+                                    <GridList cellHeight={200} style={{
+                                        width: "75%",
+                                        height: "45%"
+                                    }} cols={3}>
+                                        {this.state.artefact.imagesURL.map(url => (
+                                            <GridListTile key={url} cols={1}>
+                                                <img src={url}/>
+                                            </GridListTile>
+                                        ))}
+                                    </GridList>
+                                </div>
+                                {this.state.isAdmin && <AdminModal id="adminArtefactModal" action={this.handleModal} collection={this.state.artefact}></AdminModal>}
                                 <Paper id="paperCard">
-                                    <h5>Date</h5>
+                                    <h5 className="descriptionTitle">Date</h5>
                                     {/* {console.log(this.props.firebase.convertDate(this.state.artefact.date.toDateString()))} */}
                                     <p>{this.convertDate(this.state.artefact.date)}</p>
-                                    <h5>Brief</h5>
+                                    <h5 className="descriptionTitle">Brief Description</h5>
                                     <p>{this.state.artefact.artefactBrief}</p>
-                                    <h5>Location</h5>
+                                    <h5 className="descriptionTitle">Location</h5>
                                     <p>{this.state.artefact.location}</p>
-                                    {this.state.artefact.description && <div><h5>Description</h5>
+                                    {this.state.artefact.description && <div><h5 className="descriptionTitle">History</h5>
                                         <p>{this.state.artefact.description}</p></div>}
                                 </Paper>
                                 <Paper id="paperCard">
-                                    <h1>Artefact Members</h1>
+                                    <h1 className="memberHeadings">Shared users</h1>
                                     {this.state.isAdmin && (
                                         <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={true} search={this.searchForUsers}></EditModal>
                                     )
                                     }
-                                    <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>
+                                    {this.state.artefact.users && <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>}
                                 </Paper>
                                 <Paper id="paperCard">
-                                    <h1>Artefact Families</h1>
+                                    <h1 className="memberHeadings">Shared families</h1>
                                     {this.state.isAdmin && (
-                                    <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
-                                        )
+                                        <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
+                                    )
                                     }
                                     {this.state.artefact.authFamilies && <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider>}
                                 </Paper>

@@ -133,7 +133,7 @@ class EditModal extends Component {
         return (
             <div>
                 <Grid container justify="flex-end">
-                    <Fab color="secondary" onClick={this.handleModal}>
+                    <Fab id="circleButton" onClick={this.handleModal}>
                         <EditIcon />
                     </Fab>
                 </Grid>
