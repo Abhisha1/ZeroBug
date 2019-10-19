@@ -352,7 +352,10 @@ class Firebase {
       for (let key in data.val()) {
           found = false;
           //parse through all the authorised users for each artefact
+          console.log(data.val()[key]);
+          console.log("CHECKING USERS");
           for(let user in data.val()[key].users){
+              console.log(data.val()[key].users[user].uid)
               if(data.val()[key].users[user].uid === uid){
                   count ++;
 
@@ -361,11 +364,12 @@ class Firebase {
                   }
                   artefactList.push(tempMem);
                   found=true;
+                  break;
               }
-              break;
           }
 
           if(found===false){
+              console.log("CHECKING FAMILIES");
               for(let family in data.val()[key].authFamilies){
                   for(let user in data.val()[key].authFamilies[family].users){
                       console.log(data.val()[key].authFamilies[family].users[user].uid);
