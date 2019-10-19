@@ -753,6 +753,56 @@ getCookie = (cname) => {
   return "";
 }
 
+
+/**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
+   */
+  getArtefactData = (the, uid) => {
+    let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+    let count = 0;
+
+    // parse through all the artefacts
+    for (let key in data.val()) {
+        console.log(data.val()[key].admin.uid);
+        //parse through all the authorised users for each artefact
+        if(data.val()[key].admin.uid === uid){
+          count ++;
+
+          let tempMem = {
+              name: data.val()[key],
+          }
+          artefactList.push(tempMem);
+
+
+        }
+
+
+
+        // for(let user in data.val()[key].admin){
+        //     if(data.val()[key].users[user].uid === uid){
+        //         count ++;
+
+        //         let tempMem = {
+        //             name: data.val()[key],
+        //         }
+        //         artefactList.push(tempMem);
+        //     }
+        // }
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+}
+
+
+
+
 /**
  * Sign up a user using their provided email and password
  * @param email the email address of the user to register by

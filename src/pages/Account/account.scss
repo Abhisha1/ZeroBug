@@ -29,7 +29,7 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 1020px;
+    height: 980px;
     padding-top: 66px;
     max-width: 100% !important;
 }
@@ -268,4 +268,27 @@ input.testInput{
 
 #passwordField{
     margin-left: 32px;
+}
+
+
+.artifactContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-bottom: 66px;
+}
+.textboxContainer{
+    display: flex;
+    justify-content: center;
+    flex-wrap: space-around;
+}
+.textbox{
+    width: 300px;
+    margin: 40px;
+}
+
+#artifactTop{
+    padding-top: 66px;
 }
