@@ -297,6 +297,8 @@ class Firebase {
 
       for (let key in data.val()) {
 
+        console.log(data.val()[key].admin.displayName);
+
         if(data.val()[key].admin.displayName == username ){
           count ++;
 

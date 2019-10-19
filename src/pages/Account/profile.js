@@ -60,10 +60,9 @@ class Profile extends Component{
                 <div id="topWraper">
                     <div id="profileContainer">
                         <Paper id="paperStyle">
-                            <h1 id="account-heading">Your Profile</h1>
+                            <h1 id="account-heading">{this.state.username}</h1>
                             <div id="userInformation">                             
                                 <Avatar alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></Avatar>
-                                <h3 id="profileName">{this.state.username}</h3>
                             </div>
                         </Paper>
                     </div>
