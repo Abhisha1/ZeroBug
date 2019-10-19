@@ -347,9 +347,10 @@ class Firebase {
       tempRef.on("value", (data) =>{
 
       let count = 0;
-
+      let found = false;
       // parse through all the artefacts
       for (let key in data.val()) {
+          found = false;
           //parse through all the authorised users for each artefact
           for(let user in data.val()[key].users){
               if(data.val()[key].users[user].uid === uid){
@@ -359,6 +360,28 @@ class Firebase {
                       name: data.val()[key],
                   }
                   artefactList.push(tempMem);
+                  found=true;
+              }
+              break;
+          }
+
+          if(found===false){
+              for(let family in data.val()[key].authFamilies){
+                  for(let user in data.val()[key].authFamilies[family].users){
+                      console.log(data.val()[key].authFamilies[family].users[user].uid);
+                      if(data.val()[key].authFamilies[family].users[user].uid === uid){
+
+                          let tempMem = {
+                              name: data.val()[key],
+                          }
+                          artefactList.push(tempMem);
+                          found=true;
+                          break;
+                      }
+                  }
+                  if(found){
+                      break;
+                  }
               }
           }
       }
