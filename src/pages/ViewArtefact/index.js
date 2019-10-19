@@ -49,6 +49,29 @@ class ArtefactDetails extends Component {
         this.handleModal = this.handleModal.bind(this);
     }
 
+
+
+    /**
+   * Function passed to child prop to search families corresponding to user input
+   * @param firebase Connects to firebase server and functions
+   * @param familyName User entered family name
+   * @param modalState The modals current state
+   */
+    searchFamilies = (firebase, familyName, modalState) => {
+        firebase.searchFamilies(familyName, modalState);
+    }
+
+    /**
+     * Function passed to child prop to search users corresponding to user input
+     * @param firebase Connects to firebase server and functions
+     * @param familyMemberName User entered user's name
+     * @param modalState The modals current state
+     */
+    searchForUsers = (firebase, familyMemberName, modalState) => {
+        firebase.searchUsers(familyMemberName, modalState)
+    }
+
+
     /**
      * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
      */
@@ -152,16 +175,16 @@ class ArtefactDetails extends Component {
                                 <Paper id="paperCard">
                                     <h1>Artefact Members</h1>
                                     {this.state.isAdmin && (
-                                        <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={true}></EditModal>
-                                            )
+                                        <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={true} search={this.searchForUsers}></EditModal>
+                                    )
                                     }
                                     <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>
                                 </Paper>
                                 <Paper id="paperCard">
                                     <h1>Artefact Families</h1>
                                     {this.state.isAdmin && (
-                                        <div id="adminConfigBarb"><EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false}></EditModal>
-                                            </div>)
+                                    <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
+                                        )
                                     }
                                     {this.state.artefact.authFamilies && <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider>}
                                 </Paper>

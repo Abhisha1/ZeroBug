@@ -18,6 +18,7 @@ import HomePage from './pages/Home';
 import AdminPage from './pages/Admin';
 import ViewFamily from './pages/ViewFamily';
 import ViewArtefact from './pages/ViewArtefact';
+import CreateArtifact from './pages/CreateArtifact'
 
 import * as ROUTES from './constants/routes';
 import { withAuthentication } from './components/Session';
@@ -42,6 +43,7 @@ const App = () => (
       {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
       <Route path={ROUTES.HOME} component={HomePage} />
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route path={ROUTES.CREATE_ARTEFACT} component={CreateArtifact} />
       {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
     </div>
   </Router>

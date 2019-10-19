@@ -2,9 +2,6 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import firebase from 'firebase';
 import * as MESSAGES from '../../constants/messages';
-import cookie from 'js-cookie';
-
-
 
 
 const config = {
@@ -36,21 +33,6 @@ class Firebase {
   }
 
   /********************************************************************** */
-  /**
-   * Uploads the artefact to the server storage, using a specified location folder under the image's name
-   * @param image the image to be uploaded
-   * @param the the state of the parent class invoking the upload
-   * @param location the folder under which the image file should be stored on server
-   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
-   */
-  uploadArtefact = (image, th, location, dbGroupName) => {
-    this.storage().ref().child(location + image.name).put(image).then((snapshot) => {
-      this.getProfileImageURL(th, location, location + image.name, dbGroupName);
-      console.log('success uploading');
-    }).catch(error => {
-      console.log("Written data FAILED");
-    });
-  }
 
   /**
    * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
@@ -199,6 +181,7 @@ class Firebase {
     });
   }
 
+
   // for home page
   /**
    * get a list of Family name that the user have
@@ -251,12 +234,6 @@ class Firebase {
   }
 
 
-
-
-
-
-
-
   //upload the files
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image, th) => {
@@ -267,17 +244,6 @@ class Firebase {
 
     );
     //console.log(aaa);
-  }
-
-  //delete the file
-  testDeleteFile = (the, filepath) => {
-    var desertRef = this.storage().ref().child(filepath);
-
-    desertRef.delete().then(function () {
-      console.log("delete the file");
-    }).catch(function (error) {
-      // ...
-    });
   }
 
   //get a list of storage files Names
@@ -308,8 +274,6 @@ class Firebase {
     newPostRef.set({
       fileURL: filepath,
     });
-
-
   }
 
   //get the image file path that store in the firebase storage
@@ -360,9 +324,8 @@ class Firebase {
       name: user
     })
       .then(response => {
-        console.log(response);
         if (response.data.msg === "Success") {
-          the.setState({ ...the.state, searchedUsers: response.data.users, loading: false });
+          the.setState({ ...the.state, searchedResults: response.data.users, loading: false });
         }
         if (response.data.msg === "No matches") {
           the.setState({ ...the.state, noMatches: true, loading: false })
@@ -371,6 +334,45 @@ class Firebase {
       .catch(error => {
         return new Error(error.data.msg);
       })
+  }
+
+  /**
+   * Finds the families that match the searched family
+   * @param family the input string for a familie
+   * @param the the parent class
+   * @return a success message when successful, or an error
+   */
+  searchFamilies = async (family, the) => {
+    let self = this;
+    let snapshot = await this.database().ref('/families/').once("value")
+    let matches = [];
+    if (snapshot.val()) {
+      let arr = Object.values(snapshot.val())
+      // returns the image of the family
+      return Promise.all(arr.map(family => {
+        return self.findImage("familyImages/", family.name)
+          .then(url => {
+            let newFamily = {
+              displayName: family.name,
+              photoURL: url,
+              users: family.users
+            }
+            console.log(newFamily)
+            matches.push(newFamily);
+          })
+          .catch(err => {
+            let newFamily = {
+              displayName: family.name
+            }
+            matches.push(newFamily);
+          })
+      })).then(() => {
+        the.setState({ ...the.state, searchedResults: matches, loading: false });
+      })
+    }
+    else {
+      the.setState({ ...the.state, noMatches: true, loading: false })
+    }
   }
 
   /**
@@ -410,6 +412,7 @@ class Firebase {
       this.database().ref('/families/' + name).on("value", onData, onError)
     });
   }
+
   /**
    * Creates a new family and uploads to database
    * @param users The family members
@@ -430,6 +433,7 @@ class Firebase {
       })
     )
   }
+
   /**
    * Adds a user to the specified collection (artefact or family)
    * @param user The user to be added
@@ -461,7 +465,7 @@ class Firebase {
     let updatedFamilies = collection["authFamilies"];
     let removeIndex = -1;
     for (let key in collection["authFamilies"]) {
-      if (collection["authFamilies"][key].name === family.name) {
+      if (collection["authFamilies"][key].displayName === family.displayName) {
         removeIndex = key;
       }
     }
@@ -525,7 +529,6 @@ class Firebase {
     if (removeIndex === -1) {
       return new Error("could not find user in collection");
     }
-    console.log("name is " + name + " collection is " + collectionName)
     this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
@@ -592,61 +595,121 @@ class Firebase {
    * @param artifact current owner
    * @param artifact description
    */
-  testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
-    this.database().ref('testUploadArtifactData/' + artifactID).set({
-      artifactName: artifactName,
-      origin: artifactOrigin,
-      currentOwner: artifactCurrentOwner,
-      description: artifactDescription
-    }, (error) => {
-      if (error) {
-        // The write failed...
+  // testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
+  //   this.database().ref('testUploadArtifactData/' + artifactID).set({
+  //     artifactName: artifactName,
+  //     origin: artifactOrigin,
+  //     currentOwner: artifactCurrentOwner,
+  //     description: artifactDescription
+  //   }, (error) => {
+  //     if (error) {
+  //       // The write failed...
+  //       console.log("Written data FAILED");
+  //     } else {
+  //       // Data saved successfully!
+  //       console.log("Successfully append the data!");
+  //     }
+  //   }
+  //   // New admin doesn't exist in group so we add to the family members then make admin
+  //   if (!exists) {
+  //     this.addToFamily(newAdmin, collectionName, collection)
+  //     this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
+  //       .then(() => {
+  //         return MESSAGES.SUCCESS_MESSAGE;
+  //       })
+  //       .catch(error => {
+  //         return error;
+  //       })
+  //   }
+  // }
+
+  /**
+   * Create a new artefact
+   * @param name The name of the artefact to store
+   * @param date The Javascript Date object which stores date of artefact
+   * @param location The location from which the artefact belong
+   * @param description An optional description of the artefact
+   * @param authFamilies A JSON list of the autherised families for the artefact
+   * @param authUsers A JSON list of the autherised users for the artefact
+   */
+  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, imagesURL) => {
+    let currentUser = this.auth.currentUser;
+    let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    return (
+      this.database().ref('artefacts/' + name).set({
+        date: fbDate,
+        location: location,
+        imagesURL: imagesURL,
+        artefactBrief: artefactBrief,
+        description: description,
+        authFamilies: authFamilies,
+        authUsers: authUsers,
+        artefactName: name,
+        owner: {
+          email: currentUser.email,
+          name: currentUser.displayName,
+          uid: currentUser.uid,
+        }
+      }).then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      }).catch(error => {
+        return error;
+      })
+    )
+  }
+
+  uploadArtefactFiles = (images, artefactName, values, setValues) => {
+    let imagesArr = Array.from(images);
+    console.log(imagesArr);
+    return Promise.all(imagesArr.forEach(image => {
+      console.log("IMAGE UPLOADING");
+      console.log(image.name);
+      let currentList = values.images.URL;
+      return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
+        .then((snapshot) => {
+          console.log("IMAGE URL GETING");
+          console.log(image.name);
+          return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
+            .then((url) => {
+              currentList.push(url);
+              setValues({ ...values, ["imagesURL"]: currentList});
+            }).catch(error => {
+              console.log("Fetching URL FAILED");
+              return error
+            })
+        })
+        .catch(error => {
+          console.log("Upload IMAGE FAILED");
+          console.error(error);
+          return error
+        })
+    })).then(() => {
+      return MESSAGES.SUCCESS_MESSAGE;
+    })
+
+    //***********************************************************************//
+    /*
+    let i;
+    for (i=0; i<images.length; i++){
+      let image = images[i];
+      let currentList = values.imagesURL;
+      this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
+        console.log("artefacts/" + artefactName + "/" + i);
+        this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
+          currentList.push(url);
+          setValues({ ...values, ["imagesURL"]: currentList});
+        }).catch(error => {
+          console.log("Fetching URL FAILED");
+          return error;
+        })
+        console.log('success uploading');
+      }).catch(error => {
         console.log("Written data FAILED");
-      } else {
-        // Data saved successfully!
-        console.log("Successfully append the data!");
-      }
-    });
-  }
-
-  /**
-   * write to the database with generated random key
-   */
-  testUpdateArtifactData2 = () => {
-    // Create a new post reference with an auto-generated id
-    var newPostRef = this.database().ref('/testUploadArtifactData/').push();
-
-    newPostRef.set({
-      artifactName: "test3",
-      origin: "test3",
-      currentOwner: "test3",
-      description: "test3"
-    });
-  }
-
-
-  /**
-   * update or delete the artifact data
-   * @param updated artifact ID
-   * @param updated artifact name
-   * @param updated artifact origin
-   * @param updated artifact current owner
-   * @param updated artifact description
-   */
-  testUpdateArtifactData = (updateArtifactID, updateArtifactName, updateArtifactOrigin, updateCurrentOwner, updateDescription) => {
-
-    // A post entry
-    var postData = {
-      artifactName: updateArtifactName,
-      origin: updateArtifactOrigin,
-      currentOwner: updateCurrentOwner,
-      description: updateDescription
-    };
-
-    var updates = {};
-    updates['/testUploadArtifactData/' + updateArtifactID] = postData;
-
-    return firebase.database().ref().update(updates);
+        return error;
+      });
+    }
+    return MESSAGES.SUCCESS_MESSAGE;
+    */
   }
 
 
@@ -755,27 +818,19 @@ getCookie = (cname) => {
   }
   return "";
 }
-
-/**
- * Sign up a user using their provided email and password
- * @param email the email address of the user to register by
- * @param password the password for the user to register by
- * @param username the username for the new user
- */
-doCreateUserWithEmailAndPassword = (email, password, username) => {
-  // Create the new user in Firebase
-  return this.auth.createUserWithEmailAndPassword(email, password);
-}
-
+  /**
+   * Sign up a user using their provided email and password
+   * @param email the email address of the user to register by
+   * @param password the password for the user to register by
+   * @param username the username for the new user
+   */
+  doCreateUserWithEmailAndPassword = (email, password, username) => {
+    // Create the new user in Firebase
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
 
 
-/**
- * Sign in the a registered user account
- * @param email the email address of the registered user
- * @param password the password for the registered user's account
- */
-doCreateUserWithEmailAndPassword = (email, password) =>
-  this.auth.createUserWithEmailAndPassword(email, password);
+
 
 doSignInWithEmailAndPassword = (email, password) => {
   return this.auth.signInWithEmailAndPassword(email, password);

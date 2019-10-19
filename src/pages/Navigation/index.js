@@ -1,9 +1,11 @@
 import React from 'react';
 import { AuthUserContext } from '../../components/Session'
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import SignOutButton from '../../components/SignOut';
 import { Navbar, Nav } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
-import { IoMdPeople, IoMdPerson, IoMdHome } from "react-icons/io"
 import './navigation.scss';
 import logo from "../../assets/templogo.png";
 import Avatar from '@material-ui/core/Avatar';
@@ -31,9 +33,10 @@ const Navigation = () => (
  */
 const NavigationAuth = ( user ) => (
   <Nav className="ml-auto">
-    <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
-    <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.photoURL} /></Nav.Link>
-    <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
+    <Nav.Link href={ROUTES.HOME}><HomeTwoToneIcon fontSize="large"/></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar size="small" src={user.photoURL} /></Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_FAMILY}><GroupAddIcon fontSize="large"/></Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_ARTEFACT}><AddPhotoAlternateIcon fontSize="large"/></Nav.Link>
     <SignOutButton />
   </Nav>
 );

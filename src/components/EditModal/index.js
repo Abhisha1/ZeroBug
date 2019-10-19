@@ -13,7 +13,7 @@ import './editmodal.scss';
 class EditModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, searchedUsers: [], familyMember: '',loading: false};
+        this.state = { showModal: false, searchedResults: [], name: '',loading: false};
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -29,7 +29,7 @@ class EditModal extends Component {
         else {
             this.setState({ showModal: false })
         }
-        this.setState({ familyMember: '', searchUsers: [] });
+        this.setState({ name: '', searchUsers: [] });
     }
 
     /**
@@ -40,7 +40,7 @@ class EditModal extends Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        this.setState({ [name]: value, searchedUsers: [] });
+        this.setState({ [name]: value, searchedResults: [] });
     }
 
     /**
@@ -56,7 +56,7 @@ class EditModal extends Component {
             firebase.removeFamilyAccess(item, this.props.title, this.props.collection)
         }
         this.props.action(item, "remove");
-        this.addOrRemoveMembers(item, firebase);
+        this.addOrRemoveItem(item, firebase);
     }
 
 
@@ -73,30 +73,45 @@ class EditModal extends Component {
             firebase.grantFamilyAccess(item, this.props.title, this.props.collection)
         }
         this.props.action(item, "add");
-        this.addOrRemoveMembers(item, firebase);
+        this.addOrRemoveItem(item, firebase);
     }
 
     /**
-     * Checks if a user belongs in the family of interest, and renders an add option if they dont and remove if they do
-     * @param user The user we are checking whether they exist or not
-     * @return All users (besides admin) and whether you can add or remove them
+     * Checks if an item belongs in the collection of interest, and renders an add option if they dont and remove if they do
+     * @param item The user or family we are checking whether they exist or not
+     * @return All items (besides admin user) and whether you can add or remove them
      */
-    addOrRemoveMembers(user, firebase) {
-        for (let key in this.props.collection["users"]) {
-            // console.log(existingUser.name+"   and name we looking for  "+user.name);
-            let existingUser = this.props.collection["users"][key].uid;
-            if (user.uid === this.props.collection.admin.uid) {
-                return;
+    addOrRemoveItem(item, firebase) {
+        let collection =this.props.collection["authFamilies"] ? this.props.collection["authFamilies"] : this.props.collection["users"];
+        console.log(collection)
+        for (let key in collection) {
+            console.log(collection[key].displayName+"   and name we looking for  "+item.displayName);
+            let existing = collection[key];
+            if (item.uid){
+                if (item.uid === this.props.collection.admin.uid) {
+                    return;
+                }
+                else if (existing.uid === item.uid) {
+                    return (
+                        <div id="searchResult" key={item.uid || item.displayName}>
+                            {item.displayName && <p id="modalText">{item.displayName}</p>}
+                            <Button variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
+                        </div>)
+                }
             }
-            else if (existingUser === user.uid) {
+            if (item.displayName && item.displayName === existing.displayName) {
                 return (
-                    <div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
-                        <Button variant="outlined" id="modalRemove" onClick={() => this.remove(user, firebase)}>Remove</Button>
+                    <div id="searchResult" key={item.displayName}>
+                        {item.displayName && <p id="modalText">{item.displayName}</p>}
+                        
+                        <Button variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
                     </div>)
             }
         }
-        return (<div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
-            <Button variant="outlined" id="modalAdd" onClick={() => this.add(user, firebase)}>Add</Button>
+        return (<div id="searchResult" key={item.uid || item.displayName}>
+        {item.displayName && <p id="modalText">{item.displayName}</p>}
+                        {item.name && <p id="modalText">{item.name}</p>}
+            <Button variant="outlined" id="modalAdd" onClick={() => this.add(item, firebase)}>Add</Button>
         </div>);
 
     }
@@ -105,9 +120,9 @@ class EditModal extends Component {
      * Searches matching users
      * @param firebase Returns an object to access firebase functions
      */
-    searchForUsers(firebase){
+    searchData(firebase){
         this.setState({loading:true, noMatches: false});
-        firebase.searchUsers(this.state.familyMember, this)
+        this.props.search(firebase, this.state.name, this)
 
     }
 
@@ -135,20 +150,20 @@ class EditModal extends Component {
                                         <FormControl
                                             placeholder="User"
                                             aria-label="Users"
-                                            name="familyMember"
-                                            value={this.state.familyMember}
+                                            name="name"
+                                            value={this.state.name}
                                             onChange={this.handleChange}
                                         />
                                         <InputGroup.Append>
                                             {/* Searches database for users matching input search */}
-                                            <Button variant="outlined" onClick={() => this.searchForUsers(firebase)} id="edit-button">Search</Button>
+                                            <Button variant="outlined" onClick={() => this.searchData(firebase)} id="edit-button">Search</Button>
 
                                         </InputGroup.Append>
                                     </InputGroup>
                                     {/* Renders the search result in modal */}
                                     <div id="searchResults">
-                                        {this.state.searchedUsers.map(user => (
-                                            this.addOrRemoveMembers(user, firebase)))}
+                                        {this.state.searchedResults.map(item => (
+                                            this.addOrRemoveItem(item, firebase)))}
                                         {this.state.noMatches && <p>No Matches</p>}
                                     </div>
                                     {/* Displays a loader for when the API is still fetching the results */}

@@ -1,11 +1,13 @@
 #sliderCard{
     border: none;
+    margin: 0 auto;
     display: flex !important;
     justify-content: center;
     flex-direction: column;
 }
 #memberAvatar{
     align-self: center;
+    justify-self: center;
 }
 #memberName{
     text-align: center;
@@ -14,7 +16,11 @@
 
 #customSlider{
     align-self: center;
+    overflow: hidden;
 }
-.slick-prev:before, .slick-next:before{
-  color: #2c2c2b !important;
+
+.slick-prev:before,
+.slick-next:before {
+  color: #ffe960;
+  size: 100;
 }
