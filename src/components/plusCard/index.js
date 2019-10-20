@@ -18,7 +18,7 @@ class PlusCard extends Component{
             <div>
                 <Box boxShadow={3} height="100%" width="100%">
                     <Card className="plusCard">
-                        <CardActionArea href="/createartifact">
+                        <CardActionArea href="/createartefact">
                             <CardMedia
                               style={{height: 0, paddingTop: '100%'}}
                               image= {require ("./../../assets/plusIcon.png")}

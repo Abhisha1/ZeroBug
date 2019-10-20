@@ -4,7 +4,7 @@ import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
 import AdminModal from '../../components/AdminChangeModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
-import { Paper, Divider,Grid } from '@material-ui/core';
+import { Paper, Divider, Grid } from '@material-ui/core';
 import Cards from '../../components/Card';
 import UploadFile from "../../components/ImageUpload";
 import { Link } from 'react-router-dom';
@@ -139,7 +139,15 @@ class FamilyDetails extends Component {
                 console.log(error);
             });
     }
-
+    /** 
+        * Function passed to child prop to search users corresponding to user input
+        * @param firebase Connects to firebase server and functions
+        * @param familyMemberName User entered user's name
+        * @param modalState The modals current state
+        */
+    searchForUsers = (firebase, familyMemberName, modalState) => {
+        firebase.searchUsers(familyMemberName, modalState)
+    }
 
 
 
@@ -152,17 +160,20 @@ class FamilyDetails extends Component {
         const artefacts = (<div><Divider />
             <h1 id="account-heading">Artefacts</h1>
             <Grid container direction="row" justify="center" alignItems="center">
-             {/* Checks if the artefacts have been retrieved and renders them as cards */}
-            {this.state.dataReady &&
-                this.state.artefactList.map(item => (
-                    <div key={item.artefactName}>
-                        <Cards key={item.artefactName} artefactName={item.artefactName} description={item.artefactBrief} date={item.date} />
-                    </div>
-                ))
-            }
+                {/* Checks if the artefacts have been retrieved and renders them as cards */}
+                {this.state.dataReady &&
+                    this.state.artefactList.map(item => (
+                        <div key={item.artefactName}>
+                            <Cards key={item.artefactName} artefactName={item.artefactName} description={item.artefactBrief} date={item.date} />
+                        </div>
+                    ))
+                }
+                {this.state.dataReady && this.state.artefactList.length === 0 && 
+                <h4>You don't seem to have any shared artefacts. You can either share an <Link to={{ pathname: '/home/' }}>existing artefact</Link> or <Link to={{ pathname: '/createartefact' }}> create an artefact</Link></h4>
+                }
             </Grid>
 
-            </div>)
+        </div>)
 
         return (
             <div id="viewFamilyPage">
@@ -184,13 +195,13 @@ class FamilyDetails extends Component {
                             <Paper id="paperCard">
                                 <h1 id="familyMembers">Members</h1>
                                 {this.state.isAdmin && (<div id="adminConfigBar">
-                                    <EditModal action={this.handleModal} collection={this.state.family} title="families" itemIsUser={true}></EditModal>
+                                    <EditModal action={this.handleModal} collection={this.state.family} title="families" itemIsUser={true} search={this.searchForUsers} ></EditModal>
                                     <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
                                 </div>)
                                 }
                                 <CustomSlider cards={this.state.family["users"]}></CustomSlider>
                             </Paper>
-                                {/* Renders the artefacts onto the page */}
+                            {/* Renders the artefacts onto the page */}
                             {artefacts}
                         </div>))
                 }

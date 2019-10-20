@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Cards from "./../../components/Card";
 import PlusCard from "./../../components/plusCard";
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
 import RenderFamilies from "./renderFamilies";
@@ -27,9 +28,22 @@ class HomePage extends Component {
                 this.props.firebase.getArtefactData(this, this.state.uid);
             }
         })
-
     }
-    ///////RANDOM COMMENT
+    handleSearch = e => {
+        this.props.firebase.getArtefactData(this, this.state.uid);
+        let newArtefacts = [];   
+        this.state.artefactList.map(artefact => {
+            if(artefact.artefactName.toLowerCase().includes(e.target.value.toLowerCase())){
+                newArtefacts.push(artefact);
+            }
+        })
+        this.setState({...this.state, searchArtifact: e.target.value, artefactList: newArtefacts});
+    }
+
+
+
+
+
     render() {
         let artefacts = [];
         if (this.state.dataReady && this.state.artefactList){
@@ -52,7 +66,12 @@ class HomePage extends Component {
                 <Divider />
                 <h1 id="account-heading">Artefacts</h1>
                 <div className="textboxContainer">
-                    <TextField className="textbox" type="search" margin-right="20px" placeholder="Search for Artefact" />
+                    <TextField 
+                    className="textbox" 
+                    type="search" 
+                    margin-right="20px" 
+                    placeholder="Search for Artefact"
+                    onChange={this.handleSearch}></TextField>
                 </div>
                 <div className="container">
                     {artefacts}

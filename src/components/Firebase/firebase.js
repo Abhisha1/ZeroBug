@@ -119,6 +119,9 @@ class Firebase {
     });
   }
 
+
+
+
   /**
    * set the user photoURL
    * @para the new user photoURL
@@ -929,32 +932,6 @@ class Firebase {
       the.setState({ ...the.state, artefactList: artefactList });
       the.setState({ dataReady: true })
     });
-  }
-
-
-  getSearchArtifact = (input, the) => {
-    let artefactList = [];
-    let tempRef = this.database().ref('/artefacts/');
-    tempRef.on("value", (data) => {
-
-
-      // parse through all the artefacts
-      for (let key in data.val()) {
-        if (key === input) {
-          let tempMem = {
-            name: data.val()[key],
-          }
-          artefactList.push(tempMem);
-
-        }
-
-        console.log(key);
-      }
-      //finally, return the list through the state
-      the.setState({ ...the.state, artefactList: artefactList });
-      the.setState({ dataReady: true })
-    });
-
   }
 
 
