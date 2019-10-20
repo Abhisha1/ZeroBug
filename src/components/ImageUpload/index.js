@@ -58,6 +58,7 @@ class ImageUpload extends Component {
     readyToUpload() {
         if (!this.state.isUploaded) {
             if (this.props.isCreate && this.props.readyToSubmit){
+                console.log(this.props.readyToSubmit)
                 if (this.state.image) {
                     this.handleUpload();
                 }
@@ -75,7 +76,7 @@ class ImageUpload extends Component {
                     oReq.send();
                 }
             }
-            else{
+            else if(!this.props.isCreate){
                 if (this.state.image && !this.state.isUploaded){
                     this.handleUpload();
                 }
