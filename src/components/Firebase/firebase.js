@@ -848,7 +848,7 @@ getSearchArtifact = (input, the) => {
     
     // parse through all the artefacts
     for (let key in data.val()) {
-      if(key==input && (data.val()[key].users[user].uid === uid || data.val()[key].admin.uid === uid )){
+      if(key==input){
         let tempMem = {
           name: data.val()[key],
         }
