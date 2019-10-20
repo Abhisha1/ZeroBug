@@ -45,7 +45,7 @@ class RenderArtifact extends Component{
                 <Divider />
                 <div id="artifactTop">
                     <h1 id="account-heading">Mangage Your Artefacts</h1>
-                    <div class="artifactContainer">
+                    <div className="artifactContainer">
                         {this.state.cardData}
                     </div>
                 </div>

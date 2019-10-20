@@ -509,13 +509,13 @@ class Firebase {
    * Adds a user to the specified collection (artefact or family)
    * @param user The user to be added
    * @param collectionName Specifies if family or artefact
-   * @param collection Actual data object (the family or the artefact)
+   * @param collection Actual data object (the family or the artefact) 
    * @return A success message or error
    */
-  addToFamily = (user, collectionName, collection) => {
+  addUserToCollection = (user, collectionName, collection) => {
     let newUsers = collection["users"];
     newUsers.push(user);
-    let name = collection["name"];
+    let name = collectionName === "artefacts" ? collection["artefactName"] : collection["name"];
     this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
@@ -524,6 +524,61 @@ class Firebase {
         return error;
       })
   }
+
+  /**
+   * Removes families access to artefact
+   * @param family The family to be removed
+   * @param collectionName Specifies if family or artefact
+   * @param collection Actual data object (the family or the artefact)
+   * @return A success message or error
+   */
+  removeFamilyAccess= (family, collectionName, collection) => {
+    let updatedFamilies = collection["authFamilies"];
+    let removeIndex = -1;
+    for (let key in collection["authFamilies"]) {
+      if (collection["authFamilies"][key].displayName === family.displayName) {
+        removeIndex = key;
+      }
+    }
+    updatedFamilies.splice(removeIndex, 1);
+    let name = collection["artefactName"];
+    if (removeIndex === -1) {
+      return new Error("could not find user in collection");
+    }
+    console.log("name is " + name + " collection is " + collectionName)
+    this.database().ref('/' + collectionName + '/' + name).update({ authFamilies: updatedFamilies })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+
+  /**
+   * Give family access to collection
+   * @param family The family to be added to artefact
+   * @param collectionName Specifies if family or artefact
+   * @param collection Actual data object (the family or the artefact) 
+   * @return A success message or error
+   */
+  grantFamilyAccess = (family, collectionName, collection) => {
+    let updatedFamilies = collection["authFamilies"];
+    updatedFamilies.push(family);
+    let name = collection["artefactName"];
+    this.database().ref('/' + collectionName + '/' + name).update({ authFamilies: updatedFamilies })
+      .then(() => {
+        return MESSAGES.SUCCESS_MESSAGE;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+
+
+
+
+
   /**
    * Removes a user to the specified collection (family or artefact)
    * @param user The user to be removed
@@ -531,9 +586,8 @@ class Firebase {
    * @param collection Actual data object (the family or the artefact)
    * @return A success message or error
    */
-  removeFromFamily = (user, collectionName, collection) => {
+  removeUserFromCollection = (user, collectionName, collection) => {
     console.log(collection["users"])
-    console.log(user)
     let newUsers = collection["users"];
     let removeIndex = -1;
     for (let key in collection["users"]) {
@@ -542,9 +596,9 @@ class Firebase {
       }
     }
     newUsers.splice(removeIndex, 1);
-    let name = collection["name"];
+    let name = collectionName === "artefacts" ? collection["artefactName"] : collection["name"];
     if (removeIndex === -1) {
-      return new Error("could not find user in family");
+      return new Error("could not find user in collection");
     }
     this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
       .then(() => {
@@ -579,7 +633,7 @@ class Firebase {
     }
     // New admin doesn't exist in group so we add to the family members then make admin
     if (!exists) {
-      this.addToFamily(newAdmin, collectionName, collection)
+      this.addToCollection(newAdmin, collectionName, collection)
       this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
         .then(() => {
           return MESSAGES.SUCCESS_MESSAGE;
@@ -648,6 +702,36 @@ class Firebase {
     console.log(imagesURL);
     return await imagesURL;
   }
+
+
+  /**
+     * get all artefacts a family has access to
+     * @param the componenet set to be state
+     * @param family the family to check which artefacts it has access too
+     */
+  getFamiliesArtefactData = async (the, family) => {
+    let artefactList = [];
+    this.database().ref('/artefacts/').once("value")
+      .then(data => {
+        // parse through all the artefacts
+        for (let key in data.val()) {
+          //parse through all the authorised families for each artefact
+          for (let familyKey in data.val()[key].authFamilies) {
+            console.log("artefacts families" + data.val()[key].authFamilies[familyKey].displayName + "our fam  " + family.name)
+            if (data.val()[key].authFamilies[familyKey].displayName === family.name) {
+
+              artefactList.push(data.val()[key]);
+            }
+          }
+        }
+        console.log(artefactList)
+        //finally, return the list through the state
+        the.setState({ ...the.state, artefactList: artefactList });
+        the.setState({ dataReady: true })
+      })
+      .catch(err=> console.log("Couldn't get artefacts"))
+}
+
 
 /**
  * Get a list of Artifact name data
@@ -725,8 +809,6 @@ getCookie = (cname) => {
   }
   return "";
 }
-
-
   /**
    * Sign up a user using their provided email and password
    * @param email the email address of the user to register by
@@ -739,8 +821,8 @@ getCookie = (cname) => {
   }
 /**
    * get all artefacts user has access to
-   * @para the componenet set to be state
-   * @para the username of the user to check artefacts for
+   * @param the componenet set to be state
+   * @param the username of the user to check artefacts for
    */
   getYourManageArtefactData = (the, uid) => {
     let artefactList = [];
@@ -763,19 +845,6 @@ getCookie = (cname) => {
 
 
         }
-
-
-
-        // for(let user in data.val()[key].admin){
-        //     if(data.val()[key].users[user].uid === uid){
-        //         count ++;
-
-        //         let tempMem = {
-        //             name: data.val()[key],
-        //         }
-        //         artefactList.push(tempMem);
-        //     }
-        // }
     }
     //finally, return the list through the state
     the.setState({...the.state, artefactList: artefactList});
@@ -799,13 +868,6 @@ doCreateUserWithEmailAndPassword = (email, password, username) => {
 
 
 
-/**
- * Sign in the a registered user account
- * @param email the email address of the registered user
- * @param password the password for the registered user's account
- */
-doCreateUserWithEmailAndPassword = (email, password) =>
-  this.auth.createUserWithEmailAndPassword(email, password);
 
 doSignInWithEmailAndPassword = (email, password) => {
   return this.auth.signInWithEmailAndPassword(email, password);

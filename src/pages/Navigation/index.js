@@ -6,7 +6,6 @@ import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import SignOutButton from '../../components/SignOut';
 import { Navbar, Nav } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
-import { IoMdPeople, IoMdPerson, IoMdHome } from "react-icons/io"
 import './navigation.scss';
 import logo from "../../assets/templogo.png";
 import Avatar from '@material-ui/core/Avatar';

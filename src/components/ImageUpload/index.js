@@ -3,6 +3,7 @@ import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import "./imageUpload.scss";
 import PlaceHolderImage from '../../assets/group-profile-users.png';
 class ImageUpload extends Component {
@@ -76,7 +77,7 @@ class ImageUpload extends Component {
                     oReq.send();
                 }
             }
-            else if(!this.props.isCreate){
+            else if (!this.props.isCreate){
                 if (this.state.image && !this.state.isUploaded){
                     this.handleUpload();
                 }

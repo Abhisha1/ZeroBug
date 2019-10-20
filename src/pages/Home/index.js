@@ -9,6 +9,9 @@ const HomePage = () => (
     <Link
     to={{ pathname: '/family/Rabbit', state: { name: 'Rabbit'} }}
     >TEST VIEW FAM</Link>
+    <Link
+    to={{ pathname: '/artefact/Fraz', state: { name: 'Fraz'} }}
+    >TEST VIEW ARTEFACT</Link>
   </div>
 );
 
