@@ -108,12 +108,14 @@ class ArtefactDetails extends Component {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }
                         let currUserIsMember = false
-                        value.users.map(familyMember => {
-                            if (familyMember.uid === user.uid) {
-                                currUserIsMember = true;
-                                this.setState({ family: value, loading: false, hasAccess: true });
-                            }
-                        })
+                        if(value.users){
+                            value.users.map(familyMember => {
+                                if (familyMember.uid === user.uid) {
+                                    currUserIsMember = true;
+                                    this.setState({ family: value, loading: false, hasAccess: true });
+                                }
+                            })
+                        }
                         if (!currUserIsMember && value.authFamilies) {
                             value.authFamilies.map(family => {
                                 family.users.map(familyMember => {
@@ -175,7 +177,8 @@ class ArtefactDetails extends Component {
                                     }}>
                                     <GridList cellHeight={200} style={{
                                         width: "75%",
-                                        height: "45%"
+                                        height: "45%",
+                                        justifyContent: 'center'
                                     }} cols={3}>
                                         {this.state.artefact.imagesURL.map(url => (
                                             <GridListTile key={url} cols={1}>
