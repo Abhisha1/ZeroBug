@@ -10,9 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 
 
-
-const primary = yellow[500];
-
 class Profile extends Component{
     constructor(props){
         super(props);

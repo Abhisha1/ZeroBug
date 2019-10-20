@@ -16,20 +16,13 @@ class ImageUpload extends Component{
     handleChange = e => {
         if(e.target.files[0]){
             const file = e.target.files[0];
-            this.setState({... this.state, image: file})
+            this.setState({ ...this.state, image: file})
         }
     }
 
     handleUpload = () => {
         const {image} = this.state;
-        const uploadTask = this.props.firebase.uploadthings(image, this);
-        console.log("dddddd");
-        //this.props.firebase.getURL(this,'images/'+image.name);
-        
-
-      //  console.log(image.name);
-       // console.log(url);
-
+        this.props.firebase.uploadthings(image, this);
     }
 
     render(){
@@ -39,7 +32,7 @@ class ImageUpload extends Component{
                 <button onClick={this.handleUpload}>Upload</button>
                 <br/>
                 <img src={this.state.imageURL} alt="Uploaded images" height="120" width="330"/>
-                
+
             </div>
         )
     }
