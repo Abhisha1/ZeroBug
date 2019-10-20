@@ -40,6 +40,9 @@ const INIT_STATE = {
 // The Primary colour for buttons and glyphs
 const primary = yellow[500];
 
+// The standard photo attached to any user
+const profileImageDefault = "https://dwrhx129r2-flywheel.netdna-ssl.com/wp-content/uploads/2015/08/blank-avatar.png"
+
 // The styles sheet for the Material UI Element
 const useStyles = makeStyles(theme => ({
   image: {
@@ -83,6 +86,17 @@ function SignUp(props) {
     error: null,
   });
 
+  React.useEffect(() => {
+    props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        // user is already logged in redirect to home
+        props.history.push(ROUTES.HOME);
+      } else {
+        // User not logged in or has just logged out.
+      }
+    });
+  });
+
   // Updates the values of the state on change
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
@@ -105,7 +119,7 @@ function SignUp(props) {
       .then(() => {
         props.firebase.auth.currentUser.updateProfile({
           displayName: values.userName,
-          photoURL: "https://dwrhx129r2-flywheel.netdna-ssl.com/wp-content/uploads/2015/08/blank-avatar.png"
+          photoURL: profileImageDefault
         }).then(function(){
           console.log("User profile successfully added");
         }, function(error) {

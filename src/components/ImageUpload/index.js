@@ -3,6 +3,7 @@ import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import "./imageUpload.scss";
 import PlaceHolderImage from '../../assets/group-profile-users.png';
 class ImageUpload extends Component {
@@ -16,7 +17,7 @@ class ImageUpload extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
     }
-    /** Adapted from developer.mozilla  
+    /** Adapted from developer.mozilla
      * Previews a file that is not yet uploaded to the server to users
     */
     previewFile() {
@@ -33,7 +34,7 @@ class ImageUpload extends Component {
             reader.readAsDataURL(file);
         }
     }
-    /** Handles the event where a file is selected by user 
+    /** Handles the event where a file is selected by user
      * @param e The event triggered by a user input change
     */
     handleChange = e => {
@@ -76,7 +77,7 @@ class ImageUpload extends Component {
                     oReq.send();
                 }
             }
-            else if(!this.props.isCreate){
+            else if (!this.props.isCreate){
                 if (this.state.image && !this.state.isUploaded){
                     this.handleUpload();
                 }
@@ -119,7 +120,7 @@ class ImageUpload extends Component {
 
                     </Grid>):[]
                 }
-                
+
 
 
                 <input

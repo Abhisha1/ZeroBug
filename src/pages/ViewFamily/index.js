@@ -4,8 +4,10 @@ import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
 import AdminModal from '../../components/AdminChangeModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
-import Paper from '@material-ui/core/Paper';
+import { Paper, Divider,Grid } from '@material-ui/core';
+import Cards from '../../components/Card';
 import UploadFile from "../../components/ImageUpload";
+import { Link } from 'react-router-dom';
 import { withAuthorization } from "../../components/Session";
 import "./viewfamily.scss";
 /**
@@ -42,7 +44,7 @@ const loading = <LoadingAnimation></LoadingAnimation>
 class FamilyDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, family: null, loading: true, isAdmin: false }
+        this.state = { showModal: false, family: null, loading: true, isAdmin: false, hasAccess: false, cardData: [] }
         this.handleModal = this.handleModal.bind(this);
         this.handleAdmins = this.handleAdmins.bind(this);
     }
@@ -60,8 +62,8 @@ class FamilyDetails extends Component {
             if (this.state.family["users"][key].uid === dataFromModal.uid) {
                 duplicate = true;
                 // When we have removed a user (that already exists in our list), we delete from our rendered members
-                if(action === "remove"){
-                    usersToAdd.splice(key,1)
+                if (action === "remove") {
+                    usersToAdd.splice(key, 1)
                 }
             }
         }
@@ -106,14 +108,33 @@ class FamilyDetails extends Component {
                             uid: user.uid,
                             photoURL: user.photoURL
                         }
-                        console.log(value)
+                        // Checks if the current user is a member of the family
+                        let currUserIsMember = false
+
+                        // Current user is the admin
                         if (user.uid === value.admin.uid) {
-                            this.setState({ family: value, loading: false, isAdmin: true });
+                            this.setState({ family: value, loading: false, isAdmin: true, hasAccess: true });
+                            currUserIsMember = true;
+                            // Finds the artefacts corresponding to the family
+                            return this.props.firebase.getFamiliesArtefactData(this, this.state.family);
                         }
-                        this.setState({ family: value, loading: false });
+                        //Current user is part of the family members
+                        if (!currUserIsMember) {
+                            value.users.map(familyMember => {
+                                if (familyMember.uid === user.uid) {
+                                    currUserIsMember = true;
+                                    this.setState({ family: value, loading: false, hasAccess: true });
+                                    // Finds the artefacts corresponding to the family
+                                    return this.props.firebase.getFamiliesArtefactData(this, this.state.family);
+                                }
+                            })
+                        }
+                        if (!currUserIsMember) {
+                            this.setState({ loading: false });
+                        }
                     } else {
-                        this.setState({ family: value, loading: false });
                         // User not logged in or has just logged out.
+                        this.setState({ loading: false });
                     }
                 });
             })
@@ -121,28 +142,60 @@ class FamilyDetails extends Component {
                 console.log(error);
             });
     }
+
+
+
+
+
     /**
      * Renders the family details or a loading screen depending on
      * status of database call
      */
     render() {
+        const artefacts = (<div><Divider />
+            <h1 id="account-heading">Artefacts</h1>
+            <Grid container direction="row" justify="center" alignItems="center">
+             {/* Checks if the artefacts have been retrieved and renders them as cards */}
+            {this.state.dataReady &&
+                this.state.artefactList.map(item => (
+                    <div key={item.artefactName}>
+                        <Cards key={item.artefactName} artefactName={item.artefactName} description={item.artefactBrief} date={item.date} />
+                    </div>
+                ))
+            }
+            </Grid>
+                
+            </div>)
+
         return (
             <div id="viewFamilyPage">
+                {/* Checks if the page is still retreiving data */}
                 {this.state.loading ? <div id="loader">{loading}</div> :
-                    <div>
-                        <h1 id="familyName">{this.props.name}</h1>
-                        <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
+                    (!this.state.hasAccess ?
+                        // User is not part of family so cannot access family
+                        (<Paper>
+                            <h1>Uh oh! You don't have access to this family</h1>
+                            <h4>To find families you have access to, head back to <Link
+                                to={{ pathname: '/home/' }}
+                            >My Home</Link></h4></Paper>)
+                        // User has access so can view family information
+                        : (<div>
+                            <h1 id="familyName">{this.props.name}</h1>
+                            <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
 
-                        <Paper id="paperCard">
-                            <h1 id="familyMembers">Members</h1>
-                            {this.state.isAdmin && (<div id="adminConfigBar">
-                            <EditModal action={this.handleModal} family={this.state.family}></EditModal>
-                            <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
-                            </div>)
-                            }
-                            <CustomSlider cards={this.state.family["users"]}></CustomSlider>
-                        </Paper>
-                    </div>
+                            {/* Admins can edit users and change admin */}
+                            <Paper id="paperCard">
+                                <h1 id="familyMembers">Members</h1>
+                                {this.state.isAdmin && (<div id="adminConfigBar">
+                                    <EditModal action={this.handleModal} collection={this.state.family} title="families" itemIsUser={true}></EditModal>
+                                    <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
+                                </div>)
+                                }
+                                <CustomSlider cards={this.state.family["users"]}></CustomSlider>
+                            </Paper>
+                                {/* Renders the artefacts onto the page */}
+                            {artefacts}
+                        </div>))
                 }
 
             </div>

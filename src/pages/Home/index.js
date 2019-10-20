@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Cards from "./../../components/Card";
+import PlusCard from "./../../components/plusCard";
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
@@ -18,6 +19,7 @@ class HomePage extends Component {
             dataReady: false,
             cardData: [],
             searchArtifact: null,
+            plusCardAdded: false,
         }
     }
     componentDidMount =() => {
@@ -50,8 +52,11 @@ class HomePage extends Component {
                     {cardData.push(<Cards artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
                 </div>
             ));
+            if(this.state.plusCardAdded===false){
+                this.state.cardData.push(<PlusCard/>);
+                this.state.plusCardAdded=true;
+            }
         }
-
         return(
 
 

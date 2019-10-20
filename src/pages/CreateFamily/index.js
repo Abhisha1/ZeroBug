@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
 import { withFirebase } from '../../components/Firebase'
-import Button from "@material-ui/core/Button";
-import CustomModal from "../../components/AddUserModal";
+import { Button, TextField } from "@material-ui/core";
+import CustomModal from "../../components/AddModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
@@ -116,6 +116,10 @@ class CreateFamily extends Component {
     });
   }
 
+  searchForUsers(firebase, familyMemberName, modalState) {
+    firebase.searchUsers(familyMemberName, modalState)
+  }
+
   /**
    * Renders the create family form onto the webpage
    */
@@ -143,14 +147,13 @@ class CreateFamily extends Component {
 
         {/* The form for creating a family */}
         <Form onSubmit={this.handleSubmit()} id="new-family-form">
-          <Form.Label> Family Name </Form.Label>
 
           {/* Displays popover is family exists */}
           {this.state.isExistingFamily ?
             <OverlayTrigger placement="right" overlay={popover}>
-              <Form.Control required name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+              <TextField margin="normal" variant="outlined" label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
             </OverlayTrigger>
-            : <Form.Control required name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+            : <TextField margin="normal" variant="outlined" label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
         }
           {/* Renders the members that have been added to the family so far */}
           <CustomSlider cards={this.state.familyMembers}></CustomSlider>
@@ -158,7 +161,7 @@ class CreateFamily extends Component {
           {/* Handles the functionality to add users to a family using a custom modal */}
           <div id="family-buttons">
             <Form.Group controlId="validationFormikUsername">
-              <CustomModal action={this.handleModal}></CustomModal>
+              <CustomModal action={this.handleModal} title="Users" search={this.searchForUsers}></CustomModal>
             </Form.Group>
             <Button id="create-family-button" variant="outlined" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</Button>
           </div>

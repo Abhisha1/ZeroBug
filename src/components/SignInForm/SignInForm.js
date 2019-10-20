@@ -92,7 +92,7 @@ class SignInFormBase extends Component {
           <Modal.Header closeButton>
             <Modal.Title> Error</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{error && error.message}</Modal.Body>
+          <Modal.Body id="errorMessage" >{error && error.message}</Modal.Body>
           <Modal.Footer>
             <button variant="primary" onClick={this.handleClose}>Close</button>
           </Modal.Footer>

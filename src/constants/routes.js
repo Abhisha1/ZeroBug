@@ -8,3 +8,5 @@ export const PASSWORD_FORGET = '/pw-forget';
 export const CREATE_FAMILY = '/create-family';
 export const ARTIFACT = '/artifact';
 export const VIEW_FAMILY = "/family/:name";
+export const VIEW_ARTEFACT = "/artefact/:name";
+export const CREATE_ARTEFACT = "/createartifact";
