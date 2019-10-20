@@ -110,7 +110,7 @@ class Firebase {
       }
 
       //update the photoURL
-      if (location == "profileImages/"){
+      if (location === "profileImages/"){
         this.updateUserImage(url);
       }
 
@@ -228,7 +228,7 @@ class Firebase {
             (avatar) => {
               tempMem.avatar = avatar;
               now ++;
-              if (now == count){
+              if (now === count){
                 the.setState({dataReady: true})
               }
             });
@@ -266,7 +266,7 @@ class Firebase {
 
         console.log(data.val()[key].admin.displayName);
 
-        if(data.val()[key].admin.displayName == username ){
+        if(data.val()[key].admin.displayName === username ){
           count ++;
 
           let tempMem = {
@@ -277,7 +277,7 @@ class Firebase {
           (avatar) => {
             tempMem.avatar = avatar;
             now ++;
-            if (now == count){
+            if (now === count){
               the.setState({dataReady: true})
             }
           });
@@ -850,10 +850,10 @@ getCookie = (cname) => {
   var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }
@@ -900,6 +900,71 @@ getCookie = (cname) => {
     the.setState({...the.state, artefactList: artefactList});
     the.setState({dataReady: true})
 });
+}
+
+/**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
+   */
+  getArtefactData = (the, uid) => {
+    let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+    let count = 0;
+
+    // parse through all the artefacts
+    for (let key in data.val()) {
+
+        //parse through all the authorised users for each artefact
+        for(let user in data.val()[key].users){
+
+          console.log(data.val()[key])
+          console.log("aaaa");
+
+            console.log(data.val()[key].users[user].uid );
+            if(data.val()[key].users[user].uid === uid){
+                count ++;
+
+                let tempMem = {
+                    name: data.val()[key],
+                }
+                artefactList.push(tempMem);
+                console.log(artefactList);
+            }
+        }
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+}
+
+
+getSearchArtifact = (input, the) => {
+  let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+
+    // parse through all the artefacts
+    for (let key in data.val()) {
+      if(key === input){
+        let tempMem = {
+          name: data.val()[key],
+        }
+        artefactList.push(tempMem);
+
+      }
+
+        console.log(key);
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+
 }
 
 

@@ -9,8 +9,6 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Grid from '@material-ui/core/Grid';
 import GridListTile from '@material-ui/core/GridListTile';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import yellow from '@material-ui/core/colors/yellow';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,7 +17,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import * as MESSAGES from '../../constants/messages';
 
 
 // The Primary colour for buttons and glyphs
@@ -206,7 +203,7 @@ function UploadArtefactForm(props) {
                   required
                   fullWidth
                   className={classes.textField}
-                  id="artefactName"
+                  id="newArtefactName"
                   label="Artefact Name"
                   autoFocus
                   onChange={handleChange("artefactName")}
@@ -220,7 +217,7 @@ function UploadArtefactForm(props) {
                   required
                   fullWidth
                   className={classes.textField}
-                  id="artefactName"
+                  id="newArtefactOrigin"
                   label="Place of Origin"
                   autoFocus
                   onChange={handleChange("location")}

@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
@@ -16,9 +15,7 @@ import "./viewfamily.scss";
  * previous webpage
  */
 class ViewFamily extends Component {
-    constructor(props) {
-        super(props);
-    }
+
     /**
      * Renders the family details on screen, using the name of the family from
      * url or the previous webpage
@@ -106,7 +103,6 @@ class FamilyDetails extends Component {
                         let authUser = {
                             uid: user.uid,
                             name: user.displayName,
-                            uid: user.uid,
                             photoURL: user.photoURL
                         }
                         // Checks if the current user is a member of the family
@@ -165,7 +161,7 @@ class FamilyDetails extends Component {
                 ))
             }
             </Grid>
-                
+
             </div>)
 
         return (

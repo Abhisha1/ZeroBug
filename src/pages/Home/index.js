@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
 import RenderFamilies from "./renderFamilies";
 import "./container.scss"
+import Button from '@material-ui/core/Button';
 
 
 
@@ -17,6 +18,7 @@ class HomePage extends Component {
             uid: null,
             dataReady: false,
             cardData: [],
+            searchArtifact: null,
             plusCardAdded: false,
         }
     }
@@ -30,13 +32,16 @@ class HomePage extends Component {
 
     }
 
-    showNone(){
-        this.setState({plusCardAdded :true});
-        return(<PlusCard />)
+    handleChange = e => {
+        this.setState({...this.state, searchArtifact: e.target.value});   
+        console.log(this.searchArtifact);  
+    }
+
+    handleSearch = () => {
+        this.props.firebase.getSearchArtifact(this.state.searchArtifact, this);
     }
 
 
-///////RANDOM COMMENT
     render(){
         let artefacts = (<div class="container">
             {this.state.dataReady && 
@@ -57,11 +62,18 @@ class HomePage extends Component {
                 <RenderFamilies/>
               </div>
                 <Divider />
-                <h1 id="account-heading">Artefacts</h1>
-                <div className="textboxContainer">
-                    <TextField className="textbox" type="search" margin-right="20px" placeholder="Search for Artefact"/>
+                <h1 id="account-heading">Your Artefacts</h1>
+                <div class="textboxContainer">
+                    <TextField 
+                    className="textbox" 
+                    type="search" 
+                    margin-right="20px" 
+                    placeholder="Search for Artefact"
+                    onChange={this.handleChange}></TextField>
+
+                    <Button variant="outlined" className="searchButton" onClick={this.handleSearch}>Search</Button> 
                 </div>
-                <div className="container">
+                <div class="container">
                     {artefacts}
                 </div>
             </div>
