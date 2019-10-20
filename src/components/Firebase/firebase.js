@@ -369,23 +369,6 @@ class Firebase {
   }
 
   /**
-   * Finds an image from the server and returns a promise with its url
-   * @param location The folder the image is in on server
-   * @param name The name of the file in the server
-   */
-  findImage = (location, name) => {
-    return new Promise((resolve, reject) => {
-      this.storage().ref().child('/' + location + name).getDownloadURL()
-        .then(url => {
-          resolve(url);
-        })
-        .catch(error => {
-          reject(error);
-        })
-    })
-  }
-
-  /**
    * Finds whether the user exists and sends users which match, back to parent class
    * @param user the input string for a user
    * @param the the parent class
@@ -431,7 +414,7 @@ class Firebase {
               photoURL: url,
               users: family.users
             }
-            if(family.name.includes(familyString.toLowerCase())){
+            if(family.name.toLowerCase().includes(familyString.toLowerCase())){
               matches.push(newFamily);
             }
           })
@@ -440,7 +423,7 @@ class Firebase {
               displayName: family.name
             }
             console.log(family.name)
-            if(family.name.includes(familyString)){
+            if(family.name.toLowerCase().includes(familyString)){
               matches.push(newFamily);
             }
           })
