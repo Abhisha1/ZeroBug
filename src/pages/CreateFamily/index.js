@@ -116,15 +116,13 @@ class CreateFamily extends Component {
     });
   }
 
-
   searchForUsers(firebase, familyMemberName, modalState) {
     firebase.searchUsers(familyMemberName, modalState)
   }
 
-
-
-
-
+  /**
+   * Renders the create family form onto the webpage
+   */
   render() {
     // An error popover that is displayed when a family already exists under this name
     const popover = (

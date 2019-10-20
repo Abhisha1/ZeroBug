@@ -3,6 +3,7 @@ import { withFirebase } from '../Firebase';
 import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import "./imageUpload.scss";
 import PlaceHolderImage from '../../assets/group-profile-users.png';
 class ImageUpload extends Component {
@@ -58,6 +59,7 @@ class ImageUpload extends Component {
     readyToUpload() {
         if (!this.state.isUploaded) {
             if (this.props.isCreate && this.props.readyToSubmit){
+                console.log(this.props.readyToSubmit)
                 if (this.state.image) {
                     this.handleUpload();
                 }

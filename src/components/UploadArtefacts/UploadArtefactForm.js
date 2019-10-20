@@ -8,6 +8,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Grid from '@material-ui/core/Grid';
+import GridListTile from '@material-ui/core/GridListTile';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +19,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import * as MESSAGES from '../../constants/messages';
+
 
 // The Primary colour for buttons and glyphs
 const primary = yellow[900];
@@ -31,7 +34,6 @@ const INIT_STATE = {
   authUsers: [],
   location: '',
   date: new Date(),
-  imagesURL: [],
   imageAdded: false,
   images: [],
 };
@@ -58,6 +60,17 @@ function UploadArtefactForm(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState(INIT_STATE);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  React.useEffect(() => {
+    props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Do nothing as user can access page
+      } else {
+        // User not logged in or has just logged out.
+        props.history.push(ROUTES.SIGN_IN);
+      }
+    });
+  });
 
   // Updates the values of the state on change
   const handleChange = prop => event => {
@@ -103,25 +116,12 @@ function UploadArtefactForm(props) {
     if (!duplicate){
       updatedAuthFamilies.push({
         displayName: familiesFromModal.displayName,
-        photoURL: familiesFromModal.photoURL
+        photoURL: familiesFromModal.photoURL,
+        users: familiesFromModal.users
       });
       setValues({ ...values, ["authFamilies"]: updatedAuthFamilies });
     }
   }
-
-  // Handles submission of a new image for the artefact
-  const onImageSubmit = () => {
-    props.firebase.uploadArtefactFiles(values.images, values.artefactName, values, setValues)
-      .then(() => {
-        setValues({ ...values, ["images"]: [] });
-        return "Success";
-      })
-      .catch(error => {
-        console.log("IMAGE UPLOAD FAILED")
-        return error;
-      })
-
-  };
 
 
   // Handles submission of a new created artefact to Firebase
@@ -133,20 +133,17 @@ function UploadArtefactForm(props) {
       values.description,
       values.authFamilies,
       values.authUsers,
-      values.imagesURL
+      values.images
       )
       .then(() => {
         setValues(INIT_STATE);
         setSelectedDate(new Date());
-        onImageSubmit()
-        .then(() => {
-          props.history.push(ROUTES.HOME);
-        })
+        props.history.push(ROUTES.HOME);
+      }).catch(error => {
+        console.log("UPLOAD FAILED");
+        console.error(error);
+      })
 
-      })
-      .catch(error => {
-        console.error(error)
-      })
 
     event.preventDefault()
 
@@ -171,6 +168,20 @@ function UploadArtefactForm(props) {
    */
   const searchForUsers = (firebase, familyMemberName, modalState) => {
     firebase.searchUsers(familyMemberName, modalState)
+  }
+
+  const renderImage = (image) => {
+      let imageRead;
+      let reader = new FileReader();
+
+      reader.onload = function () {
+        imageRead = reader.result;
+      }
+
+      if (image) {
+        reader.readAsDataURL(image);
+      }
+      return imageRead;
   }
 
   // Defines when to enable the ability to upload the artefact
@@ -290,43 +301,41 @@ function UploadArtefactForm(props) {
             </Grid>
           </form>
         </Grid>
-        <Grid item xs={6}>
-          <input
-            id="imageUpload"
-            multiple
-            type="file"
-            name="Upload"
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <label htmlFor="imageUpload">
-            <Button
-              variant="contained" component="span"
-            >
-              UPLOAD
-          </Button>
-          </label>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={isInvalid}
-            onClick={onSubmit}
-          >
-            Submit
+        <Grid container justify="center" alignItems="center" direction="column-reverse">
+          <Grid item xs={5}>
+            <input
+              id="imageUpload"
+              multiple
+              type="file"
+              name="Upload"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="imageUpload">
+              <Button
+                variant="contained"
+                component="span"
+                fullWidth
+              >
+                UPLOAD
             </Button>
-        </Grid>
-        <Grid item xs={6}>
+            </label>
+          </Grid>
+          <Grid item xs={5}>
+            {Array.from(values.images).map(image => (
+              <GridListTile key={image.name}>
+                <img src={renderImage(image)} alt={image.name} id="artefactImages"/>
+              </GridListTile>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
       <Grid container direction="column">
-        <Grid item style={{ width: "100%" }}>
+        <Grid item style={{ width: "95%" }}>
           <CustomSlider cards={values.authUsers} />
         </Grid>
-        <Grid item style={{ width: "100%" }}>
+        <Grid item style={{ width: "95%" }}>
           <CustomSlider cards={values.authFamilies} />
         </Grid>
       </Grid>

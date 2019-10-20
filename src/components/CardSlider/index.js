@@ -8,7 +8,7 @@ import "./customslider.scss";
 
 /**
  * The CustomSlider class which renders list of families
- * horizontally 
+ * horizontally
  */
 class CustomSlider extends Component {
   settings = {
@@ -46,7 +46,7 @@ class CustomSlider extends Component {
   render() {
 
     let slickSlider = <Slider id="customSlider" {...this.settings} ref={c => { this.slickSlider = c }}>
-      
+
       {/* Passes through families data to render in slider */}
       {this.props.cards.map(item => (
         <div key={item} id="sliderCard">

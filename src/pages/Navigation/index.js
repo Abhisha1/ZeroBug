@@ -21,7 +21,7 @@ const Navigation = () => (
     <Navbar.Collapse id="responsive-navbar-nav">
       <AuthUserContext.Consumer>
         {/* Renders the approaprriate links depending on whether user is signed in/authorised or not */}
-        {authUser =>
+        {authUser => 
           authUser ? <NavigationAuth user={authUser}/> : <NavigationNonAuth />
         }
       </AuthUserContext.Consumer>
@@ -34,7 +34,7 @@ const Navigation = () => (
 const NavigationAuth = ( user ) => (
   <Nav className="ml-auto">
     <Nav.Link href={ROUTES.HOME}><HomeTwoToneIcon fontSize="large"/></Nav.Link>
-    <Nav.Link href={ROUTES.ACCOUNT}><Avatar size="small" src={user.photoURL} /></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar size="small" src={user.user.photoURL} /></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><GroupAddIcon fontSize="large"/></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_ARTEFACT}><AddPhotoAlternateIcon fontSize="large"/></Nav.Link>
     <SignOutButton />

@@ -10,7 +10,8 @@ class RenderFamilies extends Component{
             familyList: null,
             username: null,
             familyImageURL: [],
-            dataReady: false
+            dataReady: false,
+            cardData: null,
         }
     }
 
@@ -25,27 +26,15 @@ class RenderFamilies extends Component{
     }
 
     render(){
-
-        let cardData = []
-
-        if(this.state.dataReady){
-            for(let i = 0; i < this.state.familyList.length; i++){
-                cardData.push(
-                    {
-                        avatar: this.state.familyImageURL[i],
-                        name: this.state.familyList[i]
-                    }
-                )
-            }
-        }
-
         return(
             <div>
                 <div id="familiesWrapper">
-					<h1 id="account-heading">Your Managed Families</h1>
-                    <FamilySlider cards={
-                            cardData
-					}/>
+					<h1 id="account-heading">Manage Your Families</h1>
+                    <FamilySlider cards=
+                        {this.state.dataReady?
+                            this.state.cardData:[]
+                        }
+					/>
 				</div>
             </div>
         )

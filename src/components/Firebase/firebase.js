@@ -109,12 +109,32 @@ class Firebase {
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
 
+      //update the photoURL
+      if (location == "profileImages/"){
+        this.updateUserImage(url);
+      }
 
     }).catch(error => {
       console.log("Written data FAILED");
     });
   }
 
+  /**
+   * set the user photoURL
+   * @para the new user photoURL
+   */
+  updateUserImage = (newURL) => {
+    this.auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        user.updateProfile({
+          displayName: user.displayName,
+          photoURL: newURL
+        })
+    //console.log(user.photoURL);
+      }
+  })
+}
   /********************************************************************** */
   /**
    * get the profile image before rendering the account page
@@ -122,18 +142,26 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName) => {
+
+  getImageURL = (th, location, dbGroupName, user) => {
 
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
 
+      th.setState({ ...th.state, imageURL: url});
 
-      th.setState({ ...th.state, imageURL: url });
+      //update the user profile URL
+      user.updateProfile({
+        displayName: user.displayName,
+        photoURL: url
+      })
+
+      //console.log(user.photoURL);
+
     }).catch(error => {
       console.log("Show data FAILED");
     });
 
   }
-
 
   /**
    * get the list fo families images
@@ -167,44 +195,50 @@ class Firebase {
   }
 
 
-
-
-
-
-  // get a list of Artifact name data
-  getListArtifactName = (the) => {
-    let testArtifactName = [];
-    let tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', (data) => {
-      testArtifactName.push(data.val().artifactName);
-      the.setState({ ...the.state, artifactList: testArtifactName })
-    });
-  }
-
-
   // for home page
   /**
    * get a list of Family name that the user have
    * @para the component to be set the state
    * @para users' names
    */
-  getListFamilyName = (the, username) => {
+  getYourFamilyNames = (the, username) => {
+
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
-          if (data.val()[key].users[user].displayName == username) {
+          if (data.val()[key].users[user].displayName === username) {
 
-            testFamilyName.push(data.val()[key].name);
+            count ++;
+
+            let tempMem = {
+              name: data.val()[key].name,
+            }
+
+
+            this.getFamilyImageURL(data.val()[key].name,
+            (avatar) => {
+              tempMem.avatar = avatar;
+              now ++;
+              if (now == count){
+                the.setState({dataReady: true})
+              }
+            });
+            testFamilyName.push(tempMem);
 
           }
         }
       }
 
-      the.setState({ ...the.state, familyList: testFamilyName })
+      the.setState({...the.state, cardData: testFamilyName});
 
     });
   }
@@ -216,22 +250,59 @@ class Firebase {
    * @para the user name
    */
   getYourManagedFamilyName = (the, username) => {
+
     let testFamilyName = [];
     let tempRef = this.database().ref('/families/');
+
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
-        if (data.val()[key].admin.name == username) {
-          testFamilyName.push(data.val()[key].name);
+
+        console.log(data.val()[key].admin.displayName);
+
+        if(data.val()[key].admin.displayName == username ){
+          count ++;
+
+          let tempMem = {
+            name: data.val()[key].name,
+          }
+
+          this.getFamilyImageURL(data.val()[key].name,
+          (avatar) => {
+            tempMem.avatar = avatar;
+            now ++;
+            if (now == count){
+              the.setState({dataReady: true})
+            }
+          });
+          testFamilyName.push(tempMem);
 
         }
-      }
-      the.setState({ ...the.state, familyList: testFamilyName });
-      this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
-      the.setState({ dataReady: true })
+        }
+        the.setState({...the.state, cardData: testFamilyName});
     })
-
   }
+
+  /**
+   * get the family image
+   * @para family name
+   * @para get the family image
+   */
+  getFamilyImageURL = (familyName, callback) => {
+      this.storage().ref().child("familyImages/" + familyName).getDownloadURL().then((url)=>{
+        callback(url);
+      }
+      )
+  }
+
+
+
 
 
   //upload the files
@@ -572,56 +643,6 @@ class Firebase {
         })
     }
   }
-  /**
-     * Retrieves the a particular artefacts' data
-     * @param name The artefact name
-     * @return The associated family's data or an error
-     */
-  viewArtefact = (name) => {
-    return new Promise((resolve, reject) => {
-      const onData = snap => {
-        resolve(snap.val());
-      }
-      const onError = error => reject(error);
-      this.database().ref('/artefacts/' + name).on("value", onData, onError)
-    });
-  }
-
-  /**
-   * Write the artifact information to the database
-   * @param artifact ID
-   * @param artifact name
-   * @param artifact origin
-   * @param artifact current owner
-   * @param artifact description
-   */
-  // testUploadArtifactData = (artifactID, artifactName, artifactOrigin, artifactCurrentOwner, artifactDescription) => {
-  //   this.database().ref('testUploadArtifactData/' + artifactID).set({
-  //     artifactName: artifactName,
-  //     origin: artifactOrigin,
-  //     currentOwner: artifactCurrentOwner,
-  //     description: artifactDescription
-  //   }, (error) => {
-  //     if (error) {
-  //       // The write failed...
-  //       console.log("Written data FAILED");
-  //     } else {
-  //       // Data saved successfully!
-  //       console.log("Successfully append the data!");
-  //     }
-  //   }
-  //   // New admin doesn't exist in group so we add to the family members then make admin
-  //   if (!exists) {
-  //     this.addToFamily(newAdmin, collectionName, collection)
-  //     this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
-  //       .then(() => {
-  //         return MESSAGES.SUCCESS_MESSAGE;
-  //       })
-  //       .catch(error => {
-  //         return error;
-  //       })
-  //   }
-  // }
 
   /**
    * Create a new artefact
@@ -632,9 +653,10 @@ class Firebase {
    * @param authFamilies A JSON list of the autherised families for the artefact
    * @param authUsers A JSON list of the autherised users for the artefact
    */
-  createArtefact = (name, date, location, artefactBrief, description, authFamilies, authUsers, imagesURL) => {
+  createArtefact = async (name, date, location, artefactBrief, description, authFamilies, authUsers, images) => {
     let currentUser = this.auth.currentUser;
     let fbDate = firebase.firestore.Timestamp.fromDate(date);
+    let imagesURL = await this.uploadArtefactFiles(images, name);
     return (
       this.database().ref('artefacts/' + name).set({
         date: fbDate,
@@ -643,9 +665,9 @@ class Firebase {
         artefactBrief: artefactBrief,
         description: description,
         authFamilies: authFamilies,
-        authUsers: authUsers,
+        users: authUsers,
         artefactName: name,
-        owner: {
+        admin: {
           email: currentUser.email,
           name: currentUser.displayName,
           uid: currentUser.uid,
@@ -658,58 +680,27 @@ class Firebase {
     )
   }
 
-  uploadArtefactFiles = (images, artefactName, values, setValues) => {
+  uploadArtefactFiles = async (images, artefactName) => {
+    // Convert to filesList to an array
     let imagesArr = Array.from(images);
-    console.log(imagesArr);
-    return Promise.all(imagesArr.forEach(image => {
-      console.log("IMAGE UPLOADING");
-      console.log(image.name);
-      let currentList = values.images.URL;
+    // Iterate through all images and upload and save their URLs, response saved
+    let imagesURL = Promise.all(imagesArr.map((image) => {
+      // Upload the next image
       return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).put(image)
-        .then((snapshot) => {
-          console.log("IMAGE URL GETING");
-          console.log(image.name);
-          return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
-            .then((url) => {
-              currentList.push(url);
-              setValues({ ...values, ["imagesURL"]: currentList});
-            }).catch(error => {
-              console.log("Fetching URL FAILED");
-              return error
-            })
+      .then((snapshot) => {
+        return this.storage().ref().child("artefacts/" + artefactName + "/" + image.name).getDownloadURL()
+        .then((url) => {
+          return url;
         })
-        .catch(error => {
-          console.log("Upload IMAGE FAILED");
-          console.error(error);
-          return error
-        })
-    })).then(() => {
-      return MESSAGES.SUCCESS_MESSAGE;
-    })
-
-    //***********************************************************************//
-    /*
-    let i;
-    for (i=0; i<images.length; i++){
-      let image = images[i];
-      let currentList = values.imagesURL;
-      this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
-        console.log("artefacts/" + artefactName + "/" + i);
-        this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
-          currentList.push(url);
-          setValues({ ...values, ["imagesURL"]: currentList});
-        }).catch(error => {
-          console.log("Fetching URL FAILED");
-          return error;
-        })
-        console.log('success uploading');
-      }).catch(error => {
-        console.log("Written data FAILED");
-        return error;
-      });
-    }
-    return MESSAGES.SUCCESS_MESSAGE;
-    */
+      })
+      .catch(error => {
+        console.log("UPLOAD FAILED!!!!");
+        console.log(error);
+      })
+    }))
+    .then(values => {return values;})
+    console.log(imagesURL);
+    return await imagesURL;
   }
 
 
@@ -828,6 +819,52 @@ getCookie = (cname) => {
     // Create the new user in Firebase
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
+/**
+   * get all artefacts user has access to
+   * @param the componenet set to be state
+   * @param the username of the user to check artefacts for
+   */
+  getYourManageArtefactData = (the, uid) => {
+    let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
+
+    let count = 0;
+
+    // parse through all the artefacts
+    for (let key in data.val()) {
+        console.log(data.val()[key].admin.uid);
+        //parse through all the authorised users for each artefact
+        if(data.val()[key].admin.uid === uid){
+          count ++;
+
+          let tempMem = {
+              name: data.val()[key],
+          }
+          artefactList.push(tempMem);
+
+
+        }
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+}
+
+
+
+
+/**
+ * Sign up a user using their provided email and password
+ * @param email the email address of the user to register by
+ * @param password the password for the user to register by
+ * @param username the username for the new user
+ */
+doCreateUserWithEmailAndPassword = (email, password, username) => {
+  // Create the new user in Firebase
+  return this.auth.createUserWithEmailAndPassword(email, password);
+}
 
 
 
