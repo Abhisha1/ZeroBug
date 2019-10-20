@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    height: '100vh',
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -58,8 +59,8 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
+    height: 'auto',
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(100),
     padding: theme.spacing(3)
 
   },
@@ -146,7 +147,7 @@ function SignUp(props) {
             <LockIcon />
           </Avatar>
           <Typography component="h5" variant="h5" color='primary'>
-            Sign In
+            Log In
           </Typography>
           <form className={classes.form} noValidate onSubmit={onSubmit}>
             <TextField
@@ -192,7 +193,7 @@ function SignUp(props) {
               className={classes.submit}
               disabled={isInvalid}
             >
-              Sign In
+              Log In
             </Button>
             <Grid container justify="center">
               <Grid item>

@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    height: '100vh',
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -63,8 +64,8 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
+    height: 'auto',
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(100),
     padding: theme.spacing(3)
 
   },
