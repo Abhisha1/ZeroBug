@@ -29,7 +29,7 @@ class HomePage extends Component {
         })
 
     }
-
+///////RANDOM COMMENT
     render(){
         if(this.state.dataReady){
             this.state.artefactList.map(item=> (
