@@ -40,6 +40,9 @@ const INIT_STATE = {
 // The Primary colour for buttons and glyphs
 const primary = yellow[500];
 
+// The standard photo attached to any user
+const profileImageDefault = "https://dwrhx129r2-flywheel.netdna-ssl.com/wp-content/uploads/2015/08/blank-avatar.png"
+
 // The styles sheet for the Material UI Element
 const useStyles = makeStyles(theme => ({
   image: {
@@ -105,7 +108,7 @@ function SignUp(props) {
       .then(() => {
         props.firebase.auth.currentUser.updateProfile({
           displayName: values.userName,
-          photoURL: "https://dwrhx129r2-flywheel.netdna-ssl.com/wp-content/uploads/2015/08/blank-avatar.png"
+          photoURL: profileImageDefault
         }).then(function(){
           console.log("User profile successfully added");
         }, function(error) {

@@ -1,5 +1,8 @@
 import React from 'react';
 import { AuthUserContext } from '../../components/Session'
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import SignOutButton from '../../components/SignOut';
 import { Navbar, Nav } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
@@ -29,11 +32,20 @@ const Navigation = () => (
 /**
  * The Navigation bar links when the user is authorised/ signed into their acount
  */
+<<<<<<< HEAD
+const NavigationAuth = ( user ) => (
+  <Nav className="ml-auto">
+    <Nav.Link href={ROUTES.HOME}><HomeTwoToneIcon fontSize="large"/></Nav.Link>
+    <Nav.Link href={ROUTES.ACCOUNT}><Avatar size="small" src={user.photoURL} /></Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_FAMILY}><GroupAddIcon fontSize="large"/></Nav.Link>
+    <Nav.Link href={ROUTES.CREATE_ARTEFACT}><AddPhotoAlternateIcon fontSize="large"/></Nav.Link>
+=======
 const NavigationAuth = ( user ) => {
   return <Nav className="ml-auto">
     <Nav.Link href={ROUTES.HOME}><IoMdHome size={30} alt="Home"></IoMdHome></Nav.Link>
     <Nav.Link href={ROUTES.ACCOUNT}><Avatar alt="Remy Sharp" src={user.user.photoURL}>U</Avatar></Nav.Link>
     <Nav.Link href={ROUTES.CREATE_FAMILY}><IoMdPeople size={30} alt="Create Family"></IoMdPeople></Nav.Link>
+>>>>>>> master
     <SignOutButton />
   </Nav>
 };

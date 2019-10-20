@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
+<<<<<<< HEAD
+import { withFirebase } from '../../components/Firebase';
+import CustomModal from "../../components/AddModal";
+=======
 import { withFirebase } from '../../components/Firebase'
 import Button from "@material-ui/core/Button";
 import CustomModal from "../../components/AddUserModal";
+>>>>>>> master
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
@@ -116,9 +121,21 @@ class CreateFamily extends Component {
     });
   }
 
+<<<<<<< HEAD
+
+  searchForUsers(firebase, familyMemberName, modalState) {
+    firebase.searchUsers(familyMemberName, modalState)
+  }
+
+
+
+
+
+=======
   /**
    * Renders the create family form onto the webpage
    */
+>>>>>>> master
   render() {
     // An error popover that is displayed when a family already exists under this name
     const popover = (
@@ -158,7 +175,7 @@ class CreateFamily extends Component {
           {/* Handles the functionality to add users to a family using a custom modal */}
           <div id="family-buttons">
             <Form.Group controlId="validationFormikUsername">
-              <CustomModal action={this.handleModal}></CustomModal>
+              <CustomModal action={this.handleModal} title="Users" search={this.searchForUsers}></CustomModal>
             </Form.Group>
             <Button id="create-family-button" variant="outlined" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</Button>
           </div>
