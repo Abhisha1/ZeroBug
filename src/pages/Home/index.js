@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
 import RenderFamilies from "./renderFamilies";
 import "./container.scss"
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -60,10 +61,13 @@ class HomePage extends Component {
 
 
             <div>
-                <div>
-                    <RenderFamilies />
-                </div>
-                <Divider />
+                <Paper style={{marginLeft: "66px", marginRight: "66px", marginBottom: "66px", marginTop: "66px"}}>
+                    <div>
+                        <RenderFamilies />
+                    </div>
+                </Paper>
+
+                
                 <h1 id="account-heading">Artefacts</h1>
                 <div className="textboxContainer">
                     <TextField 
