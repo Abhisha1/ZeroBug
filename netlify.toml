@@ -1,0 +1,13 @@
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+
+[[headers]]
+    for = "/*"
+    [headers.values]
+    X-XSS-Protection = "1;mode=block"
+    X-Frame-Options = "DENY"  #No one will be using our webapp inside an inframe
+    X-Content-Type-Options = "nosniff"
+    Feature-Policy = "geolocation 'self'"
+    Referrer-Policy = "same-origin"
