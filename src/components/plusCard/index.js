@@ -17,7 +17,7 @@ class PlusCard extends Component{
         return(
             <div>
                 <Box boxShadow={3} height="100%" width="100%">
-                    <Card class="plusCard">
+                    <Card className="plusCard">
                         <CardActionArea href="/createartifact">
                             <CardMedia
                               style={{height: 0, paddingTop: '100%'}}
