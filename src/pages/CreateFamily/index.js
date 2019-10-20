@@ -191,3 +191,4 @@ const CreateFamilyPage = () => (
 // Ensures only an authorised user can create families
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(CreateFamilyPage);
+>>>>>>> master

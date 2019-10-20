@@ -17,7 +17,7 @@ class ImageUpload extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
     }
-    /** Adapted from developer.mozilla  
+    /** Adapted from developer.mozilla
      * Previews a file that is not yet uploaded to the server to users
     */
     previewFile() {
@@ -34,7 +34,7 @@ class ImageUpload extends Component {
             reader.readAsDataURL(file);
         }
     }
-    /** Handles the event where a file is selected by user 
+    /** Handles the event where a file is selected by user
      * @param e The event triggered by a user input change
     */
     handleChange = e => {
@@ -120,7 +120,7 @@ class ImageUpload extends Component {
 
                     </Grid>):[]
                 }
-                
+
 
 
                 <input

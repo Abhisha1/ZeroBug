@@ -210,4 +210,3 @@ export { ViewFamilyDetails }
 // Ensures only an authorised user can view families (that they belong in)
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
-

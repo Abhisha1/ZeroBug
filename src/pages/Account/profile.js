@@ -22,7 +22,7 @@ class Profile extends Component{
             password: null,
         }
     }
-    
+
 
     // get the user name and the profile image if he/she has
     componentDidMount =() => {
@@ -31,13 +31,13 @@ class Profile extends Component{
                 this.setState({username: user.displayName});
                 this.props.firebase.getImageURL(this, "profileImages/", this.state.username, user);
             }
-            
-        })  
+
+        })
     }
 
     // get the password from the textField
     handleChange = e => {
-        this.setState({...this.state, password: e.target.value});     
+        this.setState({...this.state, password: e.target.value});
     }
 
     // let user update the password
@@ -49,7 +49,7 @@ class Profile extends Component{
               }).catch(function(error) {
                 // An error happened
               });
-            
+
         })
     }
 
@@ -61,7 +61,7 @@ class Profile extends Component{
                     <div id="profileContainer">
                         <Paper id="paperStyle">
                             <h1 id="account-heading">{this.state.username}</h1>
-                            <div id="userInformation">                             
+                            <div id="userInformation">
                                 <Avatar alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></Avatar>
                             </div>
                         </Paper>
@@ -76,12 +76,12 @@ class Profile extends Component{
                                             label="Update Password"
                                             type="password"
                                             onChange={this.handleChange}></TextField>
-                                        <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>                                   
-                                    </div>                              
+                                        <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>
+                                    </div>
                             </div>
                         </Paper>
                     </div>
-				</div>        
+				</div>
             </div>
         )
     }

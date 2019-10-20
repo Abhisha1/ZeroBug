@@ -509,7 +509,7 @@ class Firebase {
    * Adds a user to the specified collection (artefact or family)
    * @param user The user to be added
    * @param collectionName Specifies if family or artefact
-   * @param collection Actual data object (the family or the artefact) 
+   * @param collection Actual data object (the family or the artefact)
    * @return A success message or error
    */
   addUserToCollection = (user, collectionName, collection) => {
@@ -559,7 +559,7 @@ class Firebase {
    * Give family access to collection
    * @param family The family to be added to artefact
    * @param collectionName Specifies if family or artefact
-   * @param collection Actual data object (the family or the artefact) 
+   * @param collection Actual data object (the family or the artefact)
    * @return A success message or error
    */
   grantFamilyAccess = (family, collectionName, collection) => {
@@ -702,6 +702,65 @@ class Firebase {
     console.log(imagesURL);
     return await imagesURL;
   }
+
+  /**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
+   */
+  getArtefactData = (the, uid) => {
+      let artefactList = [];
+      let tempRef = this.database().ref('/artefacts/');
+      tempRef.on("value", (data) =>{
+
+      let count = 0;
+      let found = false;
+      // parse through all the artefacts
+      for (let key in data.val()) {
+          found = false;
+          //parse through all the authorised users for each artefact
+          console.log(data.val()[key]);
+          console.log("CHECKING USERS");
+          for(let user in data.val()[key].users){
+              console.log(data.val()[key].users[user].uid)
+              if(data.val()[key].users[user].uid === uid){
+                  count ++;
+
+                  let tempMem = {
+                      name: data.val()[key],
+                  }
+                  artefactList.push(tempMem);
+                  found=true;
+                  break;
+              }
+          }
+
+          if(found===false){
+              console.log("CHECKING FAMILIES");
+              for(let family in data.val()[key].authFamilies){
+                  for(let user in data.val()[key].authFamilies[family].users){
+                      console.log(data.val()[key].authFamilies[family].users[user].uid);
+                      if(data.val()[key].authFamilies[family].users[user].uid === uid){
+
+                          let tempMem = {
+                              name: data.val()[key],
+                          }
+                          artefactList.push(tempMem);
+                          found=true;
+                          break;
+                      }
+                  }
+                  if(found){
+                      break;
+                  }
+              }
+          }
+      }
+      //finally, return the list through the state
+      the.setState({...the.state, artefactList: artefactList});
+      the.setState({dataReady: true})
+  });
+}
 
 
   /**
