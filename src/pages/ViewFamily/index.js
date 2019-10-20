@@ -163,7 +163,7 @@ class FamilyDetails extends Component {
                 {this.state.dataReady &&
                     this.state.artefactList.map(item => (
                         <div key={item.artefactName}>
-                            <Cards key={item.artefactName} artefactName={item.artefactName} description={item.artefactBrief} date={item.date} />
+                            <Cards key={item.artefactName} image={item.imagesURL[0]} artefactName={item.artefactName} description={item.artefactBrief} date={item.date} />
                         </div>
                     ))
                 }

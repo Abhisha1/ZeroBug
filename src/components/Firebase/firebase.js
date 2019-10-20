@@ -622,7 +622,7 @@ class Firebase {
     }
     // New admin doesn't exist in group so we add to the family members then make admin
     if (!exists) {
-      this.addToCollection(newAdmin, collectionName, collection)
+      this.addUserToCollection(newAdmin, collectionName, collection)
       this.database().ref('/' + collectionName + '/' + name).update({ admin: newAdmin })
         .then(() => {
           return MESSAGES.SUCCESS_MESSAGE;

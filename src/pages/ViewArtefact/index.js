@@ -52,6 +52,7 @@ class ArtefactDetails extends Component {
         super(props);
         this.state = { showModal: false, artefact: null, loading: true, isAdmin: false, hasAccess: false }
         this.handleModal = this.handleModal.bind(this);
+        this.handleAdmins = this.handleAdmins.bind(this)
     }
 
 
@@ -140,79 +141,12 @@ class ArtefactDetails extends Component {
             });
     }
 
-
-
-    /**
-     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
-     */
-    handleUserModal(dataFromModal, action) {
-        let usersToAdd = this.state.artefact["users"];
-        // adds the retrieved users to the array of users to add to a artefact
-        // whilst ensuring the user doesn't already exist in the added members
-        let duplicate = false;
-        for (let key in this.state.artefact["users"]) {
-            if (this.state.artefact["users"][key].uid === dataFromModal.uid) {
-                duplicate = true;
-                // When we have removed a user (that already exists in our list), we delete from our rendered members
-                if (action === "remove") {
-                    usersToAdd.splice(key, 1)
-                }
-            }
-        }
-        // When we have added a user (that doesn't exists in our list), we add to our rendered members
-        if (!duplicate && action === "add") {
-            usersToAdd.push(dataFromModal);
-        }
-        //Updates the slider of artefact members
-        this.setState({
-            artefact: {
-                name: this.state.artefact.name,
-                users: usersToAdd,
-                admin: this.state.artefact.admin,
-                authFamilies: this.state.artefact.authFamilies
-            }
-        });
-    }
-    /**
-     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
-     */
-    handleFamiliesModal(dataFromModal, action) {
-        let familiesToAdd = this.state.artefact["authFamilies"];
-        // adds the retrieved users to the array of users to add to a artefact
-        // whilst ensuring the user doesn't already exist in the added members
-        let duplicate = false;
-        for (let key in this.state.artefact["authFamilies"]) {
-            if (this.state.artefact["authFamilies"][key].uid === dataFromModal.uid) {
-                duplicate = true;
-                // When we have removed a user (that already exists in our list), we delete from our rendered members
-                if (action === "remove") {
-                    familiesToAdd.splice(key, 1)
-                }
-            }
-        }
-        // When we have added a user (that doesn't exists in our list), we add to our rendered members
-        if (!duplicate && action === "add") {
-            familiesToAdd.push(dataFromModal);
-        }
-        //Updates the slider of artefact members
-        this.setState({
-            artefact: {
-                name: this.state.artefact.name,
-                users: this.state.users,
-                admin: this.state.artefact.admin,
-                authFamilies: familiesToAdd
-            }
-        });
-    }
-
     /**
      * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
      */
     handleAdmins(dataFromModal) {
         this.setState({
-            family: {
-                name: this.state.family.name,
-                users: this.state.family.users,
+            artefact: {
                 admin: dataFromModal
             }
         });
@@ -288,14 +222,14 @@ class ArtefactDetails extends Component {
                                 <Paper id="paperCard">
                                     <h1 className="memberHeadings">Shared users</h1>
                                     {this.state.isAdmin && (
-                                        <EditModal action={this.handleUserModal} collection={this.state.artefact} title="artefacts" itemIsUser={true} search={this.searchForUsers}></EditModal>
+                                        <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={true} search={this.searchForUsers}></EditModal>
                                     )
                                     }
                                     {this.state.artefact.users && <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>}
                                 </Paper>
                                 <Paper id="paperCard">
                                     <h1 className="memberHeadings">Shared families</h1>
-                                    {this.state.isAdmin && <EditModal action={this.handleFamiliesModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
+                                    {this.state.isAdmin && <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
                                     
                                     }
                                     {this.state.artefact.authFamilies ? <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider> :

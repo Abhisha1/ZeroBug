@@ -56,6 +56,7 @@ class AdminModal extends Component {
         firebase.updateAdmin(user, this.props.title, this.props.family);
         this.props.action(user);
         this.renderPotentialAdmins(user, firebase);
+        window.location.reload();
     }
 
 

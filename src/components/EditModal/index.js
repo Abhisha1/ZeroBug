@@ -82,10 +82,8 @@ class EditModal extends Component {
      * @return All items (besides admin user) and whether you can add or remove them
      */
     addOrRemoveItem(item, firebase) {
-        let collection =this.props.collection["authFamilies"] ? this.props.collection["authFamilies"] : this.props.collection["users"];
-        console.log(collection)
+        let collection = this.props.itemIsUser ? this.props.collection["users"] : this.props.collection["authFamilies"];
         for (let key in collection) {
-            console.log(collection[key].displayName+"   and name we looking for  "+item.displayName);
             let existing = collection[key];
             if (item.uid){
                 if (item.uid === this.props.collection.admin.uid) {
@@ -148,7 +146,7 @@ class EditModal extends Component {
                                 <div>
                                     < InputGroup className="mb-3" >
                                         <FormControl
-                                            placeholder="User"
+                                            placeholder={this.props.itemIsUser ? "Users": "Families"}
                                             aria-label="Users"
                                             name="name"
                                             value={this.state.name}
