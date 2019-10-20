@@ -14,7 +14,6 @@ export default function CircularIndeterminate() {
   return (
     <div>
       <CircularProgress id="progressScreen" className={classes.progress} />
-      
     </div>
   );
 }

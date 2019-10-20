@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
+<<<<<<< HEAD
+import { withFirebase } from '../../components/Firebase';
+import CustomModal from "../../components/AddModal";
+=======
 import { withFirebase } from '../../components/Firebase'
+import Button from "@material-ui/core/Button";
 import CustomModal from "../../components/AddUserModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
@@ -31,20 +36,26 @@ class CreateFamily extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  /**
+   * When the component mounts, we get the currently logged on user and store them
+   */
 
   componentDidMount() {
     this.props.firebase.auth.onAuthStateChanged((user) => {
       if (user) {
+        console.log(user)
         let authUser = {
           uid: user.uid,
-          name: user.displayName,
-          email: user.email
+          displayName: user.displayName,
+          photoURL: user.photoURL,
         }
-        this.setState({authUser: authUser});
+        let newMembers = this.state.familyMembers;
+        newMembers.push(authUser);
+        this.setState({ authUser: authUser, familyMembers: newMembers });
         // User logged in already or has just logged in.
         console.log(user.uid);
       } else {
-        this.setState({authUser: null});
+        this.setState({ authUser: null });
         // User not logged in or has just logged out.
       }
     });
@@ -94,13 +105,33 @@ class CreateFamily extends Component {
   handleModal(dataFromModal) {
     let usersToAdd = this.state.familyMembers;
     // adds the retrieved users to the array of users to add to a family
-    if (this.state.familyMembers.indexOf(dataFromModal) === -1) {
+    // whilst ensuring the user doesn't already exist in the added members
+    let duplicate = false;
+    for (let i=0; i < this.state.familyMembers.length; i++){
+      if(this.state.familyMembers[i].uid === dataFromModal.uid){
+        duplicate = true;
+      }
+    }
+    if (!duplicate){
       usersToAdd.push(dataFromModal);
     }
     this.setState({
       familyMembers: usersToAdd
     });
   }
+
+
+  searchForUsers(firebase, familyMemberName, modalState) {
+    firebase.searchUsers(familyMemberName, modalState)
+  }
+
+
+
+
+
+  /**
+   * Renders the create family form onto the webpage
+   */
   render() {
     // An error popover that is displayed when a family already exists under this name
     const popover = (
@@ -113,8 +144,9 @@ class CreateFamily extends Component {
     )
 
 
+
     // ensures a family has a name and family members
-    let invalid = (this.state.familyName === '' || this.state.familyMembers.length === 0)
+    let invalid = (this.state.familyMembers.length === 0)
     return (
       <div id="create-family-page">
         <h1 id="create-family-heading">Create a new family</h1>
@@ -129,22 +161,21 @@ class CreateFamily extends Component {
           {/* Displays popover is family exists */}
           {this.state.isExistingFamily ?
             <OverlayTrigger placement="right" overlay={popover}>
-              <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+              <Form.Control required name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
             </OverlayTrigger>
-            : <Form.Control name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
-          }
+            : <Form.Control required name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+        }
+          {/* Renders the members that have been added to the family so far */}
+          <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
           {/* Handles the functionality to add users to a family using a custom modal */}
           <div id="family-buttons">
             <Form.Group controlId="validationFormikUsername">
-              <CustomModal action={this.handleModal}></CustomModal>
+              <CustomModal action={this.handleModal} title="Users" search={this.searchForUsers}></CustomModal>
             </Form.Group>
-            <button id="create-family-button" variant="primary" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</button>
+            <Button id="create-family-button" variant="outlined" disabled={this.state.isExistingFamily || invalid} type="submit" value="Create">Create</Button>
           </div>
         </Form>
-
-        {/* Renders the members that have been added to the family so far */}
-        <CustomSlider cards={this.state.familyMembers}></CustomSlider>
 
         {/* A modal that shows whether the action was successful or not successful in creating a family */}
         <Modal show={this.state.showOutcomeModal} onHide={() => window.location.assign(HOME)}>
@@ -153,7 +184,7 @@ class CreateFamily extends Component {
           </Modal.Header>
           <Modal.Body>{this.state.showOutcomeModal && this.state.message}</Modal.Body>
           <Modal.Footer>
-            <button variant="primary" onClick={() => window.location.assign(HOME)}>Close</button>
+            <Button variant="outlined" id="confirmationClose" onClick={() => window.location.assign(HOME)}>Close</Button>
           </Modal.Footer>
         </Modal>
       </div>
@@ -167,5 +198,7 @@ const CreateFamilyPage = () => (
   <CreateFamilyForm></CreateFamilyForm>
 );
 
+// Ensures only an authorised user can create families
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(CreateFamilyPage);
+>>>>>>> master

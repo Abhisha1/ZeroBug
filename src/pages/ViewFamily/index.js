@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
 import EditModal from '../../components/EditModal';
+import AdminModal from '../../components/AdminChangeModal';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Paper from '@material-ui/core/Paper';
 import UploadFile from "../../components/ImageUpload";
@@ -44,18 +45,54 @@ class FamilyDetails extends Component {
         super(props);
         this.state = { showModal: false, family: null, loading: true, isAdmin: false }
         this.handleModal = this.handleModal.bind(this);
+        this.handleAdmins = this.handleAdmins.bind(this);
     }
 
-
-    handleModal() {
-        if (this.state.showModal === false) {
-            this.setState({ showModal: true });
+    /**
+     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
+     */
+    handleModal(dataFromModal, action) {
+        let usersToAdd = this.state.family["users"];
+        // adds the retrieved users to the array of users to add to a family
+        // whilst ensuring the user doesn't already exist in the added members
+        let duplicate = false;
+        console.log(dataFromModal)
+        for (let key in this.state.family["users"]) {
+            if (this.state.family["users"][key].uid === dataFromModal.uid) {
+                duplicate = true;
+                // When we have removed a user (that already exists in our list), we delete from our rendered members
+                if(action === "remove"){
+                    usersToAdd.splice(key,1)
+                }
+            }
         }
-        else {
-            this.setState({ showModal: false })
+        // When we have added a user (that doesn't exists in our list), we add to our rendered members
+        if (!duplicate && action === "add") {
+            usersToAdd.push(dataFromModal);
         }
-        this.setState({ familyMember: '' });
+        //Updates the slider of family members
+        this.setState({
+            family: {
+                name: this.state.family.name,
+                users: usersToAdd,
+                admin: this.state.family.admin
+            }
+        });
     }
+
+    /**
+     * Handles whether the add/edit users modal for families (only visible when admin), is closed or opened
+     */
+    handleAdmins(dataFromModal) {
+        this.setState({
+            family: {
+                name: this.state.family.name,
+                users: this.state.family.users,
+                admin: dataFromModal
+            }
+        });
+    }
+
     /**
      * Fetches the specified family's data from the database
      */
@@ -67,7 +104,8 @@ class FamilyDetails extends Component {
                         let authUser = {
                             uid: user.uid,
                             name: user.displayName,
-                            email: user.email
+                            uid: user.uid,
+                            photoURL: user.photoURL
                         }
                         console.log(value)
                         if (user.uid === value.admin.uid) {
@@ -90,16 +128,18 @@ class FamilyDetails extends Component {
      */
     render() {
         return (
-            <div>
-
+            <div id="viewFamilyPage">
                 {this.state.loading ? <div id="loader">{loading}</div> :
                     <div>
+                        <h1 id="familyName">{this.props.name}</h1>
                         <UploadFile dbLocation="familyImages/" isCreate={false} name={this.props.name} />
-                        <h1>Family name</h1>
-                        <p>{this.props.name}</p>
+
                         <Paper id="paperCard">
-                            <h1>Members</h1>
-                            {this.state.isAdmin && (<EditModal action={this.handleModal} family={this.state.family}></EditModal>)
+                            <h1 id="familyMembers">Members</h1>
+                            {this.state.isAdmin && (<div id="adminConfigBar">
+                            <EditModal action={this.handleModal} family={this.state.family}></EditModal>
+                            <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
+                            </div>)
                             }
                             <CustomSlider cards={this.state.family["users"]}></CustomSlider>
                         </Paper>
@@ -113,6 +153,7 @@ class FamilyDetails extends Component {
 
 const ViewFamilyDetails = withFirebase(FamilyDetails);
 export { ViewFamilyDetails }
+
+// Ensures only an authorised user can view families (that they belong in)
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewFamily);
-

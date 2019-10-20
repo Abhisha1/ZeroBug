@@ -1,3 +1,29 @@
-#paperCard{
+#paperCard {
     margin: 2vw;
+}
+
+#familyName {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 7vw;
+    font-family: Montserrat;
+    font-weight: 600 !important;
+}
+#familyMembers{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 4vw;
+    font-family: Montserrat;
+    font-weight: 600 !important;
+}
+
+#viewFamilyPage {
+    font-family: Montserrat;
+}
+#change-button{
+    display: flex;
+}
+#adminConfigBar{
+    display: flex;
+    justify-content: space-between;
 }

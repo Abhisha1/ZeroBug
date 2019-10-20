@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import yellow from '@material-ui/core/colors/yellow';
 import Paper from '@material-ui/core/Paper';
+import Avatar from '@material-ui/core/Avatar';
+
 
 
 const primary = yellow[500];
@@ -21,6 +23,7 @@ class Profile extends Component{
         }
     }
 
+
     // get the user name and the profile image if he/she has
     componentDidMount =() => {
         this.props.firebase.auth.onAuthStateChanged((user)=>{
@@ -28,13 +31,13 @@ class Profile extends Component{
                 this.setState({username: user.displayName});
                 this.props.firebase.getImageURL(this, "profileImages/", this.state.username, user);
             }
-            
-        })  
+
+        })
     }
 
     // get the password from the textField
     handleChange = e => {
-        this.setState({...this.state, password: e.target.value});     
+        this.setState({...this.state, password: e.target.value});
     }
 
     // let user update the password
@@ -46,7 +49,7 @@ class Profile extends Component{
               }).catch(function(error) {
                 // An error happened
               });
-            
+
         })
     }
 
@@ -57,10 +60,9 @@ class Profile extends Component{
                 <div id="topWraper">
                     <div id="profileContainer">
                         <Paper id="paperStyle">
-                            <h1 id="account-heading">Your Profile</h1>
+                            <h1 id="account-heading">{this.state.username}</h1>
                             <div id="userInformation">
-                                <img id="avatarBox" src={this.state.imageURL}></img>
-                                <h3 id="profileName">{this.state.username}</h3>
+                                <Avatar alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></Avatar>
                             </div>
                         </Paper>
                     </div>
@@ -74,12 +76,12 @@ class Profile extends Component{
                                             label="Update Password"
                                             type="password"
                                             onChange={this.handleChange}></TextField>
-                                        <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>                                   
-                                    </div>                              
+                                        <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>
+                                    </div>
                             </div>
                         </Paper>
                     </div>
-				</div>        
+				</div>
             </div>
         )
     }
