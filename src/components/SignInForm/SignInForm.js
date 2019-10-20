@@ -1,108 +1,212 @@
-import React, { Component } from 'react';
+import React from 'react';
+
+// Material UI API
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import LockIcon from '@material-ui/icons/Lock';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import yellow from '@material-ui/core/colors/yellow';
+import Chip from '@material-ui/core/Chip';
+import ErrorIcon from '@material-ui/icons/Error';
+
+// Firebase API
 import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../../components/Firebase';
+import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import "../Button/button.scss";
-import { Form, Modal } from 'react-bootstrap';
-import "./signinform.scss";
-const INITIAL_STATE = {
-  email: '',
+
+// The Initial state of all values of a signup form
+const INIT_STATE = {
+  email: ' ',
   password: '',
+  showPassword: false,
   error: null,
-  showModal: false
 };
 
-/**
- * The form for signing into an existing account
- */
+// The Primary colour for buttons and glyphs
+const primary = yellow[500];
 
-class SignInFormBase extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
-    this.handleClose = this.handleClose.bind(this);
-  }
-  /**
-   * Closes the modal/hides the modal
-   */
-  handleClose() {
-    this.setState({ showModal: false });
-  }
-  /**
-   * Sends the user entered data from database and logs the user if details are correct
-   * @param event An event triggered by the submitting of the form 
-   */
-  onSubmit = event => {
-    const { email, password } = this.state;
+// The styles sheet for the Material UI Element
+const useStyles = makeStyles(theme => ({
+  image: {
+    backgroundImage: 'url(https://images.unsplash.com/photo-1504681869696-d977211a5f4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2242&q=80)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: primary,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(100),
+    padding: theme.spacing(3)
+
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    backgroundColor: primary,
+  },
+}));
+
+
+function SignUp(props) {
+  const classes = useStyles();
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+    showPassword: false,
+    error: null,
+  });
+
+  React.useEffect(() => {
+    props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        // user is already logged in redirect to home
+        props.history.push(ROUTES.HOME);
+      } else {
+        // User not logged in or has just logged out.
+      }
+    });
+  });
+
+  // Updates the values of the state on change
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  // Changes the type of the password feilds to be regural charecters
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  // Prevents default behaviour for mouse clicks to allow for password
+  // visibility changing to work
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+
+  // Handles submission of a new created user to Firebase
+  const onSubmit = event => {
     // calls authorisation to check email and password and whether it matches records in database
-    this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
+    props.firebase
+      .doSignInWithEmailAndPassword(values.email, values.password)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        setValues({ ...INIT_STATE });
+        props.history.push(ROUTES.HOME);
       })
       // Shows the error pop up when details are incorrect
       .catch(error => {
-        this.setState({ error });
-        this.setState({ showModal: true });
+        setValues({ ...values, error: error })
       });
     event.preventDefault();
   };
-  /**
-   * Updates the specified value to new input
-   * @param event The event of the value being changed by user input
-   */
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-  /**
-   * Renders the sign in form on the webpage
-   */
-  render() {
-    const { email, password, error } = this.state;
-    // Ensures that the password and email is not empty when trying to log in
-    const isInvalid = password === '' || email === '';
-    return (
-      <Form onSubmit={this.onSubmit} id="sign-in-form">
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            name="email"
-            value={email}
-            onChange={this.onChange}
-            type="email"
-            placeholder="Enter email"
-          ></Form.Control>
-        </Form.Group>
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            name="password"
-            value={password}
-            onChange={this.onChange}
-            type="password"
-            placeholder="Password"
-          ></Form.Control>
-        </Form.Group>
-        {/* makes submit button submittable only when email and password has a value */}
-        <button variant="primary" disabled={isInvalid} type="submit" value="Sign In">Sign In
-        </button>
-        <Modal show={this.state.showModal} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title> Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body id="errorMessage" >{error && error.message}</Modal.Body>
-          <Modal.Footer>
-            <button variant="primary" onClick={this.handleClose}>Close</button>
-          </Modal.Footer>
-        </Modal>
-      </Form>
-    );
+
+  // The component to render if an error message is present
+  let error;
+  if (values.error !== null) {
+    error = <Chip
+      label={values.error.message}
+      icon={<ErrorIcon />}
+      color="secondary"
+    />
+  } else {
+    error = ''
   }
+
+  // Defines what value allocations should **DISABLE** the SIGN UP button
+  const isInvalid = values.password === '' || values.email === '';
+
+  return (
+    <Grid container component="main" className={classes.root}>
+      <CssBaseline />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar} align='center'>
+            <LockIcon />
+          </Avatar>
+          <Typography component="h5" variant="h5" color='primary'>
+            Sign In
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            <TextField
+              margin='normal'
+              name="email"
+              autoComplete="email"
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              autoFocus
+              onChange={handleChange("email")}
+            />
+            <FormControl variant='outlined' required={true} fullWidth margin='normal'>
+              <InputLabel htmlFor="adornment-password" variant="outlined">Password</InputLabel>
+              <OutlinedInput
+                id="password"
+                type={values.showPassword ? 'text' : 'password'}
+                value={values.password}
+                onChange={handleChange('password')}
+                notched
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <div align='center'>{error}</div>
+            <Button
+              type="submit"
+              fullWidth
+              onSubmit={onSubmit}
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={isInvalid}
+            >
+              Sign In
+            </Button>
+            <Grid container justify="center">
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  Don't have an account? Sign up
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Grid>
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+    </Grid>
+  );
 }
-const SignInForm = compose(
-  withRouter,
-  withFirebase,
-)(SignInFormBase);
-export default SignInForm;
+
+export default withRouter(withFirebase(SignUp));
