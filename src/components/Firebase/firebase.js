@@ -546,32 +546,6 @@ class Firebase {
     .then(values => {return values;})
     console.log(imagesURL);
     return await imagesURL;
-
-
-
-    //***********************************************************************//
-    /*
-    let i;
-    for (i=0; i<images.length; i++){
-      let image = images[i];
-      let currentList = values.imagesURL;
-      this.storage().ref().child("artefacts/" + artefactName + "/" + i).put(image).then((snapshot) => {
-        console.log("artefacts/" + artefactName + "/" + i);
-        this.storage().ref().child("artefacts/" + artefactName + "/" + i).getDownloadURL().then((url) => {
-          currentList.push(url);
-          setValues({ ...values, ["imagesURL"]: currentList});
-        }).catch(error => {
-          console.log("Fetching URL FAILED");
-          return error;
-        })
-        console.log('success uploading');
-      }).catch(error => {
-        console.log("Written data FAILED");
-        return error;
-      });
-    }
-    return MESSAGES.SUCCESS_MESSAGE;
-    */
   }
 
 

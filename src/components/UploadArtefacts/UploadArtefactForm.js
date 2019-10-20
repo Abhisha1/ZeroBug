@@ -8,6 +8,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Grid from '@material-ui/core/Grid';
+import GridListTile from '@material-ui/core/GridListTile';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -59,6 +60,17 @@ function UploadArtefactForm(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState(INIT_STATE);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  React.useEffect(() => {
+    props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Do nothing as user can access page
+      } else {
+        // User not logged in or has just logged out.
+        props.history.push(ROUTES.SIGN_IN);
+      }
+    });
+  });
 
   // Updates the values of the state on change
   const handleChange = prop => event => {
@@ -156,6 +168,20 @@ function UploadArtefactForm(props) {
    */
   const searchForUsers = (firebase, familyMemberName, modalState) => {
     firebase.searchUsers(familyMemberName, modalState)
+  }
+
+  const renderImage = (image) => {
+      let imageRead;
+      let reader = new FileReader();
+
+      reader.onload = function () {
+        imageRead = reader.result;
+      }
+
+      if (image) {
+        reader.readAsDataURL(image);
+      }
+      return imageRead;
   }
 
   // Defines when to enable the ability to upload the artefact
@@ -275,25 +301,34 @@ function UploadArtefactForm(props) {
             </Grid>
           </form>
         </Grid>
-        <Grid item xs={6}>
-          <input
-            id="imageUpload"
-            multiple
-            type="file"
-            name="Upload"
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <label htmlFor="imageUpload">
-            <Button
-              variant="contained" component="span"
-            >
-              UPLOAD
-          </Button>
-          </label>
-        </Grid>
-        <Grid item xs={6}>
+        <Grid container justify="center" alignItems="center" direction="column-reverse">
+          <Grid item xs={5}>
+            <input
+              id="imageUpload"
+              multiple
+              type="file"
+              name="Upload"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="imageUpload">
+              <Button
+                variant="contained"
+                component="span"
+                fullWidth
+              >
+                UPLOAD
+            </Button>
+            </label>
+          </Grid>
+          <Grid item xs={5}>
+            {Array.from(values.images).map(image => (
+              <GridListTile key={image.name}>
+                <img src={renderImage(image)} alt={image.name} id="artefactImages"/>
+              </GridListTile>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
       <Grid container direction="column">
