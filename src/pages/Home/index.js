@@ -29,21 +29,26 @@ class HomePage extends Component {
         })
 
     }
+
+    showNone(){
+        this.setState({plusCardAdded :true});
+        return(<PlusCard />)
+    }
+
+
 ///////RANDOM COMMENT
     render(){
-        if(this.state.dataReady){
+        let artefacts = (<div class="container">
+            {this.state.dataReady && 
             this.state.artefactList.map(item=> (
-                <div key={item}>
-                    {this.state.cardData.push(<Cards artefactName={item.name.artefactName}
+                <div key={item.name.artefactName}>
+                    <Cards key={item.name.artefactName} artefactName={item.name.artefactName}
                          description={item.name.artefactBrief} date={item.name.date}
-                         image={item.name.imagesURL[0]}/>)}
+                         image={item.name.imagesURL[0]}/>
                 </div>
-            ));
-            if(this.state.plusCardAdded===false){
-                this.state.cardData.push(<PlusCard/>);
-                this.state.plusCardAdded=true;
-            }
-        }
+            ))}
+            {!this.state.artefactList && <PlusCard />}
+        </div>)
         return(
 
 
@@ -53,11 +58,11 @@ class HomePage extends Component {
               </div>
                 <Divider />
                 <h1 id="account-heading">Artefacts</h1>
-                <div class="textboxContainer">
+                <div className="textboxContainer">
                     <TextField className="textbox" type="search" margin-right="20px" placeholder="Search for Artefact"/>
                 </div>
-                <div class="container">
-                    {this.state.cardData}
+                <div className="container">
+                    {artefacts}
                 </div>
             </div>
 

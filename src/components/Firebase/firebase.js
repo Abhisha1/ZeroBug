@@ -713,23 +713,14 @@ class Firebase {
       let tempRef = this.database().ref('/artefacts/');
       tempRef.on("value", (data) =>{
 
-      let count = 0;
       let found = false;
       // parse through all the artefacts
       for (let key in data.val()) {
           found = false;
           //parse through all the authorised users for each artefact
-          console.log(data.val()[key]);
-          console.log("CHECKING USERS");
           for(let user in data.val()[key].users){
-              console.log(data.val()[key].users[user].uid)
               if(data.val()[key].users[user].uid === uid){
-                  count ++;
-
-                  let tempMem = {
-                      name: data.val()[key],
-                  }
-                  artefactList.push(tempMem);
+                  artefactList.push(data.val()[key]);
                   found=true;
                   break;
               }
