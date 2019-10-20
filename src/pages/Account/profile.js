@@ -58,7 +58,7 @@ class Profile extends Component{
                         <Paper id="paperStyle">
                             <h1 id="account-heading">{this.state.username}</h1>
                             <div id="userInformation">
-                                <Avatar alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></Avatar>
+                                <img alt="Remy Sharp" src={this.state.imageURL} id="avatarBox"></img>
                             </div>
                         </Paper>
                     </div>

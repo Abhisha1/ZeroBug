@@ -195,7 +195,7 @@ class FamilyDetails extends Component {
                                 <h1 id="familyMembers">Members</h1>
                                 {this.state.isAdmin && (<div id="adminConfigBar">
                                     <EditModal action={this.handleModal} collection={this.state.family} title="families" itemIsUser={true} search={this.searchForUsers} ></EditModal>
-                                    <AdminModal action={this.handleAdmins} family={this.state.family}></AdminModal>
+                                    <AdminModal action={this.handleAdmins} family={this.state.family} title="families"></AdminModal>
                                 </div>)
                                 }
                                 <CustomSlider cards={this.state.family["users"]}></CustomSlider>

@@ -411,11 +411,11 @@ class Firebase {
 
   /**
    * Finds the families that match the searched family
-   * @param family the input string for a familie
+   * @param familyString the input string for a familie
    * @param the the parent class
    * @return a success message when successful, or an error
    */
-  searchFamilies = async (family, the) => {
+  searchFamilies = async (familyString, the) => {
     let self = this;
     let snapshot = await this.database().ref('/families/').once("value")
     let matches = [];
@@ -423,6 +423,7 @@ class Firebase {
       let arr = Object.values(snapshot.val())
       // returns the image of the family
       return Promise.all(arr.map(family => {
+        console.log(family)
         return self.findImage("familyImages/", family.name)
           .then(url => {
             let newFamily = {
@@ -430,13 +431,18 @@ class Firebase {
               photoURL: url,
               users: family.users
             }
-           matches.push(newFamily);
+            if(family.name.includes(familyString.toLowerCase())){
+              matches.push(newFamily);
+            }
           })
           .catch(err => {
             let newFamily = {
               displayName: family.name
             }
-            matches.push(newFamily);
+            console.log(family.name)
+            if(family.name.includes(familyString)){
+              matches.push(newFamily);
+            }
           })
       })).then(() => {
         the.setState({ ...the.state, searchedResults: matches, loading: false });
@@ -514,7 +520,8 @@ class Firebase {
    * @return A success message or error
    */
   addUserToCollection = (user, collectionName, collection) => {
-    let newUsers = collection["users"];
+    console.log(collection)
+    let newUsers = collection["users"] ? collection["users"] : [];
     newUsers.push(user);
     let name = collectionName === "artefacts" ? collection["artefactName"] : collection["name"];
     this.database().ref('/' + collectionName + '/' + name).update({ users: newUsers })
@@ -563,7 +570,7 @@ class Firebase {
    * @return A success message or error
    */
   grantFamilyAccess = (family, collectionName, collection) => {
-    let updatedFamilies = collection["authFamilies"];
+    let updatedFamilies = collection["authFamilies"] ? collection["authFamilies"] : [];
     updatedFamilies.push(family);
     let name = collection["artefactName"];
     this.database().ref('/' + collectionName + '/' + name).update({ authFamilies: updatedFamilies })
@@ -615,7 +622,7 @@ class Firebase {
     * @param collection The database object (the actual family or artefact)
     */
   updateAdmin = (newAdmin, collectionName, collection) => {
-    let name = collection["name"];
+    let name = collectionName === "artefacts" ? collection["artefactName"] : collection["name"];
     // Checks if new admin is already in group and if so, simply updates new Admin as admin
     let exists = false
     for (let key in collection["users"]) {

@@ -16,7 +16,7 @@ import "./adminModal.scss";
 class AdminModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, searchedUsers: [], familyMember: '', loading: false };
+        this.state = { showModal: false, searchedResults: [], familyMember: '', loading: false };
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.changeAdmin = this.changeAdmin.bind(this);
@@ -44,7 +44,7 @@ class AdminModal extends Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        this.setState({ [name]: value, searchedUsers: [] });
+        this.setState({ [name]: value, searchedResults: [] });
     }
 
     /**
@@ -53,7 +53,7 @@ class AdminModal extends Component {
      * @param firebase The functions to connect to firebase server
      */
     changeAdmin(user, firebase) {
-        firebase.updateAdmin(user, 'families', this.props.family);
+        firebase.updateAdmin(user, this.props.title, this.props.family);
         this.props.action(user);
         this.renderPotentialAdmins(user, firebase);
     }
@@ -65,6 +65,7 @@ class AdminModal extends Component {
      * @return All users (besides admin) and whether you can add or remove them
      */
     renderPotentialAdmins(user, firebase) {
+        let collection = this.props.family["users"];
         for (let key in this.props.family["users"]) {
             // console.log(existingUser.name+"   and name we looking for  "+user.name);
             let existingUser = this.props.family["users"][key].uid;
@@ -124,7 +125,7 @@ class AdminModal extends Component {
                                     </InputGroup>
                                     {/* Renders the search result in modal */}
                                     <div id="searchResults">
-                                        {this.state.searchedUsers.map(user => (
+                                        {this.state.searchedResults.map(user => (
                                             this.renderPotentialAdmins(user, firebase)))}
                                         {this.state.noMatches && <p>No Matches</p>}
                                     </div>
