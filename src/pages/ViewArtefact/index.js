@@ -93,6 +93,7 @@ class ArtefactDetails extends Component {
      * Fetches the specified artefacts data from the database
      */
     async componentWillMount() {
+        console.log("componentn wiull mount");
         this.props.firebase.viewArtefact(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
@@ -102,6 +103,7 @@ class ArtefactDetails extends Component {
                             name: user.displayName,
                             phtoURL: user.photoURL
                         }
+                        console.log("curr user is " + user.uid + "values uid  " + value.admin.uid)
                         if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }
@@ -110,7 +112,7 @@ class ArtefactDetails extends Component {
                             value.users.map(familyMember => {
                                 if (familyMember.uid === user.uid) {
                                     currUserIsMember = true;
-                                    this.setState({ family: value, loading: false, hasAccess: true });
+                                    this.setState({ artefact: value, loading: false, hasAccess: true });
                                 }
                             })
                         }
@@ -119,7 +121,7 @@ class ArtefactDetails extends Component {
                                 family.users.map(familyMember => {
                                     if (familyMember.uid === user.uid) {
                                         currUserIsMember = true;
-                                        this.setState({ family: value, loading: false, hasAccess: true });
+                                        this.setState({ artefact: value, loading: false, hasAccess: true });
                                     }
                                 })
                             })
@@ -188,6 +190,7 @@ class ArtefactDetails extends Component {
                                 {this.state.isAdmin && <AdminModal id="adminArtefactModal" action={this.handleModal} collection={this.state.artefact}></AdminModal>}
                                 <Paper id="paperCard">
                                     <h5 className="descriptionTitle">Date</h5>
+                                    {/* {console.log(this.props.firebase.convertDate(this.state.artefact.date.toDateString()))} */}
                                     <p>{this.convertDate(this.state.artefact.date)}</p>
                                     <h5 className="descriptionTitle">Brief Description</h5>
                                     <p>{this.state.artefact.artefactBrief}</p>
@@ -210,7 +213,9 @@ class ArtefactDetails extends Component {
                                         <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
                                     )
                                     }
-                                    {this.state.artefact.authFamilies && <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider>}
+                                    {this.state.artefact.authFamilies ? <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider> :
+                                <h4>Psst.. this is a top secret artefact that hasn't been shared with any families.</h4>
+                            }}
                                 </Paper>
                             </div>))
                 }
@@ -220,7 +225,6 @@ class ArtefactDetails extends Component {
 }
 const ViewArtefactDetails = withFirebase(ArtefactDetails);
 export { ViewArtefactDetails }
-
 // Ensures only an authorised user can view families (that they belong in)
 const condition = authUser => !!authUser;
 export default withAuthorization(condition)(ViewArtefact);

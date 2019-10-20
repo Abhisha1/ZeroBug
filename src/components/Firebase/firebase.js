@@ -90,6 +90,18 @@ class Firebase {
       });
   }
 
+  viewArtefact = (name) => {
+    return new Promise((resolve, reject) => {
+      const onData = snap => {
+        console.log(snap.val())
+        resolve(snap.val());
+      }
+      const onError = error => reject(error);
+      this.database().ref('/artefacts/' + name).on("value", onData, onError)
+    });
+  }
+
+
   /**
    * Updates preview to new image
    * @param image the image to be uploaded
