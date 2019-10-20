@@ -39,7 +39,6 @@ class CreateFamily extends Component {
   componentDidMount() {
     this.props.firebase.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user)
         let authUser = {
           uid: user.uid,
           displayName: user.displayName,
@@ -49,7 +48,6 @@ class CreateFamily extends Component {
         newMembers.push(authUser);
         this.setState({ authUser: authUser, familyMembers: newMembers });
         // User logged in already or has just logged in.
-        console.log(user.uid);
       } else {
         this.setState({ authUser: null });
         // User not logged in or has just logged out.

@@ -93,7 +93,6 @@ class ArtefactDetails extends Component {
      * Fetches the specified artefacts data from the database
      */
     async componentWillMount() {
-        console.log("componentn wiull mount");
         this.props.firebase.viewArtefact(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
@@ -103,7 +102,6 @@ class ArtefactDetails extends Component {
                             name: user.displayName,
                             phtoURL: user.photoURL
                         }
-                        console.log("curr user is " + user.uid + "values uid  " + value.admin.uid)
                         if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }
@@ -190,7 +188,6 @@ class ArtefactDetails extends Component {
                                 {this.state.isAdmin && <AdminModal id="adminArtefactModal" action={this.handleModal} collection={this.state.artefact}></AdminModal>}
                                 <Paper id="paperCard">
                                     <h5 className="descriptionTitle">Date</h5>
-                                    {/* {console.log(this.props.firebase.convertDate(this.state.artefact.date.toDateString()))} */}
                                     <p>{this.convertDate(this.state.artefact.date)}</p>
                                     <h5 className="descriptionTitle">Brief Description</h5>
                                     <p>{this.state.artefact.artefactBrief}</p>

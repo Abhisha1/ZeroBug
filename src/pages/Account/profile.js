@@ -42,7 +42,6 @@ class Profile extends Component{
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             user.updatePassword(this.state.password).then(function() {
                 // Update successful
-                console.log("update password");
               }).catch(function(error) {
                 // An error happened
               });

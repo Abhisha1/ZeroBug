@@ -55,7 +55,6 @@ class FamilyDetails extends Component {
         // adds the retrieved users to the array of users to add to a family
         // whilst ensuring the user doesn't already exist in the added members
         let duplicate = false;
-        console.log(dataFromModal)
         for (let key in this.state.family["users"]) {
             if (this.state.family["users"][key].uid === dataFromModal.uid) {
                 duplicate = true;

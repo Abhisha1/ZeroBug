@@ -44,7 +44,6 @@ class Firebase {
   uploadPlaceholderImage = (imageString, location, dbGroupName) => {
     this.storage().ref().child(location + dbGroupName).putString(imageString)
       .then(snapshot => {
-        console.log(snapshot);
         this.storage().ref().child(location + dbGroupName).updateMetadata({ contentType: 'image/png' })
       })
 
@@ -62,7 +61,7 @@ class Firebase {
 
     this.storage().ref().child(location + dbGroupName).put(image).then((snapshot) => {
       this.getProfileImageURL(th, location, location + dbGroupName, dbGroupName);
-      console.log('success uploading');
+      
     }).catch(error => {
       console.log("Written data FAILED");
     });
@@ -86,7 +85,6 @@ class Firebase {
 
     })
       .then(() => {
-        console.log("success putting");
       }).catch(error => {
         console.log("Written data FAILED");
       });
@@ -134,7 +132,6 @@ class Firebase {
           displayName: user.displayName,
           photoURL: newURL
         })
-        //console.log(user.photoURL);
       }
     })
   }
@@ -157,8 +154,7 @@ class Firebase {
         displayName: user.displayName,
         photoURL: url
       })
-
-      //console.log(user.photoURL);
+;
 
     }).catch(error => {
       console.log("Show data FAILED");
@@ -267,7 +263,6 @@ class Firebase {
 
       for (let key in data.val()) {
 
-        console.log(data.val()[key].admin.displayName);
 
         if (data.val()[key].admin.displayName === username) {
           count++;
@@ -317,7 +312,6 @@ class Firebase {
     }
 
     );
-    //console.log(aaa);
   }
 
   //get a list of storage files Names
@@ -341,10 +335,8 @@ class Firebase {
 
   //store the file path of the storage to the database
   testPutFilePathToDB = (filepath) => {
-    console.log(filepath);
     var newPostRef = this.database().ref('/filesURL/').push();
-    console.log(newPostRef);
-
+    
     newPostRef.set({
       fileURL: filepath,
     });
@@ -353,15 +345,11 @@ class Firebase {
   //get the image file path that store in the firebase storage
   getURL = (th, filepath) => {
     this.storage().ref().child(filepath).getDownloadURL().then((url) => {
-      console.log("aaaaa");
-      console.log(url);
-
+      
       th.setState({ ...th.state, imageURL: url });
 
-      console.log("test test");
       this.testPutFilePathToDB(url);
-      console.log(url);
-
+      
       //return url;
     }).catch(function (error) {
       // ...
@@ -392,7 +380,6 @@ class Firebase {
    * @return a success message when successful, or an error
    */
   searchUsers = (user, the) => {
-    console.log(user);
     // Calls API to fetch all users that match the name
     axios.post("https://boiling-castle-30087.herokuapp.com/api/getAllUsers", {
       name: user
@@ -431,8 +418,7 @@ class Firebase {
               photoURL: url,
               users: family.users
             }
-            console.log(newFamily)
-            matches.push(newFamily);
+           matches.push(newFamily);
           })
           .catch(err => {
             let newFamily = {
@@ -548,7 +534,6 @@ class Firebase {
     if (removeIndex === -1) {
       return new Error("could not find user in collection");
     }
-    console.log("name is " + name + " collection is " + collectionName)
     this.database().ref('/' + collectionName + '/' + name).update({ authFamilies: updatedFamilies })
       .then(() => {
         return MESSAGES.SUCCESS_MESSAGE;
@@ -590,7 +575,6 @@ class Firebase {
    * @return A success message or error
    */
   removeUserFromCollection = (user, collectionName, collection) => {
-    console.log(collection["users"])
     let newUsers = collection["users"];
     let removeIndex = -1;
     for (let key in collection["users"]) {
@@ -697,12 +681,10 @@ class Firebase {
             })
         })
         .catch(error => {
-          console.log("UPLOAD FAILED!!!!");
           console.log(error);
         })
     }))
       .then(values => { return values; })
-    console.log(imagesURL);
     return await imagesURL;
   }
 
@@ -728,7 +710,6 @@ class Firebase {
             if (artefactList) {
               artefactList.map(artefactInList => {
                 if (artefactInList.artefactName === artefacts[key].artefactName) {
-                  console.log("Dups")
                   duplicate = true;
                   found = true;
                 }
@@ -744,7 +725,6 @@ class Firebase {
           if (artefactList) {
             artefactList.map(artefactInList => {
               if (artefactInList.artefactName === artefacts[key].artefactName) {
-                console.log("Dups")
                 duplicate = true;
                 found = true;
               }
@@ -763,7 +743,6 @@ class Firebase {
                 if (artefactList) {
                   artefactList.map(artefactInList => {
                     if (artefactInList.artefactName === artefacts[key].artefactName) {
-                      console.log("Dups")
                       duplicate = true;
                       found = true;
                     }
@@ -780,7 +759,6 @@ class Firebase {
         }
 
       }
-      console.log(artefactList)
       the.setState({ ...the.state, artefactList: artefactList, dataReady: true });
     })
   }
@@ -799,15 +777,13 @@ class Firebase {
         for (let key in data.val()) {
           //parse through all the authorised families for each artefact
           for (let familyKey in data.val()[key].authFamilies) {
-            console.log("artefacts families" + data.val()[key].authFamilies[familyKey].displayName + "our fam  " + family.name)
             if (data.val()[key].authFamilies[familyKey].displayName === family.name) {
 
               artefactList.push(data.val()[key]);
             }
           }
         }
-        console.log(artefactList)
-        //finally, return the list through the state
+         //finally, return the list through the state
         the.setState({ ...the.state, artefactList: artefactList });
         the.setState({ dataReady: true })
       })
@@ -915,7 +891,6 @@ class Firebase {
 
       // parse through all the artefacts
       for (let key in data.val()) {
-        console.log(data.val()[key].admin.uid);
         //parse through all the authorised users for each artefact
         if (data.val()[key].admin.uid === uid) {
           count++;

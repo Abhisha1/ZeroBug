@@ -100,7 +100,6 @@ function UploadArtefactForm(props) {
 
   // add a family to the list of authFamilies
   const handleFamilies = familiesFromModal => {
-    console.log(familiesFromModal);
     let updatedAuthFamilies = values.authFamilies;
     let duplicate = false
     // Checks if family exists already
@@ -137,7 +136,6 @@ function UploadArtefactForm(props) {
         setSelectedDate(new Date());
         props.history.push(ROUTES.HOME);
       }).catch(error => {
-        console.log("UPLOAD FAILED");
         console.error(error);
       })
 

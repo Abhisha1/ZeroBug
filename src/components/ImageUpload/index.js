@@ -49,7 +49,6 @@ class ImageUpload extends Component {
     handleUpload = () => {
         const { image } = this.state;
         this.props.firebase.uploadProfileImage(image, this, this.props.dbLocation, this.props.name);
-        console.log(this.props.dbLocation);
 
 
     }
@@ -59,7 +58,6 @@ class ImageUpload extends Component {
     readyToUpload() {
         if (!this.state.isUploaded) {
             if (this.props.isCreate && this.props.readyToSubmit){
-                console.log(this.props.readyToSubmit)
                 if (this.state.image) {
                     this.handleUpload();
                 }
@@ -71,7 +69,6 @@ class ImageUpload extends Component {
                     oReq.responseType = 'blob';
                     oReq.onload = function () {
                         var blob = oReq.response;
-                        console.log(blob)
                         self.props.firebase.uploadProfileImage(blob, self, self.props.dbLocation, self.props.name);
                     };
                     oReq.send();
@@ -90,12 +87,10 @@ class ImageUpload extends Component {
      */
     componentDidMount() {
         if (!this.props.isCreate) {
-            console.log("db location is " + this.props.dbLocation + " and name is " + this.props.name);
             // retireves image from storage
             this.props.firebase.findImage(this.props.dbLocation, this.props.name)
                 .then(url => {
-                    console.log(url);
-                    this.setState({ imageURL: url });
+                   this.setState({ imageURL: url });
                 })
                 // catches error for when the file does not exist
                 .catch(error => {
