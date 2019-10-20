@@ -33,7 +33,7 @@ let rootStyle = {
 const App = () => (
   <Router>
     <Grid container direction="column">
-      <Grid item>
+      <Grid item style={{width: '100%'}}>
         <Navigation />
       </Grid>
       <Grid item style={{width: '100%'}}>

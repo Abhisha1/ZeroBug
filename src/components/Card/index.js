@@ -29,7 +29,7 @@ class Cards extends Component{
             <div>
             <Box boxShadow={3} height="100%" width="100%">
               <Card className= "card">
-                    <CardActionArea href={this.props.link}>
+                    <CardActionArea href={'/artefact/' + this.props.artefactName}>
                       <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
                         image={this.props.image}
