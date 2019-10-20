@@ -28,7 +28,7 @@ class Cards extends Component{
         return (
             <div>
             <Box boxShadow={3} height="100%" width="100%">
-              <Card class= "card">
+              <Card className= "card">
                     <CardActionArea href={this.props.link}>
                       <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
@@ -42,7 +42,7 @@ class Cards extends Component{
                             {this.props.artefactName}
                         </Typography>
                         <Divider/>
-                        <Typography variant="body 1" component="p">
+                        <Typography variant="body1" component="p">
                           {this.props.description}
                         </Typography>
 

@@ -86,6 +86,17 @@ function SignUp(props) {
     error: null,
   });
 
+  React.useEffect(() => {
+    props.firebase.auth.onAuthStateChanged((user) => {
+      if (user) {
+        // user is already logged in redirect to home
+        props.history.push(ROUTES.HOME);
+      } else {
+        // User not logged in or has just logged out.
+      }
+    });
+  });
+
   // Updates the values of the state on change
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });

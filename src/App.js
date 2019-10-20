@@ -17,6 +17,7 @@ import PasswordForgetPage from './pages/PasswordForget';
 import HomePage from './pages/Home';
 import AdminPage from './pages/Admin';
 import ViewFamily from './pages/ViewFamily';
+import ViewArtefact from './pages/ViewArtefact';
 import CreateArtifact from './pages/CreateArtifact'
 import Grid from '@material-ui/core/Grid';
 
@@ -42,11 +43,9 @@ const App = () => (
         <Route path={ROUTES.CREATE_FAMILY} component={CreateFamilyPage} />
         <Route path={ROUTES.ARTIFACT} component={Artifact} />
         <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} />
-        {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
         <Route path={ROUTES.HOME} component={HomePage} />
         <Route path={ROUTES.ACCOUNT} component={AccountPage} />
         <Route path={ROUTES.CREATE_ARTEFACT} component={CreateArtifact} />
-        {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
       </Grid>
     </Grid>
   </Router>
