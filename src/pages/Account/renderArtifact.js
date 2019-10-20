@@ -32,8 +32,8 @@ class RenderArtifact extends Component{
 
         if(this.state.dataReady){
             this.state.artefactList.map(item=> (
-                <div key={item}>
-                    {this.state.cardData.push(<Cards artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
+                <div key={item.name.artefactName}>
+                    {this.state.cardData.push(<Cards key={item.name.artefactName} artefactName={item.name.artefactName} description={item.name.artefactBrief} date={item.name.date}/>)}
                 </div>
             ));
         }
