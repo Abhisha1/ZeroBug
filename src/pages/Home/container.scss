@@ -14,3 +14,16 @@
     width: 300px;
     margin: 40px;
 }
+
+
+button.searchButton{
+    margin-top: 20px;
+    background-color: white;
+    font-family: Montserrat;
+    border: 2px solid rgba(250, 243, 30, 0.845);
+}
+
+button.search:focus{
+    color: white;
+    background-color: rgba(250, 243, 30, 0.845);
+}

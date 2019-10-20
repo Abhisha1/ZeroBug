@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
 import CustomSlider from "../../components/CardSlider";
