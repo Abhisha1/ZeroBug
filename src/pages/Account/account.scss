@@ -29,7 +29,7 @@
     display: -webkit-flex; /* Safari */
     display: flex;
     flex-direction: column;
-    height: 1400px;
+    height: 980px;
     padding-top: 66px;
     max-width: 100% !important;
 }
@@ -56,6 +56,7 @@
     flex-direction: column;
     height: 680px;
     padding-top: 128px;
+    padding-bottom: 128px;
     flex: 1;
 }
 
@@ -77,13 +78,13 @@
 }
 
 .nextButton{
-    width: 100px;
-    height: 100px;
-    background-color: rgba(255, 255, 0, 0.393);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(252, 252, 56, 0.633);
     font-size: 2vw;
     border-radius: 50px;
     border: 2px solid yellow;
-    color: white;
+    color: black;
     font-weight: 800;
     
 }
@@ -209,10 +210,8 @@ input.testInput{
 
 @media only screen and (max-width: 6000px) {
     #avatarBox{
-        background-color: cyan;
         height: 256px;
         width: 256px;
-        border-radius: 50%;
     }
     .aButton{
         //border-radius: 90px;
@@ -222,10 +221,8 @@ input.testInput{
 
 @media only screen and (max-width: 1000px) {
     #avatarBox{
-        background-color: cyan;
         height: 128px;
         width: 128px;
-        border-radius: 50%;
     }
     .aButton{
         //border-radius: 30px;
@@ -235,10 +232,8 @@ input.testInput{
 
 @media only screen and (max-width: 500px) {
     #avatarBox{
-        background-color: cyan;
         height: 64px;
         width: 64px;
-        border-radius: 50%
     }
     #changeAvatarButton{
         border-radius: 20px;
@@ -274,4 +269,27 @@ input.testInput{
 
 #passwordField{
     margin-left: 32px;
+}
+
+
+.artifactContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-bottom: 66px;
+}
+.textboxContainer{
+    display: flex;
+    justify-content: center;
+    flex-wrap: space-around;
+}
+.textbox{
+    width: 300px;
+    margin: 40px;
+}
+
+#artifactTop{
+    padding-top: 66px;
 }

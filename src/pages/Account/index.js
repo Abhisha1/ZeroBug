@@ -4,6 +4,7 @@ import RenderFamilies from "./renderFamilies";
 import { withAuthorization } from "../../components/Session";
 import Paper from '@material-ui/core/Paper';
 import Profile from "./profile";
+import Artifact from "./renderArtifact";
 
 
 class AccountPage extends Component {
@@ -21,6 +22,11 @@ class AccountPage extends Component {
 				<Paper id="familyPaper">
 					<div>
 						<RenderFamilies />
+					</div>
+				</Paper>
+				<Paper id="familyPaper">
+					<div>
+						<Artifact/>
 					</div>
 				</Paper>
 			</div>	

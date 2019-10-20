@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import "./imageUpload.scss";
+import PlaceHolderImage from '../../assets/group-profile-users.png';
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -55,9 +56,31 @@ class ImageUpload extends Component {
      * Checks if the avatar image is ready to be uploaded to the server, for pages that create a new family or artefact
      */
     readyToUpload() {
-
-        if (this.state.image && !this.state.isUploaded) {
-            this.handleUpload();
+        if (!this.state.isUploaded) {
+            if (this.props.isCreate && this.props.readyToSubmit){
+                console.log(this.props.readyToSubmit)
+                if (this.state.image) {
+                    this.handleUpload();
+                }
+                else {
+                    // Sets a placeholder image for when an image isn't uploaded by users
+                    let self = this;
+                    var oReq = new XMLHttpRequest();
+                    oReq.open('get', PlaceHolderImage, true);
+                    oReq.responseType = 'blob';
+                    oReq.onload = function () {
+                        var blob = oReq.response;
+                        console.log(blob)
+                        self.props.firebase.uploadProfileImage(blob, self, self.props.dbLocation, self.props.name);
+                    };
+                    oReq.send();
+                }
+            }
+            else if(!this.props.isCreate){
+                if (this.state.image && !this.state.isUploaded){
+                    this.handleUpload();
+                }
+            }
         }
     }
 
@@ -79,8 +102,12 @@ class ImageUpload extends Component {
                 })
 
         }
+
     }
 
+    /**
+     * Renders the image upload icon and button onto webpage
+     */
     render() {
         return (
             <div id="uploadBox">
@@ -101,29 +128,24 @@ class ImageUpload extends Component {
                     type="file"
                     onChange={this.handleChange}
                 />
-                 {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
+                {/* Checks if the page the avatar is being used on is a create page (creating a new family or new artefact)
                 When the page is creating a new object, it ensures the uploading is done only when the creation page says
                 it is ready to upload.
                 If the page is not creating a new object and changing the avatar of an existing user/artefact/family, it will
                 display a button which will upload the new file after clicking the button */}
                 <div id="styledUpload">
-                    {this.props.readyToSubmit && this.readyToUpload()}
+
+                    {this.readyToUpload()}
                     <label htmlFor="imageUpload">
                         {this.props.isCreate ?
-                            (<Button variant="outlined" component="span" id="uploadStyledButton">
+                            (<Button variant="outlined" component="span" id="uploadServerButton">
                                 Upload
                             </Button>)
-                    : (
-                    <div id="profileButton">
-                        <Button variant="outlined" component="span" id="uploadStyledButton" onClick={this.handleUpload}>
-                                Upload
-                        </Button>
-
-                        <Button className="aButton" variant="outlined" onClick={this.handleUpload}>
-                            Change Profile Image
-                        </Button>
-                    </div>
-                    )}
+                            : (
+                                <Button variant="outlined" component="span" id="uploadLocalButton">
+                                    Upload
+                    </Button>
+                            )}
                     </label>
                 </div>
 

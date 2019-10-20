@@ -34,6 +34,22 @@ class Firebase {
 
   /********************************************************************** */
 
+  /**
+   * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
+   * @param image the image to be uploaded
+   * @param the the state of the parent class invoking the upload
+   * @param location the folder under which the image file should be stored on server
+   * @param dbGroupName the name of the group under which the image belongs to; ie the family name or user's name
+   */
+  uploadPlaceholderImage = (imageString, location, dbGroupName) => {
+    this.storage().ref().child(location + dbGroupName).putString(imageString)
+      .then(snapshot => {
+        console.log(snapshot);
+        this.storage().ref().child(location + dbGroupName).updateMetadata({ contentType: 'image/png' })
+      })
+
+
+  }
 
   /**
    * Uploads the artefact to the server storage, using a specified location folder under the groups name (family name or user's name)
@@ -93,12 +109,32 @@ class Firebase {
         this.putProfileImageFilePathToDB(url, location, dbGroupName);
       }
 
+      //update the photoURL
+      if (location == "profileImages/"){
+        this.updateUserImage(url);
+      }
 
     }).catch(error => {
       console.log("Written data FAILED");
     });
   }
 
+  /**
+   * set the user photoURL
+   * @para the new user photoURL
+   */
+  updateUserImage = (newURL) => {
+    this.auth.onAuthStateChanged((user) => {
+
+      if (user) {
+        user.updateProfile({
+          displayName: user.displayName,
+          photoURL: newURL
+        })
+    //console.log(user.photoURL);
+      }
+  })
+}
   /********************************************************************** */
   /**
    * get the profile image before rendering the account page
@@ -106,18 +142,26 @@ class Firebase {
    * @para the filepath
    * @para the username
    */
-  getImageURL = (th, location, dbGroupName) => {
+
+  getImageURL = (th, location, dbGroupName, user) => {
 
     this.storage().ref().child(location + dbGroupName).getDownloadURL().then((url) => {
 
+      th.setState({ ...th.state, imageURL: url});
 
-      th.setState({ ...th.state, imageURL: url });
+      //update the user profile URL
+      user.updateProfile({
+        displayName: user.displayName,
+        photoURL: url
+      })
+
+      //console.log(user.photoURL);
+
     }).catch(error => {
       console.log("Show data FAILED");
     });
 
   }
-
 
   /**
    * get the list fo families images
@@ -136,7 +180,6 @@ class Firebase {
         })
     })
   }
-
   getFamiliesImageURL = (th, location, familyNamesList) => {
     let familyImages = [];
 
@@ -158,23 +201,44 @@ class Firebase {
    * @para the component to be set the state
    * @para users' names
    */
-  getListFamilyName = (the, username) => {
+  getYourFamilyNames = (the, username) => {
+
     var testFamilyName = [];
     var tempRef = this.database().ref('/families/');
     tempRef.on("value", (data) => {
+
+      // for the number of the families the user managed
+      let count = 0;
+      // for the current image get from the storage
+      let now = 0;
 
       for (let key in data.val()) {
 
         for (let user in data.val()[key].users) {
           if (data.val()[key].users[user].displayName === username) {
 
-            testFamilyName.push(data.val()[key].name);
+            count ++;
+
+            let tempMem = {
+              name: data.val()[key].name,
+            }
+
+
+            this.getFamilyImageURL(data.val()[key].name,
+            (avatar) => {
+              tempMem.avatar = avatar;
+              now ++;
+              if (now == count){
+                the.setState({dataReady: true})
+              }
+            });
+            testFamilyName.push(tempMem);
 
           }
         }
       }
 
-      the.setState({ ...the.state, familyList: testFamilyName })
+      the.setState({...the.state, cardData: testFamilyName});
 
     });
   }
@@ -186,22 +250,59 @@ class Firebase {
    * @para the user name
    */
   getYourManagedFamilyName = (the, username) => {
+
     let testFamilyName = [];
     let tempRef = this.database().ref('/families/');
+
     tempRef.on("value", (data) => {
 
+      // for the number of the families the user managed
+      let count = 0;
+
+      // for the current image get from the storage
+      let now = 0;
+
       for (let key in data.val()) {
-        if (data.val()[key].admin.name === username) {
-          testFamilyName.push(data.val()[key].name);
+
+        console.log(data.val()[key].admin.displayName);
+
+        if(data.val()[key].admin.displayName == username ){
+          count ++;
+
+          let tempMem = {
+            name: data.val()[key].name,
+          }
+
+          this.getFamilyImageURL(data.val()[key].name,
+          (avatar) => {
+            tempMem.avatar = avatar;
+            now ++;
+            if (now == count){
+              the.setState({dataReady: true})
+            }
+          });
+          testFamilyName.push(tempMem);
 
         }
-      }
-      the.setState({ ...the.state, familyList: testFamilyName });
-      this.getFamiliesImageURL(the, "familyImages/", testFamilyName);
-      the.setState({ dataReady: true })
+        }
+        the.setState({...the.state, cardData: testFamilyName});
     })
-
   }
+
+  /**
+   * get the family image
+   * @para family name
+   * @para get the family image
+   */
+  getFamilyImageURL = (familyName, callback) => {
+      this.storage().ref().child("familyImages/" + familyName).getDownloadURL().then((url)=>{
+        callback(url);
+      }
+      )
+  }
+
+
+
 
 
   //upload the files
@@ -548,47 +649,82 @@ class Firebase {
     return await imagesURL;
   }
 
+/**
+ * Get a list of Artifact name data
+ * @param the component to be set the state
+ */
+getListArtifactName = (the) => {
+  var testArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/');
+  tempRef.on('child_added', function (data) {
+    testArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, artifactList: testArtifactName })
+}
 
-  /**
-   * get the artifact data
-   * @param artifact ID
-   * @param the component to be set the state
-   */
-  getArtifactData = (artifactID, the) => {
-    let artifactName = "?";
-    this.database().ref('/testUploadArtifactData/05').once('value').then(function (snapshot) {
-      artifactName = (snapshot.val() && snapshot.val().artifactName) || 'Anonymous';
-      the.setState({ ...the.state, artifactName: artifactName })
-    })
+
+/**
+ * Get a sorted list of Artifact name data by their name
+ * @param the component to be set the state
+ */
+getSortedListArtifactName = (the) => {
+  var testSortedArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
+  tempRef.on('child_added', function (data) {
+    testSortedArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
+}
+
+
+/**
+ * Get top 5 Artifact name data order by ArtifactName
+ * @param the component to be set the state
+ */
+getTopFiveArtifactName = (the) => {
+  var topFiveArtifactName = [];
+  var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName').limitToFirst(5);
+  tempRef.on('child_added', function (data) {
+    topFiveArtifactName.push(data.val().artifactName);
+  });
+  the.setState({ ...the.state, topFive: topFiveArtifactName })
+}
+
+/**
+ * Set Document cookie for user's current session which expires upon closing
+ * of the session.
+ *
+ *           'https://www.w3schools.com/js/js_cookies.asp'
+ *
+ * @param cname the name of the cookie
+ * @param cvalue the value of the cookie
+ */
+setCookie = (cname, cvalue) => {
+  document.cookie = cname + "=" + cvalue + ";" + ";path=/";
+}
+
+/**
+ * Get Document cookie value for given cookie name.
+ *
+ *           'https://www.w3schools.com/js/js_cookies.asp'
+ *
+ * @param cname the name of the cookie
+ * @return String value for cookie name
+ */
+getCookie = (cname) => {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
   }
-
-
-  /**
-   * Get a list of Artifact name data
-   * @param the component to be set the state
-   */
-  getListArtifactName = (the) => {
-    var testArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/');
-    tempRef.on('child_added', function (data) {
-      testArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, artifactList: testArtifactName })
-  }
-
-
-  /**
-   * Get a sorted list of Artifact name data by their name
-   * @param the component to be set the state
-   */
-  getSortedListArtifactName = (the) => {
-    var testSortedArtifactName = [];
-    var tempRef = this.database().ref('/testUploadArtifactData/').orderByChild('artifactName');
-    tempRef.on('child_added', function (data) {
-      testSortedArtifactName.push(data.val().artifactName);
-    });
-    the.setState({ ...the.state, artifactSortedList: testSortedArtifactName })
-  }
+  return "";
+}
 
 
   /**
@@ -601,28 +737,87 @@ class Firebase {
     // Create the new user in Firebase
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
-
-
-
-  /**
-   * Sign in the a registered user account
-   * @param email the email address of the registered user
-   * @param password the password for the registered user's account
+/**
+   * get all artefacts user has access to
+   * @para the componenet set to be state
+   * @para the username of the user to check artefacts for
    */
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+  getYourManageArtefactData = (the, uid) => {
+    let artefactList = [];
+    let tempRef = this.database().ref('/artefacts/');
+    tempRef.on("value", (data) =>{
 
-  doSignInWithEmailAndPassword = (email, password) => {
-    return this.auth.signInWithEmailAndPassword(email, password);
-  }
+    let count = 0;
 
-  doSignOut = () => this.auth.signOut();
+    // parse through all the artefacts
+    for (let key in data.val()) {
+        console.log(data.val()[key].admin.uid);
+        //parse through all the authorised users for each artefact
+        if(data.val()[key].admin.uid === uid){
+          count ++;
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+          let tempMem = {
+              name: data.val()[key],
+          }
+          artefactList.push(tempMem);
 
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+        }
+
+
+
+        // for(let user in data.val()[key].admin){
+        //     if(data.val()[key].users[user].uid === uid){
+        //         count ++;
+
+        //         let tempMem = {
+        //             name: data.val()[key],
+        //         }
+        //         artefactList.push(tempMem);
+        //     }
+        // }
+    }
+    //finally, return the list through the state
+    the.setState({...the.state, artefactList: artefactList});
+    the.setState({dataReady: true})
+});
+}
+
+
+
+
+/**
+ * Sign up a user using their provided email and password
+ * @param email the email address of the user to register by
+ * @param password the password for the user to register by
+ * @param username the username for the new user
+ */
+doCreateUserWithEmailAndPassword = (email, password, username) => {
+  // Create the new user in Firebase
+  return this.auth.createUserWithEmailAndPassword(email, password);
+}
+
+
+
+/**
+ * Sign in the a registered user account
+ * @param email the email address of the registered user
+ * @param password the password for the registered user's account
+ */
+doCreateUserWithEmailAndPassword = (email, password) =>
+  this.auth.createUserWithEmailAndPassword(email, password);
+
+doSignInWithEmailAndPassword = (email, password) => {
+  return this.auth.signInWithEmailAndPassword(email, password);
+}
+
+doSignOut = () => this.auth.signOut();
+
+doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+
+
+doPasswordUpdate = password =>
+  this.auth.currentUser.updatePassword(password);
 }
 
 export default Firebase;
