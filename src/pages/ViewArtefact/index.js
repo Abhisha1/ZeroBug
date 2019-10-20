@@ -94,7 +94,6 @@ class ArtefactDetails extends Component {
      * Fetches the specified artefacts data from the database
      */
     async componentWillMount() {
-        console.log("componentn wiull mount");
         this.props.firebase.viewArtefact(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
@@ -104,7 +103,6 @@ class ArtefactDetails extends Component {
                             name: user.displayName,
                             phtoURL: user.photoURL
                         }
-                        console.log("curr user is " + user.uid + "values uid  " + value.admin.uid)
                         if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }

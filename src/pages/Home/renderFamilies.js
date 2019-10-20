@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../../components/Firebase';
+import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import FamilySlider from "./cardSlider";
+import "./container.scss";
 
 class RenderFamilies extends Component{
     constructor(props){
@@ -30,11 +32,8 @@ class RenderFamilies extends Component{
             <div>
                 <div id="familiesWrapper">
 					<h1 id="account-heading">Families</h1>
-                    <FamilySlider cards=
-                        {this.state.dataReady?
-                            this.state.cardData:[]
-                        }
-					/>
+                    {this.state.dataReady ? <FamilySlider cards={this.state.cardData
+                        }></FamilySlider> : <h6 id="noFamilyMessage">You don't have any families just yet. To get started, <Link to={{pathname:'/create-family'}}>create a new family</Link></h6>}
 				</div>
             </div>
         )
