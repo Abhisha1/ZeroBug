@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import { Form, Modal, Popover, OverlayTrigger } from "react-bootstrap";
-<<<<<<< HEAD
-import { withFirebase } from '../../components/Firebase';
-import CustomModal from "../../components/AddModal";
-=======
 import { withFirebase } from '../../components/Firebase'
 import Button from "@material-ui/core/Button";
-import CustomModal from "../../components/AddUserModal";
->>>>>>> master
+import CustomModal from "../../components/AddModal";
 import { HOME } from '../../constants/routes';
 import CustomSlider from '../../components/CardSlider';
 import UploadFile from "../../components/ImageUpload";
@@ -121,7 +116,6 @@ class CreateFamily extends Component {
     });
   }
 
-<<<<<<< HEAD
 
   searchForUsers(firebase, familyMemberName, modalState) {
     firebase.searchUsers(familyMemberName, modalState)
@@ -131,11 +125,9 @@ class CreateFamily extends Component {
 
 
 
-=======
   /**
    * Renders the create family form onto the webpage
    */
->>>>>>> master
   render() {
     // An error popover that is displayed when a family already exists under this name
     const popover = (
