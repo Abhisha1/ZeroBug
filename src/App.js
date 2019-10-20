@@ -43,6 +43,7 @@ const App = () => (
         <Route path={ROUTES.CREATE_FAMILY} component={CreateFamilyPage} />
         <Route path={ROUTES.ARTIFACT} component={Artifact} />
         <Route path={ROUTES.VIEW_FAMILY} component={ViewFamily} />
+        <Route path={ROUTES.VIEW_ARTEFACT} component={ViewArtefact} />
         <Route path={ROUTES.HOME} component={HomePage} />
         <Route path={ROUTES.ACCOUNT} component={AccountPage} />
         <Route path={ROUTES.CREATE_ARTEFACT} component={CreateArtifact} />

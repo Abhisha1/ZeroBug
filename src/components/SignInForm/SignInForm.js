@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function SignUp(props) {
+function SignIn(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     email: '',
@@ -210,4 +210,4 @@ function SignUp(props) {
   );
 }
 
-export default withRouter(withFirebase(SignUp));
+export default withRouter(withFirebase(SignIn));
