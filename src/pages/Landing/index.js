@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./landing.scss";
-import Button from "../../components/Button";
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid'
 import ScrollButton from "../../components/scrollButton";
 import * as ROUTES from '../../constants/routes';
 
@@ -17,17 +18,22 @@ class LandingPage extends Component {
 
 					</div>
 
-
 					<div className="parallax">
 					</div>
 					<div className="parallax">
 					<div className="about-card" id="about-card">
 						<div className="card_text">
-							<p>
+							<p align="center">
 							A software solution developed by ZeroBugs to help families share artefacts securely online.
 							</p>
 						</div>
-						<Button variant="primary" target={ROUTES.SIGN_UP} value="Get started"></Button>
+						<Grid container justify="center">
+							<Grid item>
+								<Button variant="contained" href="/signup" color="primary" allign="center">
+									Get started
+								</Button>
+							</Grid>
+						</Grid>
 					</div>
 					</div>
 
