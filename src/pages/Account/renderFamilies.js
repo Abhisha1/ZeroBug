@@ -30,8 +30,8 @@ class RenderFamilies extends Component{
             <div>
                 <div id="familiesWrapper">
 					<h1 id="account-heading">Manage Your Families</h1>
-                    {this.state.dataReady && (this.state.cardData ? <FamilySlider cards={this.state.cardData}
-					/> : <h5 id="noFamilyCreatedMessage">You have not created any families yet.</h5>) 
+                    {this.state.dataReady ? <FamilySlider cards={this.state.cardData}
+					/> : <h5 id="noFamilyCreatedMessage">You have not created any families yet.</h5> 
                     
                     }
 				</div>
