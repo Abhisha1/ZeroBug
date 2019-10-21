@@ -10,8 +10,10 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import Grid from '@material-ui/core/Grid';
 import GridListTile from '@material-ui/core/GridListTile';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography'
 import yellow from '@material-ui/core/colors/yellow';
 import { makeStyles } from '@material-ui/core/styles';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 // Firebase API
 import { withRouter } from 'react-router-dom';
@@ -100,6 +102,7 @@ function UploadArtefactForm(props) {
 
   // add a family to the list of authFamilies
   const handleFamilies = familiesFromModal => {
+    console.log(familiesFromModal);
     let updatedAuthFamilies = values.authFamilies;
     let duplicate = false
     // Checks if family exists already
@@ -136,6 +139,7 @@ function UploadArtefactForm(props) {
         setSelectedDate(new Date());
         props.history.push(ROUTES.HOME);
       }).catch(error => {
+        console.log("UPLOAD FAILED");
         console.error(error);
       })
 
@@ -188,9 +192,9 @@ function UploadArtefactForm(props) {
 
   return (
     <div>
-      <Grid container wrap="nowrap" justify="center">
+      <Grid container wrap="nowrap" justify="center" direction="column-reverse">
         <CssBaseline />
-        <Grid item xs={6}>
+        <Grid item justify="center">
           <form onSubmit={onSubmit} noValidate className={classes.form}>
             <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
               <Grid item xs={6} >
@@ -230,6 +234,7 @@ function UploadArtefactForm(props) {
                     variant="inline"
                     format="dd/MM/yyyy"
                     margin="normal"
+                    minDate = {new Date(1000, 0, 1, 1, 0, 0)}
                     disableFuture
                     id="date-of-artefact"
                     label="Date of Artefact"
@@ -312,6 +317,7 @@ function UploadArtefactForm(props) {
                 variant="contained"
                 component="span"
                 fullWidth
+                style={{backgroundColor: '#ffeb3b', color: 'black'}}
               >
                 UPLOAD
             </Button>
@@ -319,9 +325,16 @@ function UploadArtefactForm(props) {
           </Grid>
           <Grid item xs={5}>
             {Array.from(values.images).map(image => (
-              <GridListTile key={image.name}>
-                <img src={renderImage(image)} alt={image.name} id="artefactImages"/>
-              </GridListTile>
+              <Grid conatiner justify="center" alignItems="center" style={{display: 'flex',justifyItems:'center',placeContent: 'center'}}>
+                <Grid item >
+                  <CheckCircleIcon fontSize="large" style={{color: '#43a047',}}/>
+                </Grid>
+                <Grid item style={{padding: '2vw'}}>
+                  <Typography>
+                    {image.name}
+                  </Typography>
+                </Grid>
+              </Grid>
             ))}
           </Grid>
         </Grid>
