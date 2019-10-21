@@ -5,7 +5,6 @@ import EditModal from '../../components/EditModal';
 import AdminModal from "../../components/AdminChangeModal"
 import LoadingAnimation from '../../components/LoadingAnimation';
 import { Paper, GridList, GridListTile } from '@material-ui/core';
-import UploadFile from "../../components/ImageUpload";
 import { withAuthorization } from "../../components/Session";
 import { Timestamp } from '@google-cloud/firestore';
 import { Link } from 'react-router-dom';
@@ -22,9 +21,6 @@ import "./viewartefact.scss";
 
 
 class ViewArtefact extends Component {
-    constructor(props) {
-        super(props);
-    }
     /**
      * Renders the artefact details on screen, using the name of the artefact from
      * url or the previous webpage
@@ -98,11 +94,6 @@ class ArtefactDetails extends Component {
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
                     if (user) {
-                        let authUser = {
-                            uid: user.uid,
-                            name: user.displayName,
-                            phtoURL: user.photoURL
-                        }
                         if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }
@@ -200,7 +191,7 @@ class ArtefactDetails extends Component {
                                     }} cols={3}>
                                         {this.state.artefact.imagesURL.map(url => (
                                             <GridListTile key={url} cols={1}>
-                                                <img src={url}/>
+                                                <img alt="" src={url}/>
                                             </GridListTile>
                                         ))}
                                     </GridList>

@@ -57,7 +57,7 @@ class CustomSlider extends Component {
                     <Card>
                         <CardMedia
                             image={item.avatar}
-                            style={{width: "100%", height: "250px", backgroundColor: "cyan"}}
+                            style={{width: "100%", height: "250px", backgroundColor: "grey"}}
                         />
                         <CardContent>
                             <Typography variant="h4" component="p">

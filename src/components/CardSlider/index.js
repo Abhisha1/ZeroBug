@@ -50,7 +50,7 @@ class CustomSlider extends Component {
       {/* Passes through families data to render in slider */}
       {this.props.cards.map(item => (
         <div key={item} id="sliderCard">
-          {item.photoURL ? <Avatar id="memberAvatar"
+          {item.photoURL ? <Avatar style={{margin: "1vw", width: "10vw", height:"10vw"}} id="memberAvatar"
             src={item.photoURL}
           /> : <GroupIcon id="memberAvatar"></GroupIcon>}
           <h4 id="memberName">

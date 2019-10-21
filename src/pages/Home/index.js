@@ -62,7 +62,7 @@ class HomePage extends Component {
 
             <div>
                 <h1 id="homeHeading">My Home</h1>
-                <h5 id="homeInformation">View all your artefacts and families you have access too</h5>
+                <h5 id="homeInformation">View all your artefacts and families you have access to</h5>
                 <Paper style={{marginLeft: "66px", marginRight: "66px", marginBottom: "66px", marginTop: "66px"}}>
                     <div>
                         <RenderFamilies />

@@ -5,9 +5,7 @@ import UploadFile from "../../components/ImageUpload";
 import "./account.scss";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import yellow from '@material-ui/core/colors/yellow';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 
 
 class Profile extends Component{
@@ -58,7 +56,7 @@ class Profile extends Component{
                         <Paper id="paperStyle">
                             <h1 id="account-heading">{this.state.username}</h1>
                             <div id="userInformation">
-                                <img src={this.state.imageURL} id="avatarBox"></img>
+                                <img alt="" src={this.state.imageURL} id="avatarBox"></img>
                             </div>
                         </Paper>
                     </div>

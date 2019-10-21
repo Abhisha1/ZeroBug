@@ -158,7 +158,7 @@ class FamilyDetails extends Component {
     render() {
         const artefacts = (<div><Divider />
             <h1 id="account-heading">Artefacts</h1>
-            <Grid container direction="row" justify="center" alignItems="center">
+            <Grid container direction="row" justify="space-evenly" alignItems="center">
                 {/* Checks if the artefacts have been retrieved and renders them as cards */}
                 {this.state.dataReady &&
                     this.state.artefactList.map(item => (

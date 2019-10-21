@@ -28,7 +28,7 @@ class LandingPage extends Component {
 					<div className="about-card" id="about-card">
 						<div className="card_text">
 							<p align="center">
-							A software solution developed by ZeroBugs to help families share artefacts securely online.
+							A software solution developed by ZeroBug to help families share artefacts securely online.
 							</p>
 						</div>
 						<Grid container justify="center">
