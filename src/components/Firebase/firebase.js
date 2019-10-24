@@ -89,7 +89,11 @@ class Firebase {
         console.log("Written data FAILED");
       });
   }
-
+  /**
+   * Finds an artefact and returns a promise with the artefact
+   * @param name The name of the artefact
+   * @return a promise which is the artefact object or an error
+   */
   viewArtefact = (name) => {
     return new Promise((resolve, reject) => {
       const onData = snap => {
@@ -176,9 +180,8 @@ class Firebase {
 
   /**
    * get the list fo families images
-   * @para the component to be set the state
-   * @para the filepath
-   * @para the list of families names
+   * @param location the filepath
+   * @param name the list of families names
    */
   findImage = (location, name) => {
     return new Promise((resolve, reject) => {
@@ -406,7 +409,6 @@ class Firebase {
       let arr = Object.values(snapshot.val())
       // returns the image of the family
       return Promise.all(arr.map(family => {
-        console.log(family)
         return self.findImage("familyImages/", family.name)
           .then(url => {
             let newFamily = {
@@ -422,7 +424,6 @@ class Firebase {
             let newFamily = {
               displayName: family.name
             }
-            console.log(family.name)
             if(family.name.toLowerCase().includes(familyString)){
               matches.push(newFamily);
             }
@@ -503,7 +504,6 @@ class Firebase {
    * @return A success message or error
    */
   addUserToCollection = (user, collectionName, collection) => {
-    console.log(collection)
     let newUsers = collection["users"] ? collection["users"] : [];
     newUsers.push(user);
     let name = collectionName === "artefacts" ? collection["artefactName"] : collection["name"];
@@ -708,6 +708,7 @@ class Firebase {
         let found = false;
         //parse through all the authorised users for each artefact
         for (let user in artefacts[key].users) {
+          // artefact shared by user only
           if (artefacts[key].users[user].uid === uid) {
             if (artefactList) {
               artefactList.map(artefactInList => {
@@ -723,6 +724,7 @@ class Firebase {
             found = true;
           }
         }
+        // artefact and is admin
         if (!found && artefacts[key].admin.uid === uid) {
           if (artefactList) {
             artefactList.map(artefactInList => {
@@ -737,7 +739,7 @@ class Firebase {
           }
           found = true;
         }
-
+        // artefact shared in joined families
         if (!found) {
           for (let family in artefacts[key].authFamilies) {
             for (let user in artefacts[key].authFamilies[family].users) {
@@ -927,7 +929,12 @@ class Firebase {
 
 
 
-
+  /**
+   * Signs in user via firebase 
+   * @param email The email entered by user
+   * @param password The password entered by user
+   * @return success or failure of login attempt
+   */
   doSignInWithEmailAndPassword = (email, password) => {
     return this.auth.signInWithEmailAndPassword(email, password);
   }

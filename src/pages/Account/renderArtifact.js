@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import "./account.scss";
 import Cards from "./../../components/Card";
 import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
 
 
 class RenderArtifact extends Component{

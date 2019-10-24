@@ -9,17 +9,10 @@ import { withAuthorization } from "../../components/Session";
 import { Timestamp } from '@google-cloud/firestore';
 import { Link } from 'react-router-dom';
 import "./viewartefact.scss";
-
-// import "./viewartefact.scss";
-// import "~react-image-gallery/styles/scss/image-gallery.scss";
 /**
  * Page which views a particular artefact, as chosen by users actions from
  * previous webpage
  */
-
-
-
-
 class ViewArtefact extends Component {
     /**
      * Renders the artefact details on screen, using the name of the artefact from
@@ -94,12 +87,14 @@ class ArtefactDetails extends Component {
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
                     if (user) {
+                        // logged in user is admin of artefact
                         if (user.uid === value.admin.uid) {
                             this.setState({ artefact: value, loading: false, isAdmin: true, hasAccess: true });
                         }
                         let currUserIsMember = false
-                        if(value.users){
+                        if (value.users) {
                             value.users.map(familyMember => {
+                                // logged in user can access artefact through direct access
                                 if (familyMember.uid === user.uid) {
                                     currUserIsMember = true;
                                     this.setState({ artefact: value, loading: false, hasAccess: true });
@@ -109,6 +104,7 @@ class ArtefactDetails extends Component {
                         if (!currUserIsMember && value.authFamilies) {
                             value.authFamilies.map(family => {
                                 family.users.map(familyMember => {
+                                    // logged in user has access via family
                                     if (familyMember.uid === user.uid) {
                                         currUserIsMember = true;
                                         this.setState({ artefact: value, loading: false, hasAccess: true });
@@ -174,7 +170,6 @@ class ArtefactDetails extends Component {
                                 to={{ pathname: '/home/' }}
                             >My Home</Link></h4></Paper>) : (
                             <div>
-                                {/* <ImageGallery items={this.state.artefact} /> */}
                                 <h1 id="artefactName">{this.props.name}</h1>
                                 <div style={{
                                     display: 'flex',
@@ -183,7 +178,7 @@ class ArtefactDetails extends Component {
                                     overflow: 'hidden',
                                     alignSelf: 'center',
                                     marginBottom: '2vw'
-                                    }}>
+                                }}>
                                     <GridList cellHeight={200} style={{
                                         width: "75%",
                                         height: "45%",
@@ -191,7 +186,7 @@ class ArtefactDetails extends Component {
                                     }} cols={3}>
                                         {this.state.artefact.imagesURL.map(url => (
                                             <GridListTile key={url} cols={1}>
-                                                <img alt="" src={url}/>
+                                                <img alt="" src={url} />
                                             </GridListTile>
                                         ))}
                                     </GridList>
@@ -199,7 +194,6 @@ class ArtefactDetails extends Component {
                                 {this.state.isAdmin && <AdminModal id="adminArtefactModal" action={this.handleAdmins} family={this.state.artefact} title="artefacts" ></AdminModal>}
                                 <Paper id="paperCard">
                                     <h5 className="descriptionTitle">Date</h5>
-                                    {/* {console.log(this.props.firebase.convertDate(this.state.artefact.date.toDateString()))} */}
                                     <p>{this.convertDate(this.state.artefact.date)}</p>
                                     <h5 className="descriptionTitle">Brief Description</h5>
                                     <p>{this.state.artefact.artefactBrief}</p>
@@ -219,11 +213,11 @@ class ArtefactDetails extends Component {
                                 <Paper id="paperCard">
                                     <h1 className="memberHeadings">Shared families</h1>
                                     {this.state.isAdmin && <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
-                                    
+
                                     }
                                     {this.state.artefact.authFamilies ? <CustomSlider cards={this.state.artefact["authFamilies"]}></CustomSlider> :
-                                <h4>Psst.. this is a top secret artefact that hasn't been shared with any families.</h4>
-                            }
+                                        <h4>Psst.. this is a top secret artefact that hasn't been shared with any families.</h4>
+                                    }
                                 </Paper>
                             </div>))
                 }

@@ -6,6 +6,7 @@ button[variant="primary"]{
     font-weight: 400;
     border-radius: 7px;
     border: 2px solid #ffe960;
+    align-self: center;
 }
 
 button[variant="secondary"]{
@@ -16,6 +17,7 @@ button[variant="secondary"]{
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 400;
+    align-self: center;
 }
 
 button:disabled{

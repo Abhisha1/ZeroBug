@@ -7,42 +7,30 @@ import ScrollButton from "../../components/scrollButton";
 import * as ROUTES from '../../constants/routes';
 
 
-
+/**
+ * The landing page for ZeroBug
+ */
 class LandingPage extends Component {
 
-
+	// Renders a short description of web app
 	render() {
-		return(
-			<div id="landingpage">
-
-					<div className="parallax">
+		return (
+			<Grid container justify="center">
+				<Grid item style={{ width: '100%' }} id="parallaxTry">
 					<h1 id="title-landing">A family artefact register.</h1>
 					<h3 id="subtitle-landing">Safe. Secure. Shareable</h3>
 					<ScrollButton newElementInView="about-card"></ScrollButton>
-
-					</div>
-
-					<div className="parallax">
-					</div>
-					<div className="parallax">
-					<div className="about-card" id="about-card">
-						<div className="card_text">
-							<p align="center">
-							A software solution developed by ZeroBug to help families share artefacts securely online.
-							</p>
-						</div>
-						<Grid container justify="center">
-							<Grid item>
-								<Button variant="contained" href="/signup" allign="center" style={{backgroundColor: "#ffeb3b"}}>
-									Get started
-								</Button>
-							</Grid>
-						</Grid>
-					</div>
-					</div>
-
-
-			</div>
+				</Grid>
+				<Grid item style={{ width: '100%'}} id="parallaxTry">
+					<p id="about-card">
+						A software solution developed by ZeroBug to help families share artefacts securely online.
+					</p>
+					
+					<Button variant="contained" href="/signup" align="center" style={{ backgroundColor: "#ffeb3b" }}>
+						Get started
+					</Button>
+				</Grid>
+			</Grid>
 		);
 	}
 }

@@ -68,7 +68,6 @@ class AdminModal extends Component {
     renderPotentialAdmins(user, firebase) {
         let collection = this.props.family["users"];
         for (let key in this.props.family["users"]) {
-            // console.log(existingUser.name+"   and name we looking for  "+user.name);
             let existingUser = this.props.family["users"][key].uid;
             if (user.uid === this.props.family.admin.uid) {
                 return;

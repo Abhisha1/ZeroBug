@@ -86,9 +86,11 @@ class EditModal extends Component {
         for (let key in collection) {
             let existing = collection[key];
             if (item.uid){
+                // checks if user is admin and doesn't render admin
                 if (item.uid === this.props.collection.admin.uid) {
                     return;
                 }
+                // existing users are removable
                 else if (existing.uid === item.uid) {
                     return (
                         <div id="searchResult" key={item.uid || item.displayName}>
@@ -97,6 +99,7 @@ class EditModal extends Component {
                         </div>)
                 }
             }
+            // existing families are removable
             if (item.displayName && item.displayName === existing.displayName) {
                 return (
                     <div id="searchResult" key={item.displayName}>
@@ -106,6 +109,7 @@ class EditModal extends Component {
                     </div>)
             }
         }
+        // add new user or family
         return (<div id="searchResult" key={item.uid || item.displayName}>
         {item.displayName && <p id="modalText">{item.displayName}</p>}
                         {item.name && <p id="modalText">{item.name}</p>}

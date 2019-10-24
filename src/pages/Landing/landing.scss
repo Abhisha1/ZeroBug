@@ -1,120 +1,40 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,900&display=swap');
-.parallax {
+#parallaxTry {
     /* The image used */
     background-image: url("../../assets/bg2.jpg");
 
     /* Set a specific height */
-    min-height: 500px;
-    min-width: 600px;
+    min-height: 100vw;
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+    align-items: center;
 }
 
-@media only screen and (max-width: 4000px) {
-    #title-landing{
-        color: white;
-        font-style: normal;
-        // font-weight: 1000 !important;
-        font-weight: 600 !important;
-        font-size: 9.5em !important;
-        font-family: 'Montserrat';
-        padding-left: 5vw;
-
-        text-align: center;
-
-    }
-    #subtitle-landing{
-        color: white;
-        font-family: 'Montserrat', sans-serif;
-        padding-left: 5vw;
-        font-size: 5em !important;
-        text-align: center;
-    }
-    .card_text{
-
-        font-family: 'Montserrat', sans-serif;
-        font-size: 2em !important;
-        background-blend-mode: soft-light;
-    }
-
-}
-
-@media only screen and (max-width: 800px) {
-    #title-landing{
-        color: white;
-        font-style: normal;
-        // font-weight: 1000 !important;
-        font-weight: 600 !important;
-        font-size: 7em !important;
-        font-family: 'Montserrat';
-        padding-left: 5vw;
-
-        text-align: center;
-
-    }
-    #subtitle-landing{
-        color: white;
-        font-family: 'Montserrat', sans-serif;
-        padding-left: 5vw;
-        font-size: 3em !important;
-        text-align: center;
-    }
-    .card_text{
-
-        font-family: 'Montserrat', sans-serif;
-        font-size: 2em !important;
-
-    }
-
-}
-
-@media only screen and (max-width: 420px) {
-    #title-landing{
-        color: white;
-        font-style: normal;
-        // font-weight: 1000 !important;
-        font-weight: 600 !important;
-        font-size: 5em !important;
-        font-family: 'Montserrat';
-        padding-left: 5vw;
-
-        text-align: center;
-
-    }
-    #subtitle-landing{
-        color: white;
-        font-family: 'Montserrat', sans-serif;
-        padding-left: 5vw;
-        font-size: 1em !important;
-        text-align: center;
-    }
-    .card_text{
-
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.75em !important;
-    }
-
-}
-
-
-.text_container {
+#title-landing {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 10vw;
     color: white;
-    font-family: 'Montserrat', sans-serif;
-}
-
-
-.about-card {
-    width: 70%;
-    position: absolute;
-    left: 15%;
-    color:white;
+    font-family: Montserrat;
     font-weight: 600 !important;
 }
 
-.about-card:hover{
-    // background-color: #eee;
+#subtitle-landing {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 5vw;
+    color: white;
+    font-family: Montserrat;
+}
+
+#about-card {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 3vw;
+    font-family: Montserrat;
+    color: white;
+    font-weight: 600 !important;
 }

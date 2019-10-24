@@ -6,6 +6,10 @@ import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import "./imageUpload.scss";
 import PlaceHolderImage from '../../assets/group-profile-users.png';
+/**
+ * A modular class that handles image uploads for avatar pictures; for families and users
+ * Allows user to see a preview of uploaded file along with a placeholder image uploaded to server when an image is not chosen
+ */
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
@@ -57,6 +61,7 @@ class ImageUpload extends Component {
      */
     readyToUpload() {
         if (!this.state.isUploaded) {
+            // if upload image is for a new family or user, store it locally until the user/family is created
             if (this.props.isCreate && this.props.readyToSubmit){
                 if (this.state.image) {
                     this.handleUpload();
@@ -74,6 +79,7 @@ class ImageUpload extends Component {
                     oReq.send();
                 }
             }
+            // When manipulating avatar of existing user or family, upload as soon as an image is chosen
             else if (!this.props.isCreate){
                 if (this.state.image && !this.state.isUploaded){
                     this.handleUpload();
