@@ -6,8 +6,9 @@ import "./account.scss";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-
-
+/**
+ * Profile section contain profile information, change profile image and change password
+ */
 class Profile extends Component{
     constructor(props){
         super(props);
@@ -18,24 +19,28 @@ class Profile extends Component{
         }
     }
 
-
-    // get the user name and the profile image if he/she has
+    /**
+     * get the user name and the profile image if he/she has
+     */
     componentDidMount =() => {
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
                 this.setState({username: user.displayName});
                 this.props.firebase.getImageURL(this, "profileImages/", this.state.username, user);
             }
-
         })
     }
 
-    // get the password from the textField
+    /**
+     * Get the password from the textField
+     */
     handleChange = e => {
         this.setState({...this.state, password: e.target.value});
     }
 
-    // let user update the password
+    /**
+     * Update user's password
+     */
     handleUpload = () => {
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             user.updatePassword(this.state.password).then(function() {
@@ -43,10 +48,8 @@ class Profile extends Component{
               }).catch(function(error) {
                 // An error happened
               });
-
         })
     }
-
 
     render(){
         return(

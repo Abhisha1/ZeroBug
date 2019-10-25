@@ -5,14 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import Profile from "./profile";
 import Artifact from "./renderArtifact";
 import RenderFamilies from "../../components/RenderFamily";
-
-
+/**
+ * Account Page contain profile, families, artefacts sections
+ */
 class AccountPage extends Component {
-
-	state = {
-		familiesOwned: null,
-	}
-
 	render() {
 		return (
 			<div id="profileContainer">
