@@ -5,10 +5,9 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
-import RenderFamilies from "./renderFamilies";
 import "./container.scss"
 import Paper from '@material-ui/core/Paper';
-
+import RenderFamilies from "../../components/RenderFamily";
 
 
 class HomePage extends Component {
@@ -65,7 +64,7 @@ class HomePage extends Component {
                 <h5 id="homeInformation">View all your artefacts and families you have access to</h5>
                 <Paper style={{marginLeft: "66px", marginRight: "66px", marginBottom: "66px", marginTop: "66px"}}>
                     <div>
-                        <RenderFamilies />
+                        <RenderFamilies page="homePage"/>
                     </div>
                 </Paper>
 

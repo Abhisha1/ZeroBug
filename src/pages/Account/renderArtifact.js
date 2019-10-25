@@ -4,7 +4,9 @@ import { withRouter } from 'react-router-dom';
 import "./account.scss";
 import Cards from "./../../components/Card";
 import Divider from '@material-ui/core/Divider';
-
+/**
+ * Render the Artifacts that the user manage
+ */
 
 class RenderArtifact extends Component{
     constructor(props){
@@ -17,7 +19,9 @@ class RenderArtifact extends Component{
         }
     }
 
-    // get the families that the user managed
+    /**
+     * Get the artefacts that the user managed
+     */
     componentDidMount =() => {
         this.props.firebase.auth.onAuthStateChanged((user)=>{
             if(user){
@@ -41,8 +45,6 @@ class RenderArtifact extends Component{
         }
 
         return(
-
-
             <div>
                 <Divider />
                 <div id="artifactTop">

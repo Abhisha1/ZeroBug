@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import "./account.scss";
-import RenderFamilies from "./renderFamilies";
 import { withAuthorization } from "../../components/Session";
 import Paper from '@material-ui/core/Paper';
 import Profile from "./profile";
 import Artifact from "./renderArtifact";
-
-
+import RenderFamilies from "../../components/RenderFamily";
+/**
+ * Account Page contain profile, families, artefacts sections
+ */
 class AccountPage extends Component {
-
-	state = {
-		familiesOwned: null,
-	}
-
 	render() {
 		return (
 			<div id="profileContainer">
@@ -21,7 +17,7 @@ class AccountPage extends Component {
 					</div>				
 				<Paper id="familyPaper">
 					<div>
-						<RenderFamilies />
+						<RenderFamilies page="accountPage"/>
 					</div>
 				</Paper>
 				<Paper id="familyPaper">

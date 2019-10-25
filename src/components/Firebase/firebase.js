@@ -194,23 +194,10 @@ class Firebase {
         })
     })
   }
-  getFamiliesImageURL = (th, location, familyNamesList) => {
-    let familyImages = [];
-
-    for (var i = 0; i < familyNamesList.length; i++) {
-
-      this.storage().ref().child(location + familyNamesList[i]).getDownloadURL().then((url) => {
-
-        familyImages.push(url);
-        th.setState({ ...th.state, familyImageURL: familyImages });
-      })
-    }
-
-  }
 
 
-  // for home page
   /**
+   * for home page
    * get a list of Family name that the user have
    * @para the component to be set the state
    * @para users' names
@@ -243,7 +230,7 @@ class Firebase {
                 tempMem.avatar = avatar;
                 now++;
                 if (now === count) {
-                  the.setState({ dataReady: true })
+                  the.setState({ dataReadyYour: true })
                 }
               });
             testFamilyName.push(tempMem);
@@ -252,13 +239,13 @@ class Firebase {
         }
       }
 
-      the.setState({ ...the.state, cardData: testFamilyName });
+      the.setState({ ...the.state, cardDataYour: testFamilyName });
 
     });
   }
 
-  //for account pages
   /**
+   * for account pages
    * get the family that you managed
    * @para the component to be set the state
    * @para the user name
@@ -291,14 +278,14 @@ class Firebase {
               tempMem.avatar = avatar;
               now++;
               if (now === count) {
-                the.setState({ dataReady: true })
+                the.setState({ dataReadyManage: true })
               }
             });
           testFamilyName.push(tempMem);
 
         }
       }
-      the.setState({ ...the.state, cardData: testFamilyName });
+      the.setState({ ...the.state, cardDataManage: testFamilyName });
     })
   }
 
@@ -881,6 +868,8 @@ class Firebase {
     // Create the new user in Firebase
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
+
+  
   /**
      * get all artefacts user has access to
      * @param the componenet set to be state
