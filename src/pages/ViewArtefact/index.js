@@ -82,7 +82,7 @@ class ArtefactDetails extends Component {
     /**
      * Fetches the specified artefacts data from the database
      */
-    async componentWillMount() {
+    async componentDidMount() {
         this.props.firebase.viewArtefact(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {

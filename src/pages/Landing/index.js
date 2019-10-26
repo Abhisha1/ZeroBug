@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import "./landing.scss";
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import ScrollButton from "../../components/scrollButton";
-import * as ROUTES from '../../constants/routes';
 
 
 /**

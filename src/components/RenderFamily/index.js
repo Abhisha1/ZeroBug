@@ -22,7 +22,7 @@ class RenderFamilies extends Component{
      * Get the families that the user managed or ownned
      */
     componentDidMount =() => {
-        if (this.props.page == "accountPage"){
+        if (this.props.page === "accountPage"){
             this.props.firebase.auth.onAuthStateChanged((user)=>{
                 if(user){
                     this.setState({username: user.displayName});
@@ -42,7 +42,7 @@ class RenderFamilies extends Component{
     render(){
         return(
             <div>
-                {this.props.page == "accountPage" ? (
+                {this.props.page === "accountPage" ? (
                     <div id="familiesWrapper">
 					<h1 id="account-heading">Manage Your Families</h1>
                     {this.state.dataReadyManage ? <FamilySlider cards={this.state.cardDataManage}

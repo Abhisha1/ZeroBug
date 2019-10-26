@@ -5,6 +5,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import './plusCard.scss'
+import plusIcon from "../../assets/plusIcon.png";
 
 /**
  * Place holder card to add new artefacts
@@ -21,7 +22,7 @@ class PlusCard extends Component{
                         <CardActionArea href="/createartefact">
                             <CardMedia
                               style={{height: 0, paddingTop: '100%'}}
-                              image= {require ("./../../assets/plusIcon.png")}
+                              image= {plusIcon}
                               title={this.props.artefactName}
                             />
                             <Typography variant="h6" align="center">

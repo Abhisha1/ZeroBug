@@ -7,7 +7,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-import { green } from '@material-ui/core/colors';
 import "./adminModal.scss";
 
 /**
@@ -69,15 +68,13 @@ class AdminModal extends Component {
      * @return All users (besides admin) and whether you can add or remove them
      */
     renderPotentialAdmins(user, firebase) {
-        for (let key in this.props.family["users"]) {
-            if (user.uid === this.props.family.admin.uid) {
-                return;
-            }
-            else {
-                return (<div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
-                    <Button variant="outlined" id="change-user-button" onClick={() => this.changeAdmin(user, firebase)}>Make Admin</Button>
-                </div>)
-            }
+        if (user.uid === this.props.family.admin.uid) {
+            return;
+        }
+        else {
+            return (<div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
+                <Button variant="outlined" id="change-user-button" onClick={() => this.changeAdmin(user, firebase)}>Make Admin</Button>
+            </div>)
         }
 
     }

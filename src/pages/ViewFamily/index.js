@@ -94,16 +94,11 @@ class FamilyDetails extends Component {
     /**
      * Fetches the specified family's data from the database
      */
-    async componentWillMount() {
+    async componentDidMount() {
         this.props.firebase.viewFamily(this.props.name)
             .then(value => {
                 this.props.firebase.auth.onAuthStateChanged((user) => {
                     if (user) {
-                        let authUser = {
-                            uid: user.uid,
-                            name: user.displayName,
-                            photoURL: user.photoURL
-                        }
                         // Checks if the current user is a member of the family
                         let currUserIsMember = false
 
@@ -168,7 +163,7 @@ class FamilyDetails extends Component {
                     ))
                 }
                 {this.state.dataReady && this.state.artefactList.length === 0 && 
-                <h4>You don't seem to have any shared artefacts. You can either share an <Link to={{ pathname: '/home/' }}>existing artefact</Link> or <Link to={{ pathname: '/createartefact' }}> create an artefact</Link></h4>
+                <h4 className="noArtefactMessage">You don't seem to have any shared artefacts. You can either share an <Link to={{ pathname: '/home/' }}>existing artefact</Link> or <Link to={{ pathname: '/createartefact' }}> create an artefact</Link></h4>
                 }
             </Grid>
 
