@@ -21,12 +21,12 @@ class LandingPage extends Component {
 					<h3 id="subtitle-landing">Safe. Secure. Shareable</h3>
 					<ScrollButton newElementInView="about-card"></ScrollButton>
 				</Grid>
-				<Grid item style={{ width: '100%'}} id="parallaxTry">
+				<Grid item style={{ width: '100%',justifyContent: "center", textAlign: "center"}} id="parallaxTry">
 					<p id="about-card">
 						A software solution developed by ZeroBug to help families share artefacts securely online.
 					</p>
 					
-					<Button variant="contained" href="/signup" align="center" style={{ backgroundColor: "#ffeb3b" }}>
+					<Button variant="contained" href="/signup" style={{ backgroundColor: "#ffeb3b" }}>
 						Get started
 					</Button>
 				</Grid>

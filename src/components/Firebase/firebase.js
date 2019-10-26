@@ -97,7 +97,6 @@ class Firebase {
   viewArtefact = (name) => {
     return new Promise((resolve, reject) => {
       const onData = snap => {
-        console.log(snap.val())
         resolve(snap.val());
       }
       const onError = error => reject(error);
@@ -308,8 +307,7 @@ class Firebase {
   //upload the files
   //used by the pages/Artifact/imageUpload.js
   uploadthings = (image, th) => {
-    // var aaa = this.storage().ref().child('images/'+image.name).put(image);
-    var aaa = this.storage().ref().child('images/' + image.name).put(image).then((snapshot) => {
+     this.storage().ref().child('images/' + image.name).put(image).then((snapshot) => {
       this.getURL(th, 'images/' + image.name);
     }
 
@@ -880,13 +878,10 @@ class Firebase {
     let tempRef = this.database().ref('/artefacts/');
     tempRef.on("value", (data) => {
 
-      let count = 0;
-
       // parse through all the artefacts
       for (let key in data.val()) {
         //parse through all the authorised users for each artefact
         if (data.val()[key].admin.uid === uid) {
-          count++;
 
           let tempMem = {
             name: data.val()[key],

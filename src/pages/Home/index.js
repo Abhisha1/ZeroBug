@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Cards from "./../../components/Card";
 import PlusCard from "./../../components/plusCard";
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withAuthorization } from "./../../components/Session";
 import "./container.scss"

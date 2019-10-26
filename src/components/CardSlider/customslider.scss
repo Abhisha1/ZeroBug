@@ -18,9 +18,21 @@
     align-self: center;
     overflow: hidden;
 }
+#sliderGrid{
+    padding-bottom: 7vw;
+}
+.slick-arrow.slick-prev{
+    display: contents !important;
+}
 
 .slick-prev:before,
-.slick-next:before {
+.slick-prev:after,
+.slick-next:before,
+.slick-next:after {
   color: #ffe960;
   size: 100;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index:1
 }

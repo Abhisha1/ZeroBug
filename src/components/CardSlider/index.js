@@ -3,7 +3,8 @@ import Slider from "react-slick";
 import 'slick-carousel/slick/slick-theme.css';
 import GroupIcon from '@material-ui/icons/Group';
 import 'slick-carousel/slick/slick.css';
-import { Avatar } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
 import "./customslider.scss";
 
 /**
@@ -20,7 +21,6 @@ class CustomSlider extends Component {
     infinite: false,
     arrows: true,
     swipe: true,
-    arrows: true,
     responsive: [
       {
         breakpoint: 1200,
@@ -61,7 +61,9 @@ class CustomSlider extends Component {
     </Slider>
 
     return (
-      slickSlider
+      <Grid id="sliderGrid">
+        {slickSlider}
+      </Grid>
     )
   }
 }
