@@ -5,7 +5,9 @@ import Button from "@material-ui/core/Button"
 import { FirebaseContext } from "../../components/Firebase";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import { green } from '@material-ui/core/colors';
 import "./adminModal.scss";
 
 /**
@@ -16,7 +18,7 @@ import "./adminModal.scss";
 class AdminModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { showModal: false, searchedResults: [], familyMember: '', loading: false };
+        this.state = { showModal: false, searchedResults: [], familyMember: '', loading: false, changedAdmin: false };
         this.handleModal = this.handleModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.changeAdmin = this.changeAdmin.bind(this);
@@ -56,7 +58,8 @@ class AdminModal extends Component {
         firebase.updateAdmin(user, this.props.title, this.props.family);
         this.props.action(user);
         this.renderPotentialAdmins(user, firebase);
-        window.location.reload();
+        // A snackbar to show admin change was successful
+        this.setState({changedAdmin: true})
     }
 
 
@@ -66,9 +69,7 @@ class AdminModal extends Component {
      * @return All users (besides admin) and whether you can add or remove them
      */
     renderPotentialAdmins(user, firebase) {
-        let collection = this.props.family["users"];
         for (let key in this.props.family["users"]) {
-            let existingUser = this.props.family["users"][key].uid;
             if (user.uid === this.props.family.admin.uid) {
                 return;
             }
@@ -99,7 +100,29 @@ class AdminModal extends Component {
             <div>
 
                 <Button variant="outlined" onClick={this.handleModal} id="change-button">Change Admin</Button>
-
+                {this.state.changedAdmin && <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                autoHideDuration={4000}
+                open={true}
+                onClose={() => window.location.reload()}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">You have successfully changed admin</span>}
+                action={[
+                    <IconButton
+                        key="close"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={() => window.location.reload()}
+                    >
+                        <CloseIcon />
+                    </IconButton>,
+                ]}
+            />}
                 <Modal show={this.state.showModal} onHide={this.handleModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Choose a new admin</Modal.Title>
