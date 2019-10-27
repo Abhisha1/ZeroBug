@@ -73,7 +73,7 @@ class Profile extends Component{
                                             label="Update Password"
                                             type="password"
                                             onChange={this.handleChange}></TextField>
-                                        <Button variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>
+                                        <Button type="button" id="change_password" variant="outlined" className="aButton" onClick={this.handleUpload}>Change Password</Button>
                                     </div>
                             </div>
                         </Paper>
