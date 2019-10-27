@@ -23,7 +23,7 @@ class ViewFamily extends Component {
     render() {
         let familyName = this.props.match.params.name || this.props.location.state.name;
         return (
-            <div id="viewFamilyPage">
+            <div className="viewFamilyPage">
                 <ViewFamilyDetails name={familyName} />
             </div>)
 
@@ -170,7 +170,7 @@ class FamilyDetails extends Component {
         </div>)
 
         return (
-            <div id="viewFamilyPage">
+            <div className="viewFamilyPage">
                 {/* Checks if the page is still retreiving data */}
                 {this.state.loading ? <div id="loader">{loading}</div> :
                     (!this.state.hasAccess ?

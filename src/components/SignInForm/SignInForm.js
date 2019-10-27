@@ -171,7 +171,7 @@ function SignIn(props) {
                 onChange={handleChange('password')}
                 notched
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment position="end" aria-label="password">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}

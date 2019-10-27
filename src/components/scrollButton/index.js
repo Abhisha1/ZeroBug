@@ -24,7 +24,7 @@ class ScrollButton extends Component {
     render() {
         return (
             <div>
-                <button className="scrollButton" onClick={this.handleClick}><IoIosArrowDropdownCircle size={40} color='white'></IoIosArrowDropdownCircle>
+                <button className="scrollButton" onClick={this.handleClick}><IoIosArrowDropdownCircle size={40} color='white' aria-label="scroll down"></IoIosArrowDropdownCircle>
                 </button>
             </div>
         );

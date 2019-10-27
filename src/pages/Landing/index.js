@@ -14,12 +14,12 @@ class LandingPage extends Component {
 	render() {
 		return (
 			<Grid container justify="center">
-				<Grid item style={{ width: '100%' }} id="parallaxTry">
+				<Grid item style={{ width: '100%' }} className="parallaxTry">
 					<h1 id="title-landing">A family artefact register.</h1>
 					<h3 id="subtitle-landing">Safe. Secure. Shareable</h3>
 					<ScrollButton newElementInView="about-card"></ScrollButton>
 				</Grid>
-				<Grid item style={{ width: '100%',justifyContent: "center", textAlign: "center"}} id="parallaxTry">
+				<Grid item style={{ width: '100%',justifyContent: "center", textAlign: "center"}} className="parallaxTry">
 					<p id="about-card">
 						A software solution developed by ZeroBug to help families share artefacts securely online.
 					</p>
