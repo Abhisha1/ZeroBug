@@ -73,7 +73,7 @@ class AdminModal extends Component {
         }
         else {
             return (<div id="searchResult" key={user.uid}><p id="modalText" key={user.uid}>{user.displayName}</p>
-                <Button variant="outlined" id="change-user-button" onClick={() => this.changeAdmin(user, firebase)}>Make Admin</Button>
+                <Button aria-label="Make admin" variant="outlined" id="change-user-button" onClick={() => this.changeAdmin(user, firebase)}>Make Admin</Button>
             </div>)
         }
 
@@ -96,7 +96,7 @@ class AdminModal extends Component {
         return (
             <div>
 
-                <Button variant="outlined" onClick={this.handleModal} id="change-button">Change Admin</Button>
+                <Button aria-label="Change admin" variant="outlined" onClick={this.handleModal} id="change-button">Change Admin</Button>
                 {this.state.changedAdmin && <Snackbar
                 anchorOrigin={{
                     vertical: 'bottom',

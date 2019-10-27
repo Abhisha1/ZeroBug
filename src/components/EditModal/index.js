@@ -95,7 +95,7 @@ class EditModal extends Component {
                     return (
                         <div id="searchResult" key={item.uid || item.displayName}>
                             {item.displayName && <p id="modalText">{item.displayName}</p>}
-                            <Button variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
+                            <Button aria-label="Remove member" variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
                         </div>)
                 }
             }
@@ -105,7 +105,7 @@ class EditModal extends Component {
                     <div id="searchResult" key={item.displayName}>
                         {item.displayName && <p id="modalText">{item.displayName}</p>}
                         
-                        <Button variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
+                        <Button aria-label="Remove member" variant="outlined" id="modalRemove" onClick={() => this.remove(item, firebase)}>Remove</Button>
                     </div>)
             }
         }
@@ -113,7 +113,7 @@ class EditModal extends Component {
         return (<div id="searchResult" key={item.uid || item.displayName}>
         {item.displayName && <p id="modalText">{item.displayName}</p>}
                         {item.name && <p id="modalText">{item.name}</p>}
-            <Button variant="outlined" id="modalAdd" onClick={() => this.add(item, firebase)}>Add</Button>
+            <Button aria-label="add member" variant="outlined" id="modalAdd" onClick={() => this.add(item, firebase)}>Add</Button>
         </div>);
 
     }

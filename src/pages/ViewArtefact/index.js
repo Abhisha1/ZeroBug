@@ -192,7 +192,7 @@ class ArtefactDetails extends Component {
                                     </GridList>
                                 </div>
                                 {this.state.isAdmin && <AdminModal id="adminArtefactModal" action={this.handleAdmins} family={this.state.artefact} title="artefacts" ></AdminModal>}
-                                <Paper id="paperCard">
+                                <Paper>
                                     <h5 className="descriptionTitle">Date</h5>
                                     <p>{this.convertDate(this.state.artefact.date)}</p>
                                     <h5 className="descriptionTitle">Brief Description</h5>
@@ -202,7 +202,7 @@ class ArtefactDetails extends Component {
                                     {this.state.artefact.description && <div><h5 className="descriptionTitle">History</h5>
                                         <p>{this.state.artefact.description}</p></div>}
                                 </Paper>
-                                <Paper id="paperCard">
+                                <Paper>
                                     <h1 className="memberHeadings">Shared users</h1>
                                     {this.state.isAdmin && (
                                         <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={true} search={this.searchForUsers}></EditModal>
@@ -210,7 +210,7 @@ class ArtefactDetails extends Component {
                                     }
                                     {this.state.artefact.users && <CustomSlider cards={this.state.artefact["users"]}></CustomSlider>}
                                 </Paper>
-                                <Paper id="paperCard">
+                                <Paper>
                                     <h1 className="memberHeadings">Shared families</h1>
                                     {this.state.isAdmin && <EditModal action={this.handleModal} collection={this.state.artefact} title="artefacts" itemIsUser={false} search={this.searchFamilies}></EditModal>
 

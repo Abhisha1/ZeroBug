@@ -117,7 +117,7 @@ class ImageUpload extends Component {
                 {this.props.dbLocation == "familyImages/" ?
                     (
                         <Grid container justify="center" alignItems="center">
-                        <img id="avatarBox" src={this.state.imageURL} accept="image/*"></img>
+                        <img id="avatarBox" alt="" src={this.state.imageURL} accept="image/*"></img>
 
                     </Grid>):[]
                 }

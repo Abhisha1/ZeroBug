@@ -63,7 +63,7 @@ class CustomModal extends Component {
     render() {
         return (
             <div>
-                <Button variant="outline-secondary" onClick={this.handleModal} id="add-user-button">Add {this.props.title}</Button>
+                <Button aria-label="add users" variant="outline-secondary" onClick={this.handleModal} id="add-user-button">Add {this.props.title}</Button>
                 <Modal show={this.state.showModal} onHide={this.handleModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add {this.props.title}</Modal.Title>
@@ -94,7 +94,7 @@ class CustomModal extends Component {
                                 <div id="searchResult" key={item.uid || item.displayName}>
                                     {item.displayName && <p id="modalText">{item.displayName}</p>}
                                     {item.name && <p id="modalText">{item.name}</p>}
-                                    <button variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
+                                    <button aria-label="add" variant="primary" id="modalAdd" onClick={() => this.props.action(item)}>Add</button></div>))}
                             {this.state.noMatches && <p>No Matches</p>}
                         </div>
                         {/* Displays a loader for when the API is still fetching the results */}

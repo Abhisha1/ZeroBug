@@ -149,9 +149,9 @@ class CreateFamily extends Component {
           {/* Displays popover is family exists */}
           {this.state.isExistingFamily ?
             <OverlayTrigger placement="right" overlay={popover}>
-              <TextField margin="normal" variant="outlined" label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+              <TextField margin="normal" variant="outlined" aria-label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
             </OverlayTrigger>
-            : <TextField margin="normal" variant="outlined" label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
+            : <TextField margin="normal" variant="outlined" aria-label="Family Name" autoFocus required fullWidth name="familyName" type="text" value={this.state.familyName} onChange={this.handleChange()} />
         }
           {/* Renders the members that have been added to the family so far */}
           <CustomSlider cards={this.state.familyMembers}></CustomSlider>
