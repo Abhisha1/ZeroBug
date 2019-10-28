@@ -7,7 +7,9 @@ import "./container.scss"
 import Paper from '@material-ui/core/Paper';
 import RenderFamilies from "../../components/RenderFamily";
 
-
+/**
+ * The central page of the app. This displays the artefacts and families the user is a part of!
+ */
 class HomePage extends Component {
     constructor(props) {
         super(props);
@@ -27,9 +29,11 @@ class HomePage extends Component {
             }
         })
     }
+
+    // Search bar filtering on the go
     handleSearch = e => {
         this.props.firebase.getArtefactData(this, this.state.uid);
-        let newArtefacts = [];   
+        let newArtefacts = [];
         this.state.artefactList.map(artefact => {
             if(artefact.artefactName.toLowerCase().includes(e.target.value.toLowerCase())){
                 newArtefacts.push(artefact);
@@ -53,6 +57,7 @@ class HomePage extends Component {
                 </div>
             ))
         }
+        //Add the extra plus card which redirects to add new artefact
         artefacts.push(<PlusCard key="plus" />);
         return (
 
@@ -66,13 +71,13 @@ class HomePage extends Component {
                     </div>
                 </Paper>
 
-                
+
                 <h1 id="account-heading">Artefacts</h1>
                 <div className="textboxContainer">
-                    <TextField 
-                    className="textbox" 
-                    type="search" 
-                    margin-right="20px" 
+                    <TextField
+                    className="textbox"
+                    type="search"
+                    margin-right="20px"
                     placeholder="Search for Artefact"
                     onChange={this.handleSearch}></TextField>
                 </div>
