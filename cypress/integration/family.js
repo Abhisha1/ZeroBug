@@ -1,6 +1,6 @@
 describe("Testing create a family", function(){
     it("Create a valid family", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
 
         cy.get("[name='familyName']").type("Abhisha's Testers")
         cy.get("#add-user-button").click()
@@ -13,7 +13,7 @@ describe("Testing create a family", function(){
 
     })
     it("Create an existing family", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
 
         cy.get("[name='familyName']").type("Abhisha's Testers")
         cy.get("#add-user-button").click()
@@ -26,7 +26,7 @@ describe("Testing create a family", function(){
         cy.get("div.modal-header")
     })
     it("Create a family without family name", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
         cy.get("#add-user-button").click()
         cy.get("#find-user-button").click()
         cy.get("#searchResults").children().first().children("button").click()
@@ -35,12 +35,12 @@ describe("Testing create a family", function(){
         cy.get("#create-family-button").should('be.disabled')
     })
     it("Create a family without users", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
         cy.get("[name='familyName']").type("Abhisha's Testers")
         cy.get("#create-family-button").should('be.disabled')
     })
     it("Create a family with one family member", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
         cy.get("[name='familyName']").type("Abhishas Testers")
         cy.get("#add-user-button").click()
         cy.get("#find-user-button").click()
@@ -50,7 +50,7 @@ describe("Testing create a family", function(){
         cy.get("#create-family-button").click()
     })
     it("Create a family trying to add same user multiple times", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com//create-family")
+        cy.visit("https://zerobug.netlify.com/create-family")
         cy.get("[name='familyName']").type("Abhishas Testeers")
         cy.get("#add-user-button").click()
         cy.get("#find-user-button").click()
@@ -63,7 +63,7 @@ describe("Testing create a family", function(){
 })
 describe("View a family", function(){
     it("View a family you have access too", function(){
-        cy.visit("https://hungry-yalow-8bcfa0.netlify.com/family/Abhisha's Testers")
+        cy.visit("https://zerobug.netlify.com/family/Abhisha's Testers")
 
         cy.get("#familyName").should('be', "Abhisha's Testers")
 
