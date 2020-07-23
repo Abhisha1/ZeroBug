@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An online secure artefact sharing platform to help keep track of private family heirlooms and share access to custom groups.
+
+This was dveeloped as part of our 2019 Capstone project
 
 ## Available Scripts
 
